@@ -1,4 +1,4 @@
-import api from './api'; // como el de React Native, baseURL hacia tu backend Spring
+import api from './api'; 
 
 export default class AuthService {
   constructor() {
@@ -7,12 +7,19 @@ export default class AuthService {
 
   async login(email, password) {
     if (!email || !password) throw new Error('Correo y contraseña requeridos');
-    const response = await api.post(`${this.url}/login`, { email, password });
-
-    const { token, user } = response.data;
-    localStorage.setItem('token', token);
-    localStorage.setItem('user', JSON.stringify(user));
-    return response.data;
+  
+    try {
+      const response = await api.post(`${this.url}/login`, { email, password });
+      const { token, user } = response.data;
+  
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(user));
+  
+      return response.data;
+    } catch (error) {
+      console.error("Error en login:", error.response?.data || error.message);
+      throw error;
+    }
   }
 
   async signup(data) {
@@ -34,6 +41,4 @@ export default class AuthService {
     const user = localStorage.getItem('user');
     return user ? JSON.parse(user) : null;
   }
-
-  // Puedes adaptar el resto de métodos igual cambiando AsyncStorage por localStorage
 }

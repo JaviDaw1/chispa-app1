@@ -5,7 +5,10 @@ import { Home, User, LogIn  } from "lucide-react";
 const navItems = [
   { label: "Inicio", icon: <Home className="w-5 h-5" />, path: "/" },
   { label: "Perfil", icon: <User className="w-5 h-5" />, path: "/profile" },
+  { label: "Mis Preferencias", icon: <User  className="w-5 h-5" />, path: "/preference" },
+  { label: "Mis Matches", icon: <User  className="w-5 h-5" />, path: "/match" },
   { label: "Iniciar Sesión", icon: <LogIn  className="w-5 h-5" />, path: "/login" },
+
 ];
 
 const Header = () => {

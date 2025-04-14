@@ -4,6 +4,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import HomePage from './pages/HomePage';
 import Profile from './pages/Profile';
+import Preference from './pages/Preference';
+import Match from './pages/Match';
 
 export default function App() {
    return (
@@ -13,6 +15,8 @@ export default function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/preference" element={<Preference/>} />
+            <Route path="/match" element={<Match/>} />
          </Routes>
       </Router>
    )

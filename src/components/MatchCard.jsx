@@ -1,4 +1,3 @@
-// src/components/MatchCard.jsx
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProfileService from '../services/ProfileService';
@@ -9,7 +8,6 @@ const MatchCard = ({ match, currentUserId }) => {
   const navigate = useNavigate();
   const profileService = new ProfileService();
 
-  // Determina qué usuario es el otro (no el actual)
   const otherUserId = match.user1.id === currentUserId ? match.user2.id : match.user1.id;
 
   useEffect(() => {

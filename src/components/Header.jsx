@@ -1,18 +1,31 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Home, User, LogIn  } from "lucide-react";
-
-const navItems = [
-  { label: "Inicio", icon: <Home className="w-5 h-5" />, path: "/" },
-  { label: "Perfil", icon: <User className="w-5 h-5" />, path: "/profile" },
-  { label: "Mis Preferencias", icon: <User  className="w-5 h-5" />, path: "/preference" },
-  { label: "Mis Matches", icon: <User  className="w-5 h-5" />, path: "/match" },
-  { label: "Iniciar Sesión", icon: <LogIn  className="w-5 h-5" />, path: "/login" },
-
-];
+import { Home, User, LogIn } from "lucide-react";
 
 const Header = () => {
   const location = useLocation();
+
+  const [isAuthenticated, setIsAuthenticated] = useState(Boolean(localStorage.getItem("token") || localStorage.getItem("usuario")));
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setIsAuthenticated(Boolean(localStorage.getItem("token") || localStorage.getItem("usuario")));
+    };
+
+    window.addEventListener("authChange", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("authChange", handleStorageChange);
+    };
+  }, []);
+
+  const navItems = [
+    { label: "Inicio", icon: <Home className="w-5 h-5" />, path: "/" },
+    { label: "Mis Matches", icon: <User className="w-5 h-5" />, path: "/match" },
+    isAuthenticated
+      ? { label: "Perfil", icon: <User className="w-5 h-5" />, path: "/profile" }
+      : { label: "Iniciar Sesión", icon: <LogIn className="w-5 h-5" />, path: "/login" },
+  ];
 
   return (
     <>
@@ -24,9 +37,8 @@ const Header = () => {
             <li key={item.label}>
               <Link
                 to={item.path}
-                className={`flex items-center gap-2 hover:text-blue-600 transition ${
-                  location.pathname === item.path ? "text-blue-600 font-semibold" : ""
-                }`}
+                className={`flex items-center gap-2 hover:text-blue-600 transition ${location.pathname === item.path ? "text-blue-600 font-semibold" : ""
+                  }`}
               >
                 {item.icon}
                 <span>{item.label}</span>
@@ -43,9 +55,8 @@ const Header = () => {
             <li key={item.label}>
               <Link
                 to={item.path}
-                className={`flex flex-col items-center text-sm transition ${
-                  location.pathname === item.path ? "text-blue-600 font-semibold" : "hover:text-blue-600"
-                }`}
+                className={`flex flex-col items-center text-sm transition ${location.pathname === item.path ? "text-blue-600 font-semibold" : "hover:text-blue-600"
+                  }`}
               >
                 {item.icon}
                 <span>{item.label}</span>

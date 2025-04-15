@@ -1,16 +1,18 @@
 // src/pages/Login.jsx
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import AuthService from '../services/AuthService';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
     try {
       await new AuthService().login(email, password);
-      alert('Inicio de sesión exitoso');
+      navigate('/');
     } catch (err) {
       alert(err.message || 'Error en login');
     }

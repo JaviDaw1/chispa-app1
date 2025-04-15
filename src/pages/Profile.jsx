@@ -72,6 +72,16 @@ const Profile = () => {
               </div>
               <div className="mb-4">
                 <label className="block text-sm sm:text-lg font-medium text-gray-700">
+                  Edad: <span className="text-gray-900">{profile.age}</span>
+                </label>
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm sm:text-lg font-medium text-gray-700">
+                   Fecha de Nacimiento: <span className="text-gray-900">{profile.birthDate}</span>
+                </label>
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm sm:text-lg font-medium text-gray-700">
                   Localización: <span className="text-gray-900">{profile.location}</span>
                 </label>
               </div>

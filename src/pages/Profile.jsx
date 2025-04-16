@@ -28,11 +28,13 @@ const Profile = () => {
         const { data } = await profileService.getByUserId(userInfo.id);
         setProfile(data);
       } catch (error) {
-        console.error("Error al obtener el perfil:", error);
+        if (error.response && error.response.status === 404) {
+          setProfile(null);
+        }
       }
-    };
-    fetchUserAndProfile();
-  }, [navigate]);
+      };
+      fetchUserAndProfile();
+    }, [navigate]);
 
   const handlePreferences = () => {
     navigate('/preference');
@@ -44,7 +46,8 @@ const Profile = () => {
   };
 
   if (!profile) {
-    return <div>Cargando perfil...</div>;
+    navigate('/create-profile');
+    return null;
   }
 
   return (
@@ -77,7 +80,7 @@ const Profile = () => {
               </div>
               <div className="mb-4">
                 <label className="block text-sm sm:text-lg font-medium text-gray-700">
-                   Fecha de Nacimiento: <span className="text-gray-900">{profile.birthDate}</span>
+                  Fecha de Nacimiento: <span className="text-gray-900">{profile.birthDate}</span>
                 </label>
               </div>
               <div className="mb-4">

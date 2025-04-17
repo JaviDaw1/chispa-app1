@@ -72,28 +72,39 @@ export default function CreateProfile() {
       return;
     }
 
+    // Formatear los datos según la estructura requerida
     const profileData = {
-      ...formData,
-      user: { id: user.id },
-      birthDate: formData.birthDate
-        ? new Date(formData.birthDate).toISOString()
-        : null,
+      user: {
+        id: user.id,
+        firstname: formData.name, // Agregado para coincidir con la estructura
+        lastname: formData.lastName, // Agregado para coincidir con la estructura
+      },
+      name: formData.name,
+      lastName: formData.lastName,
+      gender: formData.gender,
+      birthDate: formData.birthDate, // Ya no convertimos a ISOString, el backend espera "YYYY-MM-DD"
+      location: formData.location,
+      bio: formData.bio,
+      interests: formData.interests,
+      profilePhoto: formData.profilePhoto,
+      preferredRelationship: formData.preferredRelationship
     };
 
     try {
       setLoading(true);
-      const existingProfile = await profileService.getByUserId(user.id);
+      const { data: existingProfile } = await profileService.getByUserId(user.id);
 
-      if (existingProfile.data) {
-        await profileService.update(existingProfile.data.id, profileData);
+      if (existingProfile) {
+        await profileService.update(existingProfile.id, profileData);
       } else {
         await profileService.create(profileData);
+        profileService.clearCache(); // Limpiar cache después de crear
       }
 
       navigate("/profile");
     } catch (error) {
       console.error("Error saving profile:", error);
-      alert("Error al guardar el perfil. Por favor intenta nuevamente.");
+      alert(`Error al guardar el perfil: ${error.message}. Por favor intenta nuevamente.`);
     } finally {
       setLoading(false);
     }

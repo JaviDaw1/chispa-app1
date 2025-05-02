@@ -76,13 +76,13 @@ export default function CreateProfile() {
     const profileData = {
       user: {
         id: user.id,
-        firstname: formData.name, // Agregado para coincidir con la estructura
-        lastname: formData.lastName, // Agregado para coincidir con la estructura
+        firstname: formData.name,
+        lastname: formData.lastName,
       },
       name: formData.name,
       lastName: formData.lastName,
       gender: formData.gender,
-      birthDate: formData.birthDate, // Ya no convertimos a ISOString, el backend espera "YYYY-MM-DD"
+      birthDate: formData.birthDate,
       location: formData.location,
       bio: formData.bio,
       interests: formData.interests,
@@ -96,12 +96,15 @@ export default function CreateProfile() {
 
       if (existingProfile) {
         await profileService.update(existingProfile.id, profileData);
+        profileService.clearCache();
       } else {
         await profileService.create(profileData);
         profileService.clearCache(); // Limpiar cache después de crear
       }
 
       navigate("/profile");
+      {/* TODO: revisar si hay otra manera de hacer esto de recargar para que se vean los cambios de perfil*/}
+      window.location.reload();  
     } catch (error) {
       console.error("Error saving profile:", error);
       alert(`Error al guardar el perfil: ${error.message}. Por favor intenta nuevamente.`);

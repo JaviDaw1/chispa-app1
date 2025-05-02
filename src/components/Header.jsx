@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Home, User, LogIn } from "lucide-react";
+import { Home, User, LogIn, MessageCircle, Sparkles } from "lucide-react";
 
 const Header = () => {
   const location = useLocation();
@@ -20,49 +20,61 @@ const Header = () => {
   }, []);
 
   const navItems = [
-    { label: "Inicio", icon: <Home className="w-5 h-5" />, path: "/" },
-    { label: "Mis Matches", icon: <User className="w-5 h-5" />, path: "/match" },
+    { label: "Inicio", icon: Home, path: "/" },
+    { label: "Mis Matches", icon: Sparkles, path: "/match" },
+    { label: "Mensajes", icon: MessageCircle, path: "/messages" },
     isAuthenticated
-      ? { label: "Perfil", icon: <User className="w-5 h-5" />, path: "/profile" }
-      : { label: "Iniciar Sesión", icon: <LogIn className="w-5 h-5" />, path: "/login" },
+      ? { label: "Perfil", icon: User, path: "/profile" }
+      : { label: "Iniciar Sesión", icon: LogIn, path: "/login" },
   ];
 
   return (
     <>
-      {/* Header superior (pantallas grandes) */}
+      {/* Header grande (lg+) */}
       <nav className="hidden lg:flex justify-between items-center px-6 py-4 bg-white shadow-md fixed top-0 left-0 w-full z-50">
-        <div className="text-xl font-bold">Chispa</div>
-        <ul className="flex gap-6">
-          {navItems.map((item) => (
-            <li key={item.label}>
-              <Link
-                to={item.path}
-                className={`flex items-center gap-2 hover:text-blue-600 transition ${location.pathname === item.path ? "text-blue-600 font-semibold" : ""
-                  }`}
-              >
-                {item.icon}
-                <span>{item.label}</span>
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <div className="max-w-screen-xl w-full mx-auto flex justify-between items-center">
+          <div className="text-2xl font-bold text-pink-500">Chispa</div>
+          <ul className="flex gap-8">
+            {navItems.map((item) => {
+              const IconComponent = item.icon;
+              const isActive = location.pathname === item.path;
+              return (
+                <li key={item.label}>
+                  <Link
+                    to={item.path}
+                    className={`flex items-center gap-2 transition text-lg ${isActive ? "text-blue-600 font-semibold" : "text-gray-700 hover:text-blue-600"
+                      }`}
+                  >
+                    <IconComponent className="w-5 h-5" />
+                    <span>{item.label}</span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       </nav>
 
-      {/* Header inferior (pantallas medianas y chicas) */}
-      <nav className="lg:hidden fixed bottom-0 left-0 w-full bg-white border-t shadow-inner z-50">
-        <ul className="flex justify-around py-2">
-          {navItems.map((item) => (
-            <li key={item.label}>
-              <Link
-                to={item.path}
-                className={`flex flex-col items-center text-sm transition ${location.pathname === item.path ? "text-blue-600 font-semibold" : "hover:text-blue-600"
-                  }`}
-              >
-                {item.icon}
-                <span>{item.label}</span>
-              </Link>
-            </li>
-          ))}
+      {/* Header móvil (sm, md) */}
+      <nav className="lg:hidden fixed bottom-0 left-0 w-full bg-white border-t shadow-inner z-50 py-3">
+        <ul className="flex justify-around">
+          {navItems.map((item) => {
+            const IconComponent = item.icon;
+            const isActive = location.pathname === item.path;
+            return (
+              <li key={item.label}>
+                <Link
+                  to={item.path}
+                  className={`flex flex-col items-center text-xs transition ${isActive ? "text-blue-600" : "text-gray-600 hover:text-blue-600"
+                    }`}
+                >
+                  <IconComponent className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" />
+                  {/* Si quieres mostrar texto en móvil, descomenta la línea de abajo */}
+                  {/* <span className="mt-1">{item.label}</span> */}
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       </nav>
     </>

@@ -4,16 +4,29 @@ import Header from '../components/Header';
 import ProfileService from '../services/ProfileService';
 import AuthService from '../services/AuthService';
 import { useNavigate } from 'react-router-dom';
+import LikesService from '../services/LikesService';
+import { Heart, ArrowRight, User } from 'lucide-react';
 
 const profileService = new ProfileService();
 const authService = new AuthService();
+const likesService = new LikesService();
 
 export default function HomePage() {
     const [profiles, setProfiles] = useState([]);
     const [currentProfileIndex, setCurrentProfileIndex] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [showInstructions, setShowInstructions] = useState(true);
+    const currentProfile = profiles[currentProfileIndex];
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setShowInstructions(false);
+        }, 4000);
+
+        return () => clearTimeout(timer);
+    }, []);
 
     useEffect(() => {
         // Verificar autenticación primero
@@ -23,12 +36,20 @@ export default function HomePage() {
             return;
         }
 
-        const fetchProfiles = async () => {
+        const fetchProfilesAndLikes = async () => {
             try {
+                // Obtener todos los perfiles
                 const response = await profileService.getAll();
-                // Filtrar el perfil del usuario actual si es necesario
-                const filteredProfiles = response.data.filter(profile => profile.userId !== userInfo.id);
-                setProfiles(filteredProfiles);
+                const filteredProfiles = response.data.filter(profile => profile.user.id !== userInfo.id && profile.user.role !== "ADMIN");
+
+                // Obtener los likes del usuario logueado
+                const likesResponse = await likesService.getLikesByLikerId(userInfo.id);
+                const likedUserIds = likesResponse.data.map(like => like.liked.id);
+
+                // Filtrar perfiles para excluir los que ya fueron likados
+                const availableProfiles = filteredProfiles.filter(profile => !likedUserIds.includes(profile.id));
+
+                setProfiles(availableProfiles);
                 setLoading(false);
             } catch (err) {
                 console.error("Error al obtener perfiles:", err);
@@ -37,9 +58,8 @@ export default function HomePage() {
             }
         };
 
-        fetchProfiles();
+        fetchProfilesAndLikes();
     }, [navigate]);
-
     const handlers = useSwipeable({
         onSwipedLeft: () => {
             goToNextProfile();
@@ -51,15 +71,39 @@ export default function HomePage() {
     });
 
     const goToNextProfile = () => {
-        setCurrentProfileIndex(prev => 
+        setCurrentProfileIndex(prev =>
             prev >= profiles.length - 1 ? 0 : prev + 1
         );
     };
 
     const goToPreviousProfile = () => {
-        setCurrentProfileIndex(prev => 
+        setCurrentProfileIndex(prev =>
             prev <= 0 ? profiles.length - 1 : prev - 1
         );
+    };
+
+    const handleLike = async () => {
+        try {
+            const userInfo = authService.getUserInfo();
+            if (!userInfo || !currentProfile) {
+                console.error('No se encontró usuario logueado o perfil actual');
+                return;
+            }
+
+            const likeData = {
+                liker: { id: userInfo.id },
+                liked: { id: currentProfile.id },
+                state: "PENDING"
+            };
+
+            await likesService.postLike(likeData);
+            console.log('Like enviado con éxito');
+
+            setProfiles(prevProfiles => prevProfiles.filter(profile => profile.id !== currentProfile.id));
+            goToNextProfile();
+        } catch (err) {
+            console.error('Error al enviar like:', err);
+        }
     };
 
     if (loading) {
@@ -95,25 +139,25 @@ export default function HomePage() {
         );
     }
 
-    const currentProfile = profiles[currentProfileIndex];
-
     return (
-        <div className="flex flex-col min-h-screen">
+        <div className="flex flex-col min-h-screen lg:pt-16">
             <Header />
-            <div className="flex flex-1 flex-col items-center justify-center p-4">
+            <div className="flex flex-1 flex-col items-center justify-center p-4 w-full">
                 {/* Contenedor del perfil con gestos de swipe */}
-                <div 
+                <div
                     {...handlers}
-                    className="w-full max-w-md bg-white rounded-xl shadow-lg overflow-hidden relative"
-                    style={{ minHeight: '500px', touchAction: 'pan-y' }}
+                    className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg bg-white rounded-xl shadow-lg overflow-hidden relative max-h-[80vh]"
+                    style={{ touchAction: 'pan-y' }}
                 >
-                    {/* Foto de perfil */}
-                    <div className="h-full w-full bg-gray-100 flex items-center justify-center overflow-hidden">
+
+                    <div
+                        className="h-auto aspect-[3/4] bg-gray-100 flex items-center justify-center overflow-hidden"
+                    >
                         {currentProfile.profilePhoto ? (
-                            <img 
-                                src={currentProfile.profilePhoto} 
+                            <img
+                                src={currentProfile.profilePhoto}
                                 alt={`${currentProfile.name} ${currentProfile.lastName}`}
-                                className="h-full w-full object-cover"
+                                className="w-full h-full object-cover"
                             />
                         ) : (
                             <div className="text-4xl text-gray-400">
@@ -121,24 +165,24 @@ export default function HomePage() {
                             </div>
                         )}
                     </div>
-                    
+
                     {/* Información del perfil */}
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 text-white">
-                        <h2 className="text-2xl font-bold">
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 sm:p-6 text-white">
+                        <h2 className="text-xl sm:text-2xl font-bold">
                             {currentProfile.name} {currentProfile.lastName}, {currentProfile.age}
                         </h2>
-                        <p className="text-sm opacity-80 mt-1">{currentProfile.location}</p>
-                        
+                        <p className="text-xs sm:text-sm opacity-80 mt-1">{currentProfile.location}</p>
+
                         {currentProfile.bio && (
-                            <p className="mt-3 text-sm">{currentProfile.bio}</p>
+                            <p className="mt-2 sm:mt-3 text-xs sm:text-sm">{currentProfile.bio}</p>
                         )}
-                        
+
                         {currentProfile.interests && (
-                            <div className="mt-3 flex flex-wrap gap-2">
+                            <div className="mt-2 sm:mt-3 flex flex-wrap gap-2">
                                 {currentProfile.interests.split(',').map((interest, i) => (
-                                    <span 
-                                        key={i} 
-                                        className="bg-white/20 px-3 py-1 rounded-full text-xs"
+                                    <span
+                                        key={i}
+                                        className="bg-white/20 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs"
                                     >
                                         {interest.trim()}
                                     </span>
@@ -146,42 +190,37 @@ export default function HomePage() {
                             </div>
                         )}
                     </div>
-                    
-                    {/* Indicador de perfiles */}
-                    <div className="absolute top-4 left-0 right-0 flex justify-center gap-1.5">
-                        {profiles.map((_, index) => (
-                            <div 
-                                key={index}
-                                className={`h-1.5 rounded-full transition-all duration-300 ${
-                                    index === currentProfileIndex 
-                                        ? 'bg-white w-6' 
-                                        : 'bg-white/30 w-3'
-                                }`}
-                            />
-                        ))}
-                    </div>
                 </div>
-                
-                {/* Botones de navegación para dispositivos sin touch */}
-                <div className="flex gap-4 mt-6">
-                    <button 
-                        onClick={goToPreviousProfile}
-                        className="bg-gray-200 hover:bg-gray-300 px-6 py-2 rounded-full"
+
+                {/* Contenedor con tres botones (perfil, like, siguiente) */}
+                <div className="flex gap-4 sm:gap-6 mt-3">
+                    <button
+                        onClick={() => navigate(`/profiles/${currentProfile.id}`)}
+                        className="bg-gray-200 hover:bg-gray-300 p-3 sm:p-4 rounded-full"
                     >
-                        Anterior
+                        <User className="h-5 w-5 sm:h-6 sm:w-6 text-gray-800" />
                     </button>
-                    <button 
+                    <button
+                        onClick={handleLike}
+                        className="bg-pink-500 hover:bg-pink-600 text-white p-3 sm:p-4 rounded-full"
+                    >
+                        <Heart className="h-5 w-5 sm:h-6 sm:w-6" />
+                    </button>
+                    <button
                         onClick={goToNextProfile}
-                        className="bg-gray-200 hover:bg-gray-300 px-6 py-2 rounded-full"
+                        className="bg-gray-200 hover:bg-gray-300 p-3 sm:p-4 rounded-full"
                     >
-                        Siguiente
+                        <ArrowRight className="h-5 w-5 sm:h-6 sm:w-6 text-gray-800" />
                     </button>
                 </div>
-                
+
                 {/* Instrucciones para móvil */}
-                <p className="mt-4 text-gray-500 text-sm">
-                    Desliza hacia los lados para ver más perfiles
-                </p>
+                <div
+                    className={`mt-4 text-gray-100 text-xs sm:text-sm px-3 sm:px-4 py-1 sm:py-2 rounded-full bg-gray-800 shadow-md transition-opacity duration-700 ${showInstructions ? 'opacity-100' : 'opacity-0'
+                        }`}
+                >
+                    💡 Desliza hacia los lados para ver más perfiles
+                </div>
             </div>
         </div>
     );

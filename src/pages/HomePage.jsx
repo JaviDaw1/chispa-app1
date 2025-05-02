@@ -82,29 +82,35 @@ export default function HomePage() {
         );
     };
 
-    const handleLike = async () => {
-        try {
-            const userInfo = authService.getUserInfo();
-            if (!userInfo || !currentProfile) {
-                console.error('No se encontró usuario logueado o perfil actual');
-                return;
-            }
-
-            const likeData = {
-                liker: { id: userInfo.id },
-                liked: { id: currentProfile.id },
-                state: "PENDING"
-            };
-
-            await likesService.postLike(likeData);
-            console.log('Like enviado con éxito');
-
-            setProfiles(prevProfiles => prevProfiles.filter(profile => profile.id !== currentProfile.id));
-            goToNextProfile();
-        } catch (err) {
-            console.error('Error al enviar like:', err);
+   // En el handleLike del HomePage.jsx
+const handleLike = async () => {
+    try {
+        const userInfo = authService.getUserInfo();
+        if (!userInfo || !currentProfile) {
+            console.error('No se encontró usuario logueado o perfil actual');
+            return;
         }
-    };
+
+        const likeData = {
+            liker: { id: userInfo.id },
+            liked: { id: currentProfile.id },
+            state: "PENDING"
+        };
+
+        const response = await likesService.postLike(likeData);
+        
+        // Mostrar notificación si hay match
+        if (response.data?.matchCreated) {
+            alert(`¡Match con ${currentProfile.name}!`);
+            // O usar un sistema de notificaciones más elegante
+        }
+
+        setProfiles(prevProfiles => prevProfiles.filter(profile => profile.id !== currentProfile.id));
+        goToNextProfile();
+    } catch (err) {
+        console.error('Error al enviar like:', err);
+    }
+};
 
     if (loading) {
         return (

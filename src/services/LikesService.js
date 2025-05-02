@@ -16,6 +16,13 @@ export default class LikesService {
   async postLike(likeData) {
     try {
       const response = await api.post(this.url, likeData);
+      
+      // Verificar si la respuesta incluye información de match
+      if (response.data.matchCreated) {
+        console.log('¡Match creado!', response.data.match);
+        // Aquí podrías mostrar una notificación al usuario
+      }
+      
       return response;
     } catch (error) {
       console.error('Error creating like:', error);

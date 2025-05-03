@@ -35,7 +35,7 @@ const Match = () => {
     };
 
     fetchMatches();
-  }, [navigate, currentUser]);
+  }, [navigate, currentUser.id]);
 
   if (loading) {
     return (

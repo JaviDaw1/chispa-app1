@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react'; 
 import { useParams } from 'react-router-dom';
 import MessagesService from '../services/MessagesService';
 import MatchService from '../services/MatchService';
@@ -19,43 +19,7 @@ const Chat = () => {
   const currentUser = authService.getUserInfo();
   const messagesEndRef = useRef(null);
 
-  // Cargar match y mensajes
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        // Obtener información del match
-        const matchResponse = await matchService.getMatchById(matchId);
-        setMatch(matchResponse.data);
-        
-        // Determinar el otro usuario
-        const other = matchResponse.data.user1.id === currentUser.id 
-          ? matchResponse.data.user2 
-          : matchResponse.data.user1;
-        setOtherUser(other);
-        
-        // Obtener mensajes
-        const messagesResponse = await messagesService.getConversation(
-          matchId, 
-          currentUser.id, 
-          other.id
-        );
-        setMessages(messagesResponse.data);
-        
-        // Contar mensajes no leídos
-        const countResponse = await messagesService.countUnreadMessages(currentUser.id, matchId);
-        setUnreadCount(countResponse.data);
-        
-        // Marcar mensajes como leídos
-        await markUnreadAsRead();
-      } catch (error) {
-        console.error('Error loading chat:', error);
-      }
-    };
-
-    loadData();
-  }, [matchId, currentUser.id]);
-
-  // Scroll al final de los mensajes
+  // Scroll automático al final del chat
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
@@ -64,21 +28,43 @@ const Chat = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const markUnreadAsRead = async () => {
-    try {
-      const unreadMessages = messages.filter(
-        msg => msg.receiverUser.id === currentUser.id && !msg.isRead
-      );
-      
-      await Promise.all(
-        unreadMessages.map(msg => 
-          messagesService.markAsRead(msg.id)
-        )
-      );
-    } catch (error) {
-      console.error('Error marking messages as read:', error);
-    }
-  };
+  useEffect(() => {
+    const loadChatData = async () => {
+      try {
+        const matchResponse = await matchService.getMatchById(matchId);
+        setMatch(matchResponse.data);
+        
+        const other = matchResponse.data.user1.id === currentUser.id 
+          ? matchResponse.data.user2 
+          : matchResponse.data.user1;
+        setOtherUser(other);
+
+        const [messagesResponse, countResponse] = await Promise.all([
+          messagesService.getConversation(matchId, currentUser.id, other.id),
+          messagesService.countUnreadMessages(currentUser.id, matchId)
+        ]);
+        
+        const fetchedMessages = messagesResponse.data;
+        setMessages(fetchedMessages);
+        setUnreadCount(countResponse.data);
+
+        // Marcar solo los no leídos al cargar
+        const unreadMessages = fetchedMessages.filter(
+          msg => msg.receiverUser.id === currentUser.id && !msg.isRead
+        );
+
+        if (unreadMessages.length > 0) {
+          await Promise.all(
+            unreadMessages.map(msg => messagesService.markAsRead(msg.id))
+          );
+        }
+      } catch (error) {
+        console.error('Error loading chat:', error);
+      }
+    };
+
+    loadChatData();
+  }, [matchId, currentUser.id]);
 
   const handleSendMessage = async () => {
     if (!newMessage.trim()) return;
@@ -91,7 +77,7 @@ const Chat = () => {
         newMessage
       );
       
-      setMessages([...messages, response.data]);
+      setMessages(prev => [...prev, response.data]);
       setNewMessage('');
     } catch (error) {
       console.error('Error sending message:', error);

@@ -14,8 +14,8 @@ const MatchCard = ({ match, currentUserId }) => {
   const messagesService = new MessagesService();
   const authService = new AuthService();
 
+  const currentUser = authService.getUserInfo(); // Guardar fuera del useEffect
   const otherUserId = match.user1.id === currentUserId ? match.user2.id : match.user1.id;
-  const currentUser = authService.getUserInfo();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,7 +23,7 @@ const MatchCard = ({ match, currentUserId }) => {
         // Cargar perfil del otro usuario
         const profileResponse = await profileService.getByUserId(otherUserId);
         setOtherUserProfile(profileResponse.data);
-        
+
         // Cargar mensajes no leídos
         if (currentUser) {
           const unreadResponse = await messagesService.countUnreadMessages(
@@ -40,7 +40,7 @@ const MatchCard = ({ match, currentUserId }) => {
     };
 
     fetchData();
-  }, [otherUserId, match.id, currentUser?.id]);
+  }, [otherUserId, match.id]); // Remover currentUser?.id de las dependencias
 
   if (loading) {
     return (

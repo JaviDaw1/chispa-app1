@@ -19,7 +19,6 @@ const Chat = () => {
   const currentUser = authService.getUserInfo();
   const messagesEndRef = useRef(null);
 
-  // Scroll automático al final del chat
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
@@ -96,7 +95,7 @@ const Chat = () => {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
+    <div className="flex flex-col min-h-screen bg-gray-50 pb-16">
       <Header />
       
       {/* Encabezado del chat */}

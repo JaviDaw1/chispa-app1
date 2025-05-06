@@ -21,7 +21,7 @@ const Header = () => {
 
   const navItems = [
     { label: "Inicio", icon: Home, path: "/" },
-    { label: "Mis Matches", icon: Sparkles, path: "/match" },
+    { label: "Mis Matches", icon: Sparkles, path: "/matches" },
     { label: "Mensajes", icon: MessageCircle, path: "/messages" },
     isAuthenticated
       ? { label: "Perfil", icon: User, path: "/profile" }

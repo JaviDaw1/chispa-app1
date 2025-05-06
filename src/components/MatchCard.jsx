@@ -7,14 +7,10 @@ import AuthService from '../services/AuthService';
 const MatchCard = ({ match, currentUserId }) => {
   const [otherUserProfile, setOtherUserProfile] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [unreadCount, setUnreadCount] = useState(0);
   const navigate = useNavigate();
   
   const profileService = new ProfileService();
-  const messagesService = new MessagesService();
-  const authService = new AuthService();
 
-  const currentUser = authService.getUserInfo(); // Guardar fuera del useEffect
   const otherUserId = match.user1.id === currentUserId ? match.user2.id : match.user1.id;
 
   useEffect(() => {
@@ -24,14 +20,6 @@ const MatchCard = ({ match, currentUserId }) => {
         const profileResponse = await profileService.getByUserId(otherUserId);
         setOtherUserProfile(profileResponse.data);
 
-        // Cargar mensajes no leídos
-        if (currentUser) {
-          const unreadResponse = await messagesService.countUnreadMessages(
-            currentUser.id, 
-            match.id
-          );
-          setUnreadCount(unreadResponse.data);
-        }
       } catch (error) {
         console.error("Error al cargar datos:", error);
       } finally {
@@ -69,11 +57,6 @@ const MatchCard = ({ match, currentUserId }) => {
               src={otherUserProfile.profilePhoto || '/default-profile.png'} 
               alt={`${otherUserProfile.name} ${otherUserProfile.lastName}`} 
             />
-            {unreadCount > 0 && (
-              <div className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
-                {unreadCount}
-              </div>
-            )}
           </div>
           <div className="flex-1 min-w-0">
             <h3 className="text-lg font-medium text-gray-900 truncate">

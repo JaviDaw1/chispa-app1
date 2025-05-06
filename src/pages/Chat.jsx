@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'; 
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import MessagesService from '../services/MessagesService';
 import MatchService from '../services/MatchService';
 import AuthService from '../services/AuthService';
@@ -32,37 +32,48 @@ const Chat = () => {
       try {
         const matchResponse = await matchService.getMatchById(matchId);
         setMatch(matchResponse.data);
-        
-        const other = matchResponse.data.user1.id === currentUser.id 
-          ? matchResponse.data.user2 
+  
+        const other = matchResponse.data.user1.id === currentUser.id
+          ? matchResponse.data.user2
           : matchResponse.data.user1;
         setOtherUser(other);
-
-        const [messagesResponse, countResponse] = await Promise.all([
-          messagesService.getConversation(matchId, currentUser.id, other.id),
-          messagesService.countUnreadMessages(currentUser.id, matchId)
-        ]);
-        
+  
+        // Obtener mensajes usando solo getMessagesByMatchId
+        const messagesResponse = await messagesService.getMessagesByMatch(matchId);
         const fetchedMessages = messagesResponse.data;
+  
         setMessages(fetchedMessages);
-        setUnreadCount(countResponse.data);
-
-        // Marcar solo los no leídos al cargar
+  
         const unreadMessages = fetchedMessages.filter(
           msg => msg.receiverUser.id === currentUser.id && !msg.isRead
         );
-
-        if (unreadMessages.length > 0) {
-          await Promise.all(
-            unreadMessages.map(msg => messagesService.markAsRead(msg.id))
-          );
-        }
+        setUnreadCount(unreadMessages.length);
+  
+        // if (unreadMessages.length > 0) {
+        //   await Promise.all(
+        //     unreadMessages.map(msg => messagesService.markAsRead(msg.id))
+        //   );
+        // }
       } catch (error) {
         console.error('Error loading chat:', error);
       }
     };
-
+  
     loadChatData();
+  
+    // Intervalo para obtener mensajes nuevos cada 5 segundos (5000 ms)
+    const intervalId = setInterval(async () => {
+      try {
+        const messagesResponse = await messagesService.getMessagesByMatch(matchId);
+        const fetchedMessages = messagesResponse.data;
+        setMessages(fetchedMessages);
+      } catch (error) {
+        console.error('Error fetching messages:', error);
+      }
+    }, 5000);
+  
+    // Limpiar el intervalo cuando el componente se desmonte
+    return () => clearInterval(intervalId);
   }, [matchId, currentUser.id]);
 
   const handleSendMessage = async () => {
@@ -95,11 +106,19 @@ const Chat = () => {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 pb-16">
+    <div className="flex flex-col min-h-screen bg-gray-50">
       <Header />
       
-      {/* Encabezado del chat */}
-      <div className="bg-pink-600 text-white p-4 flex items-center">
+      {/* Encabezado del chat, se mantiene fijo */}
+      <div className="sticky top-0 bg-pink-600 text-white p-4 flex items-center z-10 lg:pt-20">
+
+      <Link to="/messages" className="text-white mr-4">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 12H5" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5l-7 7 7 7" />
+          </svg>
+        </Link>
+
         <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center mr-3">
           {otherUser.profile?.profilePhoto ? (
             <img 
@@ -148,8 +167,8 @@ const Chat = () => {
         <div ref={messagesEndRef} />
       </div>
       
-      {/* Input para enviar mensajes */}
-      <div className="border-t border-gray-200 p-3 bg-white">
+      {/* Input para enviar mensajes, fijado en la parte inferior */}
+      <div className="sticky bottom-0 left-0 w-full bg-white p-3 border-t border-gray-200 pb-14 lg:pb-3">
         <div className="flex items-center gap-2">
           <input
             type="text"

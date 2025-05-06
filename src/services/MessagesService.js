@@ -21,23 +21,17 @@ export default class MessagesService {
     }
   }
 
-  async getConversation(matchId, userId1, userId2) {
-    return api.get(`${this.url}/match/${matchId}/conversation`, {
-      params: { userId1, userId2 }
-    });
-  }
-
-  async markAsRead(messageId) {
-    return api.patch(`${this.url}/${messageId}/read`);
-  }
-
-  async countUnreadMessages(userId, matchId) {
-    return api.get(`${this.url}/match/${matchId}/unread-count`, {
-      params: { userId }
-    });
-  }
+  // async markAsRead(messageId) {
+  //   return api.patch(`${this.url}/${messageId}/read`);
+  // }
 
   async getMessagesByMatch(matchId) {
-    return api.get(`${this.url}/match/${matchId}`);
+    try {
+      const response = await api.get(`${this.url}/match/${matchId}`);
+      return response;
+    } catch (error) {
+      console.error(`Error getting messages for match ${matchId}:`, error);
+      throw error;
+    }
   }
 }

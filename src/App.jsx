@@ -9,6 +9,7 @@ import Preference from './pages/Preference';
 import Match from './pages/Match';
 import SignUp from './pages/SignUp';
 import Chat from './pages/Chat';
+import ChatsPage from './pages/ChatsPage';
 
 export default function App() {
    return (
@@ -21,8 +22,9 @@ export default function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/preference" element={<Preference/>} />
-            <Route path="/match" element={<Match/>} />
+            <Route path="/matches" element={<Match/>} />
             <Route path="/chat/:matchId" element={<Chat />} />
+            <Route path="/messages" element={<ChatsPage />} />
          </Routes>
       </Router>
    )

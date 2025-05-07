@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';  // Importamos useNavigate
 import ChatsCard from '../components/ChatsCard';
 import MatchService from '../services/MatchService';
 import AuthService from '../services/AuthService';
@@ -10,10 +11,22 @@ const authService = new AuthService();
 const ChatsPage = () => {
     const [matches, setMatches] = useState([]);
     const [loading, setLoading] = useState(true);
-    const currentUser = authService.getUserInfo();
+    const navigate = useNavigate();
+    const [currentUser, setCurrentUser] = useState(null);
+
+    useEffect(() => {
+        const user = authService.getUserInfo();
+        if (!user?.id) {
+            navigate('/login');
+            return;
+        }
+        setCurrentUser(user);
+    }, [navigate]);
 
     useEffect(() => {
         const fetchMatches = async () => {
+            if (!currentUser?.id) return;
+
             try {
                 const response = await matchService.getMatchesByUser(currentUser.id);
                 setMatches(response.data);
@@ -23,11 +36,14 @@ const ChatsPage = () => {
                 setLoading(false);
             }
         };
-        fetchMatches();
-    }, [currentUser.id]);
+
+        if (currentUser) {
+            fetchMatches();
+        }
+    }, [currentUser]);
 
     return (
-        <div className="max-w-lg mx-auto mt-8 p-4 bg-gradient-to-br">
+        <div className="max-w-lg mx-auto mt-8 p-4 bg-gradient-to-br lg:pt-16">
             <Header />
             <h2 className="text-2xl font-extrabold mb-4 text-center">Tus chats</h2>
 

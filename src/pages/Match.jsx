@@ -14,16 +14,23 @@ const Match = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const currentUser = authService.getUserInfo();
+
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    const user = authService.getUserInfo();
+    if (!user?.id) {
+      navigate('/login');
+      return;
+    }
+    setCurrentUser(user);
+  }, [navigate]);
 
   useEffect(() => {
     const fetchMatches = async () => {
-      try {
-        if (!currentUser?.id) {
-          navigate('/login');
-          return;
-        }
+      if (!currentUser?.id) return;
 
+      try {
         const response = await matchService.getMatchesByUser(currentUser.id);
         setMatches(response.data);
       } catch (err) {
@@ -34,8 +41,10 @@ const Match = () => {
       }
     };
 
-    fetchMatches();
-  }, [navigate, currentUser.id]);
+    if (currentUser) {
+      fetchMatches();
+    }
+  }, [currentUser]);
 
   if (loading) {
     return (

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom"; // useParams para obtener el ID del perfil de la URL
 import AuthService from "../services/AuthService";
 import ProfileService from "../services/ProfileService";
 import Header from "../components/Header";
@@ -9,6 +9,7 @@ const authService = new AuthService();
 const profileService = new ProfileService();
 
 const Profile = () => {
+  const { id } = useParams();  // Obtén el ID de perfil desde los parámetros de la URL
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -17,21 +18,30 @@ const Profile = () => {
   const fetchProfile = useCallback(async (userInfo) => {
     try {
       setLoading(true);
-      const { data } = await profileService.getByUserId(userInfo.id);
-      setProfile(data);
+      let profileData;
+      if (id) {
+        // Si hay un ID en la URL, buscar el perfil de ese usuario
+        const { data } = await profileService.getById(id);
+        profileData = data;
+      } else {
+        // Si no hay ID, buscar el perfil del usuario logueado
+        const { data } = await profileService.getByUserId(userInfo.id);
+        profileData = data;
+      }
+      setProfile(profileData);
       setError(null);
     } catch (error) {
       console.error("Error al obtener el perfil:", error);
       if (error.response && error.response.status === 404) {
         setProfile(null);
-        setError(null);
+        setError("Perfil no encontrado");
       } else {
         setError("Error al cargar el perfil");
       }
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [id]);  // Dependencia de 'id', ya que cambiamos de perfil si cambiamos el ID
 
   useEffect(() => {
     const userInfo = authService.getUserInfo();
@@ -85,7 +95,7 @@ const Profile = () => {
       <div className="flex flex-1 items-center justify-center py-6">
         <div className="max-w-4xl w-full bg-white rounded-2xl shadow-xl p-6 mx-2">
           <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-            Mi Perfil
+            {id ? "Perfil del Usuario" : "Mi Perfil"}
           </h2>
 
           {(!profile || Object.values(profile).every((val) => !val)) && (

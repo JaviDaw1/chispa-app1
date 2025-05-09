@@ -10,6 +10,7 @@ import Match from './pages/Match';
 import SignUp from './pages/SignUp';
 import Chat from './pages/Chat';
 import ChatsPage from './pages/ChatsPage';
+import Error404 from './pages/Error404';
 
 export default function App() {
    return (
@@ -18,6 +19,7 @@ export default function App() {
             {/* Páginas generales */}
             <Route path="/" element={<HomePage />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/profile/:userId" element={<Profile />} />
             <Route path="/create-profile" element={<CreateProfile />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
@@ -25,6 +27,7 @@ export default function App() {
             <Route path="/matches" element={<Match/>} />
             <Route path="/chat/:matchId" element={<Chat />} />
             <Route path="/messages" element={<ChatsPage />} />
+            <Route path="*" element={<Error404 />} />
          </Routes>
       </Router>
    )

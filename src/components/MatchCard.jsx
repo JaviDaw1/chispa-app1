@@ -8,7 +8,7 @@ const MatchCard = ({ match, currentUserId }) => {
   const [otherUserProfile, setOtherUserProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  
+
   const profileService = new ProfileService();
 
   const otherUserId = match.user1.id === currentUserId ? match.user2.id : match.user1.id;
@@ -52,10 +52,10 @@ const MatchCard = ({ match, currentUserId }) => {
       <div className="p-4">
         <div className="flex items-center space-x-4">
           <div className="relative flex-shrink-0">
-            <img 
-              className="h-16 w-16 rounded-full object-cover border-2 border-pink-500" 
-              src={otherUserProfile.profilePhoto || '/default-profile.png'} 
-              alt={`${otherUserProfile.name} ${otherUserProfile.lastName}`} 
+            <img
+              className="h-16 w-16 rounded-full object-cover border-2 border-pink-500"
+              src={otherUserProfile.profilePhoto || '/default-profile.png'}
+              alt={`${otherUserProfile.name} ${otherUserProfile.lastName}`}
             />
           </div>
           <div className="flex-1 min-w-0">
@@ -74,7 +74,7 @@ const MatchCard = ({ match, currentUserId }) => {
             </p>
           </div>
         </div>
-        
+
         <div className="mt-4 flex justify-between items-center">
           <div className="flex space-x-2">
             <button
@@ -86,7 +86,7 @@ const MatchCard = ({ match, currentUserId }) => {
               </svg>
               Ver perfil
             </button>
-            
+
             <button
               onClick={() => navigate(`/chat/${match.id}`)}
               className="px-3 py-1.5 bg-pink-600 text-white rounded-md hover:bg-pink-700 text-sm flex items-center"
@@ -97,7 +97,7 @@ const MatchCard = ({ match, currentUserId }) => {
               Chatear
             </button>
           </div>
-          
+
           <span className="text-xs text-gray-500">
             {new Date(match.matchDate).toLocaleDateString('es-ES', {
               day: 'numeric',

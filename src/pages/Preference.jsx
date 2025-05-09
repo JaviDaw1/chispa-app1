@@ -9,15 +9,15 @@ const authService = new AuthService();
 const preferenceService = new PreferenceService();
 
 const Preference = () => {
-  const [preferencias, setPreferencias] = useState({
+  const [preferencias, setPreferencias] = useState(null); // Cambiado a null inicialmente
+  const [loading, setLoading] = useState(true);
+  const [editing, setEditing] = useState(false);
+  const [tempPreferences, setTempPreferences] = useState({
     favoriteGender: "",
     minAgeRange: 18,
     maxAgeRange: 100,
     maxDistance: 20
   });
-  const [loading, setLoading] = useState(true);
-  const [editing, setEditing] = useState(false);
-  const [tempPreferences, setTempPreferences] = useState({});
   const [isSaving, setIsSaving] = useState(false);
   const navigate = useNavigate();
 
@@ -37,53 +37,52 @@ const Preference = () => {
         navigate("/login");
         return;
       }
-  
+
       const response = await preferenceService.getByUserId(user.id);
-  
-      let prefs;
       if (response.data) {
-        // Ya existen preferencias
-        prefs = {
+        const prefs = {
           favoriteGender: response.data.favoriteGender || "",
           minAgeRange: response.data.minAgeRange || 18,
           maxAgeRange: response.data.maxAgeRange || 100,
           maxDistance: response.data.maxDistance || 20
         };
+        setPreferencias(prefs);
+        setTempPreferences(prefs);
       } else {
-        // No existen preferencias: se crean
+        // Si no hay preferencias, inicializamos con valores por defecto
         const defaultPrefs = {
           favoriteGender: "",
           minAgeRange: 18,
           maxAgeRange: 100,
-          maxDistance: 20,
-          user: { id: user.id }
+          maxDistance: 20
         };
-        const created = await preferenceService.create(defaultPrefs);
-        prefs = {
-          favoriteGender: created.data.favoriteGender || "",
-          minAgeRange: created.data.minAgeRange || 18,
-          maxAgeRange: created.data.maxAgeRange || 100,
-          maxDistance: created.data.maxDistance || 20
-        };
+        setTempPreferences(defaultPrefs);
       }
-  
-      setPreferencias(prefs);
-      setTempPreferences(prefs);
     } catch (error) {
-      console.log("Error al cargar o crear preferencias:", error);
+      console.log("Error al cargar preferencias:", error);
     } finally {
       setLoading(false);
     }
   };
-  
 
   const handleEdit = () => {
     setEditing(true);
+    // Si no hay preferencias, usamos los valores por defecto
+    if (!preferencias) {
+      setTempPreferences({
+        favoriteGender: "",
+        minAgeRange: 18,
+        maxAgeRange: 100,
+        maxDistance: 20
+      });
+    }
   };
 
   const handleCancel = () => {
     setEditing(false);
-    setTempPreferences(preferencias);
+    if (preferencias) {
+      setTempPreferences(preferencias);
+    }
   };
 
   const handleSave = async () => {
@@ -95,22 +94,26 @@ const Preference = () => {
         return;
       }
 
-      const currentPrefs = await preferenceService.getByUserId(user.id);
       const preferencesToSend = {
         ...tempPreferences,
         user: { id: user.id }
       };
 
       let response;
-      if (currentPrefs.data) {
+      if (preferencias) {
+        // Actualización de preferencias existentes
+        const currentPrefs = await preferenceService.getByUserId(user.id);
         response = await preferenceService.update(currentPrefs.data.id, preferencesToSend);
       } else {
+        // Creación de nuevas preferencias
         response = await preferenceService.create(preferencesToSend);
       }
 
       if (response.data) {
         setPreferencias(response.data);
         setEditing(false);
+        // Recargamos las preferencias para asegurar consistencia
+        await cargarPreferencias();
       }
     } catch (error) {
       console.log("Error al guardar preferencias:", error);
@@ -154,7 +157,7 @@ const Preference = () => {
                 onClick={handleEdit}
                 className="bg-blue-500 hover:bg-blue-600 ease-in-out transition-all duration-200 text-white font-semibold py-2 px-4 rounded"
               >
-                Editar
+                {preferencias ? "Editar" : "Crear Preferencias"}
               </button>
             ) : (
               <div className="flex gap-2">
@@ -176,25 +179,31 @@ const Preference = () => {
           </div>
           
           {!editing ? (
-            <>
-              <div className="mb-4">
-                <label className="block text-sm sm:text-lg font-medium text-gray-700">
-                  Género de interés: <span className="text-gray-900">{traducirGenero(preferencias.favoriteGender)}</span>
-                </label>
+            preferencias ? (
+              <>
+                <div className="mb-4">
+                  <label className="block text-sm sm:text-lg font-medium text-gray-700">
+                    Género de interés: <span className="text-gray-900">{traducirGenero(preferencias.favoriteGender)}</span>
+                  </label>
+                </div>
+                
+                <div className="mb-4">
+                  <label className="block text-sm sm:text-lg font-medium text-gray-700">
+                    Rango de edad: <span className="text-gray-900">{preferencias.minAgeRange} - {preferencias.maxAgeRange} años</span>
+                  </label>
+                </div>
+                
+                <div className="mb-4">
+                  <label className="block text-sm sm:text-lg font-medium text-gray-700">
+                    Distancia máxima: <span className="text-gray-900">{preferencias.maxDistance} km</span>
+                  </label>
+                </div>
+              </>
+            ) : (
+              <div className="text-center py-4">
+                <p className="text-gray-600 mb-4">No tienes preferencias configuradas aún</p>
               </div>
-              
-              <div className="mb-4">
-                <label className="block text-sm sm:text-lg font-medium text-gray-700">
-                  Rango de edad: <span className="text-gray-900">{preferencias.minAgeRange} - {preferencias.maxAgeRange} años</span>
-                </label>
-              </div>
-              
-              <div className="mb-4">
-                <label className="block text-sm sm:text-lg font-medium text-gray-700">
-                  Distancia máxima: <span className="text-gray-900">{preferencias.maxDistance} km</span>
-                </label>
-              </div>
-            </>
+            )
           ) : (
             <>
               <div className="mb-4">

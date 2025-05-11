@@ -19,14 +19,18 @@ const Header = () => {
     };
   }, []);
 
-  const navItems = [
-    { label: "Inicio", icon: Home, path: "/" },
-    { label: "Mis Matches", icon: Sparkles, path: "/matches" },
-    { label: "Mensajes", icon: MessageCircle, path: "/messages" },
-    isAuthenticated
-      ? { label: "Perfil", icon: User, path: "/profile" }
-      : { label: "Iniciar Sesión", icon: LogIn, path: "/login" },
-  ];
+  // Lo he metido asi para que si no ha iniciado sesion solo salga el boton de iniciar sesion
+  const navItems = isAuthenticated
+  ? [
+      { label: "Inicio", icon: Home, path: "/" },
+      { label: "Mis Chispazos", icon: Sparkles, path: "/matches" },
+      { label: "Mensajes", icon: MessageCircle, path: "/messages" },
+      { label: "Perfil", icon: User, path: "/profile" },
+    ]
+  : [
+      
+      { label: "Iniciar Sesión", icon: LogIn, path: "/login" },
+    ];
 
   return (
     <>

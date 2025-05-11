@@ -146,75 +146,67 @@ const Preference = () => {
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-gray-50">
       <Header />
-      <div className="flex flex-1 items-center justify-center py-4">
-        <div className="max-w-2xl w-full p-8 bg-white rounded-lg shadow-lg mx-4">
+      <div className="flex flex-1 items-center justify-center p-6">
+        <div className="w-full max-w-2xl bg-white rounded-2xl shadow-2xl p-8">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-3xl font-semibold text-gray-800">Mis Preferencias</h2>
+            <h2 className="text-3xl font-bold text-gray-800">Mis Preferencias</h2>
             {!editing ? (
               <button 
                 onClick={handleEdit}
-                className="bg-blue-500 hover:bg-blue-600 ease-in-out transition-all duration-200 text-white font-semibold py-2 px-4 rounded"
+                className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-xl transition duration-200"
               >
                 {preferencias ? "Editar" : "Crear Preferencias"}
               </button>
             ) : (
-              <div className="flex gap-2">
+              <div className="flex gap-3">
                 <button 
                   onClick={handleCancel}
-                  className="bg-gray-500 hover:bg-gray-600 ease-in-out transition-all duration-200 text-white font-semibold py-2 px-4 rounded"
+                  className="bg-gray-400 hover:bg-gray-500 text-white font-medium py-2 px-4 rounded-xl transition duration-200"
                 >
                   Cancelar
                 </button>
                 <button 
                   onClick={handleSave}
                   disabled={isSaving}
-                  className="bg-green-500 hover:bg-green-600 ease-in-out transition-all duration-200 text-white font-semibold py-2 px-4 rounded disabled:opacity-50"
+                  className="bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-xl transition duration-200 disabled:opacity-50"
                 >
                   {isSaving ? "Guardando..." : "Guardar"}
                 </button>
               </div>
             )}
           </div>
-          
+  
           {!editing ? (
             preferencias ? (
-              <>
-                <div className="mb-4">
-                  <label className="block text-sm sm:text-lg font-medium text-gray-700">
-                    Género de interés: <span className="text-gray-900">{traducirGenero(preferencias.favoriteGender)}</span>
-                  </label>
+              <div className="space-y-4">
+                <div>
+                  <h4 className="text-lg font-semibold text-gray-700">Género de interés:</h4>
+                  <p className="text-gray-800">{traducirGenero(preferencias.favoriteGender)}</p>
                 </div>
-                
-                <div className="mb-4">
-                  <label className="block text-sm sm:text-lg font-medium text-gray-700">
-                    Rango de edad: <span className="text-gray-900">{preferencias.minAgeRange} - {preferencias.maxAgeRange} años</span>
-                  </label>
+                <div>
+                  <h4 className="text-lg font-semibold text-gray-700">Rango de edad:</h4>
+                  <p className="text-gray-800">{preferencias.minAgeRange} - {preferencias.maxAgeRange} años</p>
                 </div>
-                
-                <div className="mb-4">
-                  <label className="block text-sm sm:text-lg font-medium text-gray-700">
-                    Distancia máxima: <span className="text-gray-900">{preferencias.maxDistance} km</span>
-                  </label>
+                <div>
+                  <h4 className="text-lg font-semibold text-gray-700">Distancia máxima:</h4>
+                  <p className="text-gray-800">{preferencias.maxDistance} km</p>
                 </div>
-              </>
-            ) : (
-              <div className="text-center py-4">
-                <p className="text-gray-600 mb-4">No tienes preferencias configuradas aún</p>
               </div>
+            ) : (
+              <div className="text-center text-gray-500 italic">No tienes preferencias configuradas aún.</div>
             )
           ) : (
-            <>
-              <div className="mb-4">
-                <label className="block text-sm sm:text-lg font-medium text-gray-700 mb-2">
-                  Género de interés:
-                </label>
+            <div className="space-y-6">
+              {/* Género */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Género de interés:</label>
                 <select
                   name="favoriteGender"
                   value={tempPreferences.favoriteGender}
                   onChange={handleChange}
-                  className="w-full p-2 border border-gray-300 rounded-md"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="">Selecciona un género</option>
                   <option value="MALE">Hombre</option>
@@ -222,14 +214,13 @@ const Preference = () => {
                   <option value="OTHER">Otro</option>
                 </select>
               </div>
-              
-              <div className="mb-4">
-                <label className="block text-sm sm:text-lg font-medium text-gray-700 mb-2">
-                  Rango de edad:
-                </label>
-                <div className="flex items-center gap-4">
+  
+              {/* Rango de edad */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Rango de edad:</label>
+                <div className="flex gap-4">
                   <div className="flex-1">
-                    <label className="block text-sm text-gray-600 mb-1">Mínimo:</label>
+                    <label className="block text-xs text-gray-600 mb-1">Mínimo</label>
                     <input
                       type="number"
                       name="minAgeRange"
@@ -237,11 +228,11 @@ const Preference = () => {
                       max={tempPreferences.maxAgeRange}
                       value={tempPreferences.minAgeRange}
                       onChange={handleChange}
-                      className="w-full p-2 border border-gray-300 rounded-md"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
                   <div className="flex-1">
-                    <label className="block text-sm text-gray-600 mb-1">Máximo:</label>
+                    <label className="block text-xs text-gray-600 mb-1">Máximo</label>
                     <input
                       type="number"
                       name="maxAgeRange"
@@ -249,16 +240,15 @@ const Preference = () => {
                       max="100"
                       value={tempPreferences.maxAgeRange}
                       onChange={handleChange}
-                      className="w-full p-2 border border-gray-300 rounded-md"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
                 </div>
               </div>
-              
-              <div className="mb-4">
-                <label className="block text-sm sm:text-lg font-medium text-gray-700 mb-2">
-                  Distancia máxima (km):
-                </label>
+  
+              {/* Distancia */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Distancia máxima (km):</label>
                 <input
                   type="number"
                   name="maxDistance"
@@ -266,24 +256,27 @@ const Preference = () => {
                   max="100"
                   value={tempPreferences.maxDistance}
                   onChange={handleChange}
-                  className="w-full p-2 border border-gray-300 rounded-md"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
-            </>
+            </div>
           )}
-          
-          <Divider className="my-5" />
-          
-          <button 
-            onClick={() => navigate("/")} 
-            className="bg-gray-500 hover:bg-gray-600 ease-in-out transition-all duration-200 text-white font-semibold py-2 px-4 rounded"
-          >
-            Ir a Inicio
-          </button>
+  
+          <Divider className="my-6" />
+  
+          <div className="flex justify-end">
+            <button 
+              onClick={() => navigate("/")} 
+              className="bg-gray-700 hover:bg-gray-800 text-white font-medium py-2 px-4 rounded-xl transition duration-200"
+            >
+              Volver al Inicio
+            </button>
+          </div>
         </div>
       </div>
     </div>
   );
+  
 };
 
 export default Preference;

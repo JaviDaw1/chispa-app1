@@ -1,15 +1,14 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useNavigate, useParams } from "react-router-dom"; // useParams para obtener el ID del perfil de la URL
+import { useNavigate, useParams } from "react-router-dom";
 import AuthService from "../services/AuthService";
 import ProfileService from "../services/ProfileService";
 import Header from "../components/Header";
-import Divider from "../components/Divider";
 
 const authService = new AuthService();
 const profileService = new ProfileService();
 
 const Profile = () => {
-  const { id } = useParams();  // Obtén el ID de perfil desde los parámetros de la URL
+  const { id } = useParams();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -20,11 +19,9 @@ const Profile = () => {
       setLoading(true);
       let profileData;
       if (id) {
-        // Si hay un ID en la URL, buscar el perfil de ese usuario
         const { data } = await profileService.getById(id);
         profileData = data;
       } else {
-        // Si no hay ID, buscar el perfil del usuario logueado
         const { data } = await profileService.getByUserId(userInfo.id);
         profileData = data;
       }
@@ -32,7 +29,7 @@ const Profile = () => {
       setError(null);
     } catch (error) {
       console.error("Error al obtener el perfil:", error);
-      if (error.response && error.response.status === 404) {
+      if (error.response?.status === 404) {
         setProfile(null);
         setError("Perfil no encontrado");
       } else {
@@ -41,7 +38,7 @@ const Profile = () => {
     } finally {
       setLoading(false);
     }
-  }, [id]);  // Dependencia de 'id', ya que cambiamos de perfil si cambiamos el ID
+  }, [id]);
 
   useEffect(() => {
     const userInfo = authService.getUserInfo();
@@ -61,10 +58,13 @@ const Profile = () => {
 
   if (loading) {
     return (
-      <div className="flex flex-col min-h-screen pt-16">
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
         <Header />
-        <div className="flex flex-1 items-center justify-center">
-          <div className="text-xl text-gray-600">Cargando perfil...</div>
+        <div className="flex items-center justify-center h-[calc(100vh-80px)]">
+          <div className="flex flex-col items-center">
+            <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+            <p className="text-gray-600 font-medium">Cargando perfil...</p>
+          </div>
         </div>
       </div>
     );
@@ -72,14 +72,19 @@ const Profile = () => {
 
   if (error) {
     return (
-      <div className="flex flex-col min-h-screen pt-16">
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
         <Header />
-        <div className="flex flex-1 items-center justify-center">
-          <div className="text-center">
-            <p className="text-xl text-red-500 mb-6">{error}</p>
+        <div className="flex items-center justify-center h-[calc(100vh-80px)]">
+          <div className="text-center max-w-md p-6 bg-white rounded-xl shadow-sm">
+            <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-10 h-10 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold text-gray-800 mb-2">{error}</h3>
             <button
               onClick={handleCompleteProfile}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded transition"
+              className="mt-4 px-6 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg shadow-sm hover:shadow-md transition-all"
             >
               Completar Perfil
             </button>
@@ -90,122 +95,172 @@ const Profile = () => {
   }
 
   return (
-    <div className="flex flex-col min-h-screen pb-16 pt-10 bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <Header />
-      <div className="flex flex-1 items-center justify-center py-6">
-        <div className="max-w-4xl w-full bg-white rounded-2xl shadow-xl p-6 mx-2">
-          <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-            {id ? "Perfil del Usuario" : "Mi Perfil"}
-          </h2>
-
-          {(!profile || Object.values(profile).every((val) => !val)) && (
-            <div className="mb-6 p-4 bg-yellow-50 border-l-4 border-yellow-400 rounded-lg flex items-start gap-3">
-              <svg
-                className="h-6 w-6 text-yellow-400 mt-1"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              <p className="text-sm text-yellow-700">
-                Tu perfil está incompleto o no existe. Por favor completa tu
-                información.
-              </p>
-            </div>
-          )}
-
-          {profile ? (
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-4">
-                <ProfileField label="Nombre" value={profile.name} />
-                <ProfileField label="Apellido" value={profile.lastName} />
-                <ProfileField label="Género" value={profile.gender} />
-                <ProfileField
-                  label="Fecha de nacimiento"
-                  value={new Date(profile.birthDate).toLocaleDateString()}
-                />
-                <ProfileField label="Edad" value={profile.age} />
-                {profile.location && (
-                  <ProfileField label="Ubicación" value={profile.location} />
-                )}
-                {profile.bio && (
-                  <ProfileField label="Biografía" value={profile.bio} />
-                )}
-                {profile.interests && (
-                  <ProfileField label="Intereses" value={profile.interests} />
-                )}
-                <ProfileField
-                  label="Relación preferida"
-                  value={profile.preferredRelationship}
+      
+      <main className="container mx-auto px-4 py-8 max-w-5xl">
+        <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+          {/* Header con foto de perfil */}
+          <div className="relative bg-gradient-to-r from-blue-500 to-indigo-600 h-48">
+            {profile?.profilePhoto && (
+              <div className="absolute -bottom-16 left-8">
+                <img
+                  src={profile.profilePhoto}
+                  alt="Foto de perfil"
+                  className="w-32 h-32 rounded-full border-4 border-white object-cover shadow-md"
                 />
               </div>
+            )}
+            <div className="absolute bottom-4 right-4">
+              {profile?.isOnline ? (
+                <span className="inline-flex items-center px-3 py-1 rounded-full bg-green-100 text-green-800 text-sm font-medium">
+                  <span className="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
+                  En línea
+                </span>
+              ) : (
+                <span className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 text-gray-800 text-sm font-medium">
+                  <span className="w-2 h-2 rounded-full bg-gray-500 mr-2"></span>
+                  Desconectado
+                </span>
+              )}
+            </div>
+          </div>
 
-              <div className="flex flex-col items-center space-y-4">
-                {profile.profilePhoto && (
-                  <img
-                    src={profile.profilePhoto}
-                    alt="Foto de perfil"
-                    className="w-32 h-32 sm:w-40 sm:h-40 rounded-full object-cover border"
-                  />
+          {/* Contenido principal */}
+          <div className="pt-20 px-8 pb-8">
+            <div className="flex justify-between items-start mb-6">
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900">
+                  {profile?.name} {profile?.lastName}
+                </h1>
+                {profile?.age && (
+                  <p className="text-gray-500">{profile.age} años</p>
                 )}
-                <ProfileField
-                  label="Estado"
-                  value={profile.isOnline ? "En línea" : "Desconectado"}
-                  valueColor={profile.isOnline ? "green" : "gray"}
-                />
-                <ProfileField
-                  label="Última conexión"
-                  value={new Date(profile.lastActive).toLocaleString()}
-                />
+              </div>
+              
+              {!id && (
+                <button
+                  onClick={handleCompleteProfile}
+                  className="px-5 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors shadow-sm"
+                >
+                  Editar perfil
+                </button>
+              )}
+            </div>
+
+            {/* Alerta de perfil incompleto */}
+            {(!profile || Object.values(profile).every((val) => !val)) && (
+              <div className="mb-6 p-4 bg-amber-50 border-l-4 border-amber-400 rounded-lg flex items-start gap-3">
+                <svg className="h-5 w-5 text-amber-500 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
+                <p className="text-sm text-amber-700">
+                  Tu perfil está incompleto. Completa tu información para mejorar tus matches.
+                </p>
+              </div>
+            )}
+
+            {/* Grid de información */}
+            {profile ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="space-y-6">
+                  <ProfileSection title="Información básica">
+                    <ProfileField label="Género" value={profile.gender} />
+                    <ProfileField 
+                      label="Fecha de nacimiento" 
+                      value={profile.birthDate ? new Date(profile.birthDate).toLocaleDateString() : ''} 
+                    />
+                    <ProfileField label="Ubicación" value={profile.location} />
+                  </ProfileSection>
+
+                  {profile.bio && (
+                    <ProfileSection title="Sobre mí">
+                      <p className="text-gray-700 whitespace-pre-line">{profile.bio}</p>
+                    </ProfileSection>
+                  )}
+                </div>
+
+                <div className="space-y-6">
+                  {profile.interests && (
+                    <ProfileSection title="Intereses">
+                      <div className="flex flex-wrap gap-2">
+                        {profile.interests.split(',').map((interest, index) => (
+                          <span key={index} className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
+                            {interest.trim()}
+                          </span>
+                        ))}
+                      </div>
+                    </ProfileSection>
+                  )}
+
+                  <ProfileSection title="Preferencias">
+                    <ProfileField 
+                      label="Tipo de relación" 
+                      value={profile.preferredRelationship} 
+                    />
+                    <ProfileField 
+                      label="Última conexión" 
+                      value={profile.lastActive ? new Date(profile.lastActive).toLocaleString() : ''} 
+                    />
+                  </ProfileSection>
+                </div>
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <div className="mx-auto w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center mb-4">
+                  <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                  </svg>
+                </div>
+                <h3 className="text-xl font-medium text-gray-700 mb-2">No se encontró perfil</h3>
+                <button
+                  onClick={handleCompleteProfile}
+                  className="mt-4 px-6 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg shadow-sm hover:shadow-md transition-all"
+                >
+                  Crear Perfil
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Footer con acciones */}
+          {!id && (
+            <div className="border-t border-gray-200 px-8 py-6 bg-gray-50">
+              <div className="flex flex-col sm:flex-row justify-end gap-3">
+                <button
+                  onClick={handlePreferences}
+                  className="px-6 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors shadow-sm"
+                >
+                  Preferencias
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className="px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors shadow-sm"
+                >
+                  Cerrar sesión
+                </button>
               </div>
             </div>
-          ) : (
-            <div className="text-center py-8 text-gray-600">
-              No se encontró información de perfil.
-            </div>
           )}
-
-          <div className="flex justify-center mt-8">
-            <button
-              onClick={handleCompleteProfile}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded transition"
-            >
-              {profile ? "Editar Perfil" : "Crear Perfil"}
-            </button>
-          </div>
-
-          <Divider className="my-6" />
-
-          <div className="flex flex-col sm:flex-row gap-4">
-            <button
-              onClick={handlePreferences}
-              className="bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded flex-1 transition"
-            >
-              Preferencias
-            </button>
-            <button
-              onClick={handleLogout}
-              className="bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded flex-1 transition"
-            >
-              Cerrar Sesión
-            </button>
-          </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 };
 
-const ProfileField = ({ label, value, valueColor = "gray" }) => (
+const ProfileSection = ({ title, children }) => (
   <div>
-    <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
-      {label}:
-    </label>
-    <p className={`text-${valueColor}-900 break-words`}>{value}</p>
+    <h3 className="text-lg font-semibold text-gray-800 mb-3 pb-2 border-b border-gray-200">{title}</h3>
+    <div className="space-y-4">
+      {children}
+    </div>
+  </div>
+);
+
+const ProfileField = ({ label, value }) => (
+  <div>
+    <p className="text-sm font-medium text-gray-500">{label}</p>
+    <p className="text-gray-800 mt-1">{value || '-'}</p>
   </div>
 );
 

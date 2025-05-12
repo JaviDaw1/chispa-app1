@@ -5,18 +5,24 @@ import ProfileService from '../services/ProfileService';
 import AuthService from '../services/AuthService';
 import { useNavigate } from 'react-router-dom';
 import LikesService from '../services/LikesService';
+import BlocksService from '../services/BlocksService';
+import Modal from '../components/Modal';
+import Logo from "../../public/images/logo.jpg"
 import { Heart, ArrowRight, Ban } from 'lucide-react';
 
 const profileService = new ProfileService();
 const authService = new AuthService();
 const likesService = new LikesService();
+const blocksService = new BlocksService();
 
 export default function HomePage() {
   const [profiles, setProfiles] = useState([]);
   const [currentProfileIndex, setCurrentProfileIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [blockReason, setBlockReason] = useState('');
   const [showInstructions, setShowInstructions] = useState(true);
+  const [showBlockModal, setShowBlockModal] = useState(false);
   const currentProfile = profiles[currentProfileIndex];
   const navigate = useNavigate();
 
@@ -38,16 +44,27 @@ export default function HomePage() {
 
     const fetchProfilesAndLikes = async () => {
       try {
+        const userInfo = authService.getUserInfo();
+
         // Obtener todos los perfiles
         const response = await profileService.getAll();
-        const filteredProfiles = response.data.filter(profile => profile.user.id !== userInfo.id && profile.user.role !== "ADMIN");
+        const filteredProfiles = response.data.filter(profile =>
+          profile.user.id !== userInfo.id && profile.user.role !== "ADMIN"
+        );
 
         // Obtener los likes del usuario logueado
         const likesResponse = await likesService.getLikesByLikerId(userInfo.id);
         const likedUserIds = likesResponse.data.map(like => like.liked.id);
 
-        // Filtrar perfiles para excluir los que ya fueron likados
-        const availableProfiles = filteredProfiles.filter(profile => !likedUserIds.includes(profile.id));
+        // Obtener los bloqueos del usuario logueado
+        const blocksResponse = await blocksService.getByReporterId(userInfo.id);
+        const blockedUserIds = blocksResponse.data.map(block => block.reported.id);
+
+        // Filtrar perfiles para excluir los que ya fueron likados o bloqueados
+        const availableProfiles = filteredProfiles.filter(profile =>
+          !likedUserIds.includes(profile.id) &&
+          !blockedUserIds.includes(profile.id)
+        );
 
         setProfiles(availableProfiles);
         setLoading(false);
@@ -115,6 +132,31 @@ export default function HomePage() {
     }
   };
 
+  const handleBlock = async () => {
+    try {
+      const userInfo = authService.getUserInfo();
+      if (!userInfo || !currentProfile) {
+        console.error('No se encontró usuario logueado o perfil actual');
+        return;
+      }
+
+      const blockData = {
+        reporter: { id: userInfo.id },
+        reported: { id: currentProfile.id },
+        reason: blockReason || "Bloqueado desde swipe"
+      };
+
+      await blocksService.create(blockData);
+
+      // Quitar el perfil bloqueado y pasar al siguiente
+      setProfiles(prev => prev.filter(p => p.id !== currentProfile.id));
+      goToNextProfile();
+    } catch (err) {
+      console.error('Error al bloquear usuario:', err);
+    }
+  };
+
+
   if (loading) {
     return (
       <div className="flex flex-col min-h-screen">
@@ -151,6 +193,13 @@ export default function HomePage() {
   return (
     <div className="flex flex-col min-h-screen lg:pt-16">
       <Header />
+      <div className="lg:hidden fixed top-0 left-0 w-full flex justify-center bg-white shadow z-40 py-2">
+        <img
+          src={Logo}
+          alt="Chispa logo"
+          className="h-14"
+        />
+      </div>
       <div className="flex flex-1 flex-col items-center justify-center p-4 w-full">
         {/* Contenedor del perfil con gestos de swipe */}
         <div
@@ -204,11 +253,12 @@ export default function HomePage() {
         {/* Contenedor con tres botones (perfil, like, siguiente) */}
         <div className="flex gap-4 sm:gap-6 mt-3">
           <button
-            onClick={() => navigate(`/profile/${currentProfile.id}`)}
+            onClick={() => setShowBlockModal(true)}
             className="bg-gray-200 hover:bg-gray-300 p-3 sm:p-4 rounded-full"
           >
             <Ban className="h-5 w-5 sm:h-6 sm:w-6 text-gray-800" />
           </button>
+
           <button
             onClick={handleLike}
             className="bg-pink-500 hover:bg-pink-600 text-white p-3 sm:p-4 rounded-full"
@@ -231,6 +281,21 @@ export default function HomePage() {
           💡 Desliza hacia la derecha para ver más perfiles
         </div>
       </div>
+      <Modal
+        show={showBlockModal}
+        onClose={() => setShowBlockModal(false)}
+        onConfirm={() => {
+          handleBlock();
+          setShowBlockModal(false);
+        }}
+        title={`¿Estás seguro de que deseas bloquear a ${currentProfile?.name} ${currentProfile?.lastName}?`}
+        placeholder="Motivo del bloqueo (opcional)"
+        confirmText="Bloquear"
+        cancelText="Cancelar"
+        showReasonInput={true}
+        reason={blockReason}
+        onReasonChange={setBlockReason}
+      />
     </div>
   );
 }

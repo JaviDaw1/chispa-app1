@@ -16,4 +16,8 @@ export default class MatchService {
   async updateMatchState(id, state) {
     return api.patch(`${this.url}/${id}`, { matchState: state });
   }
+
+  async deleteMatch(id) {
+    return api.delete(`${this.url}/${id}`);
+  }
 }

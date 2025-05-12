@@ -69,13 +69,13 @@ const Match = () => {
   }
 
   return (
-    <div className="max-w-lg mx-auto mt-8 p-4 bg-gradient-to-br lg:pt-16">
+    <div className="flex flex-col min-h-screen">
       <Header />
-      <div className="flex-1 p-6">
-        <h1 className="text-center text-3xl font-extrabold">Tus Matches</h1>
+      <div className="flex-1 p-6 pt-16">
+        <h1 className="text-center mb-8 text-3xl font-extrabold">Tus Matches</h1>
         
         {matches.length === 0 ? (
-          <div className="text-center py-6">
+          <div className="text-center py-10">
             <p className="text-gray-500">Aún no tienes matches. ¡Sigue explorando!</p>
             <button
               onClick={() => navigate('/')}

@@ -56,7 +56,7 @@ export default function Settings() {
             />
           </Link>
 
-          <Link to="/configuracion/bloqueados" className={itemClass}>
+          <Link to="/blockedUsers" className={itemClass}>
             <SettingItem
               icon={<Ban className="text-red-500" />}
               title="Usuarios bloqueados"

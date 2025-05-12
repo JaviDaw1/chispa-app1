@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Home, User, LogIn, MessageCircle, Sparkles, Settings } from "lucide-react";
+import Logo from "../../public/images/logo.jpg"
 
 const Header = () => {
   const location = useLocation();
@@ -36,7 +37,10 @@ const Header = () => {
       {/* Header grande (lg+) */}
       <nav className="hidden lg:flex justify-between items-center px-6 py-4 bg-white shadow-md fixed top-0 left-0 w-full z-50">
         <div className="max-w-screen-xl w-full mx-auto flex justify-between items-center">
-          <div className="text-2xl font-bold text-pink-500">Chispa</div>
+          <div className="flex items-center gap-2">
+            <img src={Logo} alt="Chispa logo" className="h-10" />
+            <div className="text-2xl font-bold">Chispa</div>
+          </div>
           <ul className="flex gap-8">
             {navItems.map((item) => {
               const IconComponent = item.icon;

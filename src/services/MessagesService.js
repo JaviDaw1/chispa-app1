@@ -34,4 +34,14 @@ export default class MessagesService {
       throw error;
     }
   }
+
+  async deleteMessagesByMatchId(matchId) {
+    try {
+      const response = await api.delete(`${this.url}/match/${matchId}`);
+      return response;
+    } catch (error) {
+      console.error(`Error deleting messages for match ${matchId}:`, error);
+      throw error;
+    }
+  }
 }

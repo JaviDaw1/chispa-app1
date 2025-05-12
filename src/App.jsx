@@ -12,6 +12,7 @@ import Chat from './pages/Chat';
 import ChatsPage from './pages/ChatsPage';
 import Error404 from './pages/Error404';
 import Settings from './pages/Settings';
+import BlockedUsers from './pages/BlockedUsers';
 
 export default function App() {
    return (
@@ -30,6 +31,7 @@ export default function App() {
             <Route path="/messages" element={<ChatsPage />} />
             <Route path="*" element={<Error404 />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/blockedUsers" element={<BlockedUsers />} />
          </Routes>
       </Router>
    )

@@ -61,4 +61,8 @@ export default class LikesService {
   async countTotalLikes() {
     return api.get(`${this.url}/count`);
   }
+
+  async deleteLikeByLikerIdAndLikedId(likerId, likedId) {
+    return api.delete(`${this.url}/liker/${likerId}/liked/${likedId}`);
+  }
 }

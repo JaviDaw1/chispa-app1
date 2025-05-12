@@ -43,21 +43,29 @@ const ChatsPage = () => {
   }, [currentUser]);
 
   return (
-    <div className="max-w-lg mx-auto mt-8 p-6 bg-gradient-to-br lg:pt-16">
+    <div className="flex flex-col min-h-screen bg-gray-50">
       <Header />
-      <h1 className="text-3xl font-extrabold mb-4 text-center">Tus chats</h1>
+      <main className="flex-1 flex flex-col items-center px-4 sm:px-6 lg:px-8 pt-24 sm:pt-20">
+        <h1 className="text-4xl font-bold text-center text-gray-800 mb-8">
+          Tus chats
+        </h1>
 
-      {loading ? (
-        <p className="text-center text-gray-500">Cargando chats...</p>
-      ) : matches.length === 0 ? (
-        <p className="text-center text-gray-500">No tienes chats todavía. ¡Ve a hacer match!</p>
-      ) : (
-        <div className="max-h-[70vh] overflow-y-auto pr-1 space-y-3">
-          {matches.map((match) => (
-            <ChatsCard key={match.id} match={match} currentUserId={currentUser.id} />
-          ))}
-        </div>
-      )}
+        {loading ? (
+          <p className="text-gray-500 text-lg">Cargando chats...</p>
+        ) : matches.length === 0 ? (
+          <p className="text-gray-500 text-lg">No tienes chats todavía. ¡Ve a hacer match!</p>
+        ) : (
+          <div className="w-full max-w-4xl grid grid-cols-1 gap-6 overflow-y-auto max-h-[70vh] pb-2">
+            {matches.map((match) => (
+              <ChatsCard
+                key={match.id}
+                match={match}
+                currentUserId={currentUser.id}
+              />
+            ))}
+          </div>
+        )}
+      </main>
     </div>
   );
 };

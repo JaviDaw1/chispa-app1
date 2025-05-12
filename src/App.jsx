@@ -11,6 +11,7 @@ import SignUp from './pages/SignUp';
 import Chat from './pages/Chat';
 import ChatsPage from './pages/ChatsPage';
 import Error404 from './pages/Error404';
+import Settings from './pages/Settings';
 
 export default function App() {
    return (
@@ -28,6 +29,7 @@ export default function App() {
             <Route path="/chat/:matchId" element={<Chat />} />
             <Route path="/messages" element={<ChatsPage />} />
             <Route path="*" element={<Error404 />} />
+            <Route path="/settings" element={<Settings />} />
          </Routes>
       </Router>
    )

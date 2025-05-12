@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Home, User, LogIn, MessageCircle, Sparkles } from "lucide-react";
+import { Home, User, LogIn, MessageCircle, Sparkles, Settings } from "lucide-react";
 
 const Header = () => {
   const location = useLocation();
@@ -19,16 +19,15 @@ const Header = () => {
     };
   }, []);
 
-  // Lo he metido asi para que si no ha iniciado sesion solo salga el boton de iniciar sesion
   const navItems = isAuthenticated
   ? [
       { label: "Inicio", icon: Home, path: "/" },
       { label: "Mis Chispazos", icon: Sparkles, path: "/matches" },
       { label: "Mensajes", icon: MessageCircle, path: "/messages" },
       { label: "Perfil", icon: User, path: "/profile" },
+      { label: "Configuración", icon: Settings, path: "/settings" },
     ]
   : [
-      
       { label: "Iniciar Sesión", icon: LogIn, path: "/login" },
     ];
 

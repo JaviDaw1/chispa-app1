@@ -97,7 +97,7 @@ const Profile = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <Header />
-      
+
       <main className="container mx-auto px-4 py-8 max-w-5xl">
         <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
           {/* Header con foto de perfil */}
@@ -128,25 +128,26 @@ const Profile = () => {
 
           {/* Contenido principal */}
           <div className="pt-20 px-8 pb-8">
-            <div className="flex justify-between items-start mb-6">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-6">
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">
+                <h1 className="text-xl sm:text-3xl font-bold text-gray-900">
                   {profile?.name} {profile?.lastName}
                 </h1>
                 {profile?.age && (
-                  <p className="text-gray-500">{profile.age} años</p>
+                  <p className="text-gray-500 text-sm sm:text-base">{profile.age} años</p>
                 )}
               </div>
-              
+
               {!id && (
                 <button
                   onClick={handleCompleteProfile}
-                  className="px-5 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors shadow-sm"
+                  className="self-start px-4 py-2 text-sm sm:text-base bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors shadow-sm"
                 >
                   Editar perfil
                 </button>
               )}
             </div>
+
 
             {/* Alerta de perfil incompleto */}
             {(!profile || Object.values(profile).every((val) => !val)) && (
@@ -166,9 +167,9 @@ const Profile = () => {
                 <div className="space-y-6">
                   <ProfileSection title="Información básica">
                     <ProfileField label="Género" value={profile.gender} />
-                    <ProfileField 
-                      label="Fecha de nacimiento" 
-                      value={profile.birthDate ? new Date(profile.birthDate).toLocaleDateString() : ''} 
+                    <ProfileField
+                      label="Fecha de nacimiento"
+                      value={profile.birthDate ? new Date(profile.birthDate).toLocaleDateString() : ''}
                     />
                     <ProfileField label="Ubicación" value={profile.location} />
                   </ProfileSection>
@@ -194,13 +195,13 @@ const Profile = () => {
                   )}
 
                   <ProfileSection title="Preferencias">
-                    <ProfileField 
-                      label="Tipo de relación" 
-                      value={profile.preferredRelationship} 
+                    <ProfileField
+                      label="Tipo de relación"
+                      value={profile.preferredRelationship}
                     />
-                    <ProfileField 
-                      label="Última conexión" 
-                      value={profile.lastActive ? new Date(profile.lastActive).toLocaleString() : ''} 
+                    <ProfileField
+                      label="Última conexión"
+                      value={profile.lastActive ? new Date(profile.lastActive).toLocaleString() : ''}
                     />
                   </ProfileSection>
                 </div>

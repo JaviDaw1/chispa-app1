@@ -5,7 +5,7 @@ import ProfileService from '../services/ProfileService';
 import AuthService from '../services/AuthService';
 import { useNavigate } from 'react-router-dom';
 import LikesService from '../services/LikesService';
-import { Heart, ArrowRight, User } from 'lucide-react';
+import { Heart, ArrowRight, Ban } from 'lucide-react';
 
 const profileService = new ProfileService();
 const authService = new AuthService();
@@ -207,7 +207,7 @@ export default function HomePage() {
             onClick={() => navigate(`/profile/${currentProfile.id}`)}
             className="bg-gray-200 hover:bg-gray-300 p-3 sm:p-4 rounded-full"
           >
-            <User className="h-5 w-5 sm:h-6 sm:w-6 text-gray-800" />
+            <Ban className="h-5 w-5 sm:h-6 sm:w-6 text-gray-800" />
           </button>
           <button
             onClick={handleLike}
@@ -228,7 +228,7 @@ export default function HomePage() {
           className={`mt-4 text-gray-100 text-xs sm:text-sm px-3 sm:px-4 py-1 sm:py-2 rounded-full bg-gray-800 shadow-md transition-opacity duration-700 ${showInstructions ? 'opacity-100' : 'opacity-0'
             }`}
         >
-          💡 Desliza hacia los lados para ver más perfiles
+          💡 Desliza hacia la derecha para ver más perfiles
         </div>
       </div>
     </div>

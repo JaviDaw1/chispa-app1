@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import AuthService from '../services/AuthService';
 import Divider from '../components/Divider';
 import Header from '../components/Header';
+import Alert from '../components/Alert';
 import { Eye, EyeOff, User, Mail, Lock, MapPin, Calendar, Heart, Smile } from 'lucide-react';
 
 const authService = new AuthService();
@@ -155,7 +156,7 @@ export default function SignUp() {
                     type="text"
                     value={formData.lastname}
                     onChange={handleChange}
-                    className={`block w-full rounded-xl border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 sm:text-sm sm:leading-6 ${errors.lastname ? 'ring-red-500' : 'ring-gray-300'}`}
+                    className={`block w-full rounded-xl border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 pl-2 focus:ring-blue-500 sm:text-sm sm:leading-6 ${errors.lastname ? 'ring-red-500' : 'ring-gray-300'}`}
                   />
                   {errors.lastname && <p className="mt-1 text-sm text-red-600">{errors.lastname}</p>}
                 </div>
@@ -263,7 +264,7 @@ export default function SignUp() {
                       type="date"
                       value={formData.birthDate}
                       onChange={handleChange}
-                      className={`block w-full pl-10 rounded-xl border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 sm:text-sm sm:leading-6 ${errors.birthDate ? 'ring-red-500' : 'ring-gray-300'}`}
+                      className={`block w-full pl-10 rounded-xl border-0 py-3 pr-2 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 sm:text-sm sm:leading-6 ${errors.birthDate ? 'ring-red-500' : 'ring-gray-300'}`}
                     />
                   </div>
                   {errors.birthDate && <p className="mt-1 text-sm text-red-600">{errors.birthDate}</p>}
@@ -279,7 +280,7 @@ export default function SignUp() {
                     name="gender"
                     value={formData.gender}
                     onChange={handleChange}
-                    className={`block w-full rounded-xl border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset focus:ring-2 focus:ring-blue-500 sm:text-sm sm:leading-6 ${errors.gender ? 'ring-red-500' : 'ring-gray-300'}`}
+                    className={`block w-full rounded-xl border-0 py-3 text-gray-900 pl-2 shadow-sm ring-1 ring-inset focus:ring-2 focus:ring-blue-500 sm:text-sm sm:leading-6 ${errors.gender ? 'ring-red-500' : 'ring-gray-300'}`}
                   >
                     <option value="MALE">Hombre</option>
                     <option value="FEMALE">Mujer</option>
@@ -320,10 +321,10 @@ export default function SignUp() {
                   <input
                     id="profilePhoto"
                     name="profilePhoto"
-                    type="text"
+                    type="url"
                     value={formData.profilePhoto}
                     onChange={handleChange}
-                    className={`block w-full rounded-xl border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 sm:text-sm sm:leading-6 ${errors.profilePhoto ? 'ring-red-500' : 'ring-gray-300'}`}
+                    className={`block w-full rounded-xl border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset pl-2 placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 sm:text-sm sm:leading-6 ${errors.profilePhoto ? 'ring-red-500' : 'ring-gray-300'}`}
                   />
                   {errors.profilePhoto && <p className="mt-1 text-sm text-red-600">{errors.profilePhoto}</p>}
                 </div>
@@ -343,7 +344,7 @@ export default function SignUp() {
                       value={formData.bio}
                       onChange={handleChange}
                       rows={3}
-                      className={`block w-full pl-10 rounded-xl border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 sm:text-sm sm:leading-6 ${errors.bio ? 'ring-red-500' : 'ring-gray-300'}`}
+                      className={`block w-full pl-10 rounded-xl border-0 py-3 pr-1 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 sm:text-sm sm:leading-6 ${errors.bio ? 'ring-red-500' : 'ring-gray-300'}`}
                     />
                   </div>
                   {errors.bio && <p className="mt-1 text-sm text-red-600">{errors.bio}</p>}
@@ -361,7 +362,7 @@ export default function SignUp() {
                     value={formData.interests}
                     onChange={handleChange}
                     placeholder="Ej: música, viajes, deportes"
-                    className={`block w-full rounded-xl border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 sm:text-sm sm:leading-6 ${errors.interests ? 'ring-red-500' : 'ring-gray-300'}`}
+                    className={`block w-full rounded-xl border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset pl-2 placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 sm:text-sm sm:leading-6 ${errors.interests ? 'ring-red-500' : 'ring-gray-300'}`}
                   />
                   {errors.interests && <p className="mt-1 text-sm text-red-600">{errors.interests}</p>}
                 </div>
@@ -375,11 +376,11 @@ export default function SignUp() {
                 >
                   {isSubmitting ? (
                     <span className="flex items-center">
-                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <svg className="ease-in-out animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                       </svg>
-                      Procesando...
+                      Cargando...
                     </span>
                   ) : (
                     'Registrarse'
@@ -387,16 +388,13 @@ export default function SignUp() {
                 </button>
               </div>
             </form>
-             
-
-            
             <div className="mt-8 text-center">
-            <Divider text="O" />  
+              <Divider text="O" className="mb-4" />
               <p className="text-sm text-gray-600">
                 ¿Ya tienes una cuenta?{' '}
-                <Link 
-                  to="/login" 
-                  className="font-medium text-blue-600 hover:text-blue-500 transition-colors duration-200"
+                <Link
+                  to="/login"
+                  className="font-medium text-blue-600 hover:text-blue-500 transition-colors duration-200 ease-in-out"
                 >
                   Inicia sesión aquí
                 </Link>

@@ -6,8 +6,8 @@ export default function Error404() {
     <div className="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
       <main className="h-screen flex flex-col justify-center items-center px-6 py-24 sm:py-32 lg:px-8">
         <div className="text-center max-w-2xl mx-auto">
-          <div className="mb-8 animate-bounce">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-32 w-32 mx-auto text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="animate-bounce">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-20 w-20 sm:h-32 sm:w-32 mx-auto text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
@@ -33,7 +33,7 @@ export default function Error404() {
               <span className="inline-block ml-2 group-hover:translate-x-1 transition-transform duration-200">→</span>
             </a>
           </div>
-          <div className="mt-16 border-t border-gray-200 pt-8">
+          <div className="lg:mt-10 border-t border-gray-200 pt-8">
             <p className="text-sm text-gray-500">
               ¿Necesitas ayuda? <a href="#" className="font-medium text-blue-600 hover:text-blue-500">Contáctanos</a>
             </p>

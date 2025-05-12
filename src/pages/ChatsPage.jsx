@@ -43,9 +43,9 @@ const ChatsPage = () => {
   }, [currentUser]);
 
   return (
-    <div className="max-w-lg mx-auto mt-8 p-4 bg-gradient-to-br lg:pt-16">
+    <div className="max-w-lg mx-auto mt-8 p-6 bg-gradient-to-br lg:pt-16">
       <Header />
-      <h2 className="text-2xl font-extrabold mb-4 text-center">Tus chats</h2>
+      <h1 className="text-3xl font-extrabold mb-4 text-center">Tus chats</h1>
 
       {loading ? (
         <p className="text-center text-gray-500">Cargando chats...</p>

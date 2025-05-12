@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import Header from '../components/Header';
 import AuthService from '../services/AuthService';
 import Divider from '../components/Divider';
+import Alert from '../components/Alert';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
 
 export default function Login() {
@@ -17,7 +18,7 @@ export default function Login() {
     e.preventDefault();
     setIsLoading(true);
     setError('');
-    
+
     try {
       await new AuthService().login(email, password);
       navigate('/');
@@ -43,20 +44,7 @@ export default function Login() {
             </h2>
           </div>
 
-          {error && (
-            <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded">
-              <div className="flex">
-                <div className="flex-shrink-0">
-                  <svg className="h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <div className="ml-3">
-                  <p className="text-sm text-red-700">{error}</p>
-                </div>
-              </div>
-            </div>
-          )}
+          {error && <Alert message={error} type="error" />}
 
           <form className="space-y-6" onSubmit={handleLogin}>
             <div>
@@ -138,8 +126,8 @@ export default function Login() {
           <div className="text-center">
             <p className="text-sm text-gray-600">
               ¿No tienes una cuenta?{' '}
-              <Link 
-                to="/signup" 
+              <Link
+                to="/signup"
                 className="font-medium text-blue-600 hover:text-blue-500 transition-colors duration-200"
               >
                 Regístrate aquí

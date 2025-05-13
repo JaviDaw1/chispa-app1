@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
-  User,
   Lock,
   Bell,
   Ban,
@@ -12,13 +11,16 @@ import {
 import Header from "../components/Header";
 import Modal from "../components/Modal";
 import SettingItem from "../components/SettingItem";
+import AuthService from "../services/AuthService";
+
+const authService = new AuthService();
 
 export default function Settings() {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    console.log("Sesión cerrada");
+    authService.logout();
     setShowLogoutModal(false);
     navigate("/login");
   };

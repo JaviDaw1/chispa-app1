@@ -106,32 +106,40 @@ export default function BlockedUsers() {
         ) : (
           <>
             <div className="text-center mb-8">
-              <h2 className="text-xl font-bold text-gray-800">
-                Has bloqueado {blockedCount} usuario(s)
-              </h2>
+              {blockedCount > 0 ? (
+                <h2 className="text-xl font-bold text-gray-800">
+                  Has bloqueado {blockedCount} usuario(s)
+                </h2>
+              ) : (
+                <h2 className="text-xl font-bold text-gray-800">
+                  ¡No has tenido ningún problema! No has bloqueado a nadie 😎
+                </h2>
+              )}
             </div>
 
-            <div className="space-y-4 w-full">
-              {blockedUsers.map((user) => (
-                <div
-                  key={user.blockId}
-                  className="flex items-center justify-between bg-white p-4 rounded-xl shadow hover:shadow-md transition-all"
-                >
-                  <div className="flex items-center">
-                    <User className="text-blue-600 mr-3" />
-                    <span className="font-semibold">
-                      {user.firstname} {user.lastname} (@{user.username})
-                    </span>
-                  </div>
-                  <button
-                    onClick={() => handleUnblock(user)}
-                    className="px-4 py-2 text-red-500 hover:bg-red-100 rounded-lg"
+            {blockedCount > 0 && (
+              <div className="space-y-4 w-full">
+                {blockedUsers.map((user) => (
+                  <div
+                    key={user.blockId}
+                    className="flex items-center justify-between bg-white p-4 rounded-xl shadow hover:shadow-md transition-all"
                   >
-                    Desbloquear
-                  </button>
-                </div>
-              ))}
-            </div>
+                    <div className="flex items-center">
+                      <User className="text-blue-600 mr-3" />
+                      <span className="font-semibold">
+                        {user.firstname} {user.lastname} (@{user.username})
+                      </span>
+                    </div>
+                    <button
+                      onClick={() => handleUnblock(user)}
+                      className="px-4 py-2 text-red-500 hover:bg-red-100 rounded-lg"
+                    >
+                      Desbloquear
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
           </>
         )}
       </div>

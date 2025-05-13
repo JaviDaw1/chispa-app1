@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import AuthService from '../services/AuthService';
 import Divider from '../components/Divider';
 import Header from '../components/Header';
-import Alert from '../components/Alert';
+import Logo from '../../public/images/logo.jpg'
 import { Eye, EyeOff, User, Mail, Lock, MapPin, Calendar, Heart, Smile } from 'lucide-react';
 
 const authService = new AuthService();
@@ -110,7 +110,14 @@ export default function SignUp() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       <Header />
-      <div className="flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+      <div className="lg:hidden fixed top-0 left-0 w-full flex justify-center bg-white shadow z-40 py-2">
+        <img
+          src={Logo}
+          alt="Chispa logo"
+          className="h-14"
+        />
+      </div>
+      <div className="flex-grow flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-20 pb-16">
         <div className="sm:mx-auto sm:w-full sm:max-w-3xl">
           <div className="bg-white px-8 py-12 shadow-xl rounded-2xl sm:px-12">
             <div className="text-center mb-10">

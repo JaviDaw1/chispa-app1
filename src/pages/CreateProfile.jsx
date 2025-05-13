@@ -125,9 +125,9 @@ export default function CreateProfile() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-gray-100">
       <Header />
-      <div className="flex flex-1 items-center justify-center py-8 bg-gray-100">
+      <div className="flex-grow flex items-center justify-center px-4 sm:px-6 lg:px-8 lg:pt-20 pb-16 pt-4">
         <form
           onSubmit={handleSubmit}
           className="bg-white p-6 rounded-lg shadow-md w-full max-w-md"

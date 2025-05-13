@@ -6,6 +6,7 @@ import Divider from '../components/Divider';
 import Alert from '../components/Alert';
 import Logo from '../../public/images/logo.jpg'
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import LoadingScreen from '../components/LoadingScreen'; // Asegúrate de importar el componente
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -13,20 +14,30 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false); // Nuevo estado para controlar la pantalla de carga
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
+    setIsSubmitting(true); // Activa la pantalla de carga
 
     try {
+      // Intentar el login
       await new AuthService().login(email, password);
-      navigate('/');
+
+      // Simula la carga de 2 segundos antes de redirigir
+      setTimeout(() => {
+        navigate('/');
+      }, 2000);
     } catch (err) {
       setError(err.message || 'Error en el inicio de sesión');
     } finally {
       setIsLoading(false);
+      setTimeout(() => {
+        setIsSubmitting(false);
+      }, 2000);
     }
   };
 
@@ -44,6 +55,9 @@ export default function Login() {
           className="h-14"
         />
       </div>
+
+            {isSubmitting && <LoadingScreen size="lg" message='Iniciando Sesión...' showLogo={true} logoSrc={Logo} />} 
+
       <div className="flex-grow flex items-center justify-center px-4 sm:px-6 lg:px-8">
         <div className="bg-white px-8 py-10 shadow-xl rounded-2xl w-full max-w-md space-y-6">
           <div className="text-center">

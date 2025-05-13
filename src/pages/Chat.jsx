@@ -97,7 +97,7 @@ const Chat = () => {
       const blockData = {
         reporter: { id: currentUser.id },
         reported: { id: otherUser.id },
-        reason: blockReason || "Bloqueado desde chat",
+        blockReason: blockReason || "Bloqueado desde chat",
       };
 
       await blockService.create(blockData);

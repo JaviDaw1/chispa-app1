@@ -112,7 +112,7 @@ export default function BlockedUsers() {
                 </h2>
               ) : (
                 <h2 className="text-xl font-bold text-gray-800">
-                  ¡No has tenido ningún problema! No has bloqueado a nadie 😎
+                  No has bloqueado a nadie todavia 😎
                 </h2>
               )}
             </div>

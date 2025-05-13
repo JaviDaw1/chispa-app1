@@ -143,7 +143,7 @@ export default function HomePage() {
       const blockData = {
         reporter: { id: userInfo.id },
         reported: { id: currentProfile.id },
-        reason: blockReason || "Bloqueado desde swipe"
+        blockReason: blockReason || "Bloqueado desde swipe"
       };
 
       await blocksService.create(blockData);
@@ -275,7 +275,7 @@ export default function HomePage() {
 
         {/* Instrucciones para móvil */}
         <div
-          className={`mt-4 text-gray-100 text-xs sm:text-sm px-3 sm:px-4 py-1 sm:py-2 rounded-full bg-gray-800 shadow-md transition-opacity duration-700 ${showInstructions ? 'opacity-100' : 'opacity-0'
+          className={`mt-6 text-gray-100 text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-gray-800 shadow-md transition-opacity duration-700 ${showInstructions ? 'opacity-100' : 'opacity-0'
             }`}
         >
           💡 Desliza hacia la derecha para ver más perfiles

@@ -25,8 +25,8 @@ export default function App() {
             <Route path="/create-profile" element={<CreateProfile />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
-            <Route path="/preference" element={<Preference/>} />
-            <Route path="/matches" element={<Match/>} />
+            <Route path="/preference" element={<Preference />} />
+            <Route path="/matches" element={<Match />} />
             <Route path="/chat/:matchId" element={<Chat />} />
             <Route path="/messages" element={<ChatsPage />} />
             <Route path="*" element={<Error404 />} />

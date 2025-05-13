@@ -21,7 +21,7 @@ export default function App() {
             {/* Páginas generales */}
             <Route path="/" element={<HomePage />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/profile/:userId" element={<Profile />} />
+            <Route path="/profile/:id" element={<Profile />} />
             <Route path="/create-profile" element={<CreateProfile />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />

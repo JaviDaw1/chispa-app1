@@ -37,10 +37,8 @@ export default class AuthService {
 
       const newUser = response.data;
 
-      // Login automático para obtener el token (si es necesario para crear perfil)
       await this.login(data.email, data.password);
 
-      // Crear perfil personalizado
       const profileService = new ProfileService();
 
       const customProfile = {

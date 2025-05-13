@@ -98,7 +98,7 @@ const Profile = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <Header />
 
-      <main className="container mx-auto px-4 py-8 max-w-5xl">
+      <main className="container mx-auto px-4 py-8 max-w-5xl pb-16">
         <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
           {/* Header con foto de perfil */}
           <div className="relative bg-gradient-to-r from-blue-500 to-indigo-600 h-48">

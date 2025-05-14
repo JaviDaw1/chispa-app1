@@ -12,12 +12,14 @@ import Header from "../components/Header";
 import Modal from "../components/Modal";
 import SettingItem from "../components/SettingItem";
 import AuthService from "../services/AuthService";
+import { useTranslation } from "react-i18next"; // Importa useTranslation
 
 const authService = new AuthService();
 
 export default function Settings() {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const navigate = useNavigate();
+  const { t } = useTranslation(); // Obtén las traducciones
 
   const handleLogout = () => {
     authService.logout();
@@ -34,51 +36,51 @@ export default function Settings() {
       <div className="max-w-3xl mx-auto flex flex-col items-center">
         <div className="mb-10">
           <h1 className="text-3xl font-extrabold text-gray-900 text-center">
-            Configuración
+            {t("settings.title")} {/* Traducción de título */}
           </h1>
           <p className="text-gray-600 mt-2 text-center">
-            Administra tu cuenta, privacidad y preferencias.
+            {t("settings.subtitle")} {/* Traducción de descripción */}
           </p>
         </div>
 
         <div className="space-y-4">
-          <Link to="/configuracion/seguridad" className={itemClass}>
+          <Link to="/settings/security" className={itemClass}>
             <SettingItem
               icon={<Lock className="text-rose-600" />}
-              title="Seguridad"
-              subtitle="Contraseña y autenticación"
+              title={t("settings.security")} 
+              subtitle={t("settings.security_sub")}
             />
           </Link>
 
-          <Link to="/configuracion/notificaciones" className={itemClass}>
+          <Link to="/settings/notifications" className={itemClass}>
             <SettingItem
               icon={<Bell className="text-amber-500" />}
-              title="Notificaciones"
-              subtitle="Preferencias de alertas"
+              title={t("settings.notifications")}
+              subtitle={t("settings.notifications_sub")} 
             />
           </Link>
 
           <Link to="/blockedUsers" className={itemClass}>
             <SettingItem
               icon={<Ban className="text-red-500" />}
-              title="Usuarios bloqueados"
-              subtitle="Usuarios que has bloqueado"
+              title={t("settings.blocked")} 
+              subtitle={t("settings.blocked_sub")} 
             />
           </Link>
 
-          <Link to="/configuracion/documentacion" className={itemClass}>
+          <Link to="/settings/documentation" className={itemClass}>
             <SettingItem
               icon={<Book className="text-blue-500" />}
-              title="Documentación"
-              subtitle="Guías, preguntas frecuentes y más"
+              title={t("settings.docs")}
+              subtitle={t("settings.docs_sub")} 
             />
           </Link>
 
-          <Link to="/configuracion/soporte" className={itemClass}>
+          <Link to="/settings/support" className={itemClass}>
             <SettingItem
               icon={<HelpCircle className="text-green-600" />}
-              title="Soporte / Ayuda"
-              subtitle="Contacta con nuestro equipo"
+              title={t("settings.support")} 
+              subtitle={t("settings.support_sub")} 
             />
           </Link>
 
@@ -88,8 +90,8 @@ export default function Settings() {
           >
             <SettingItem
               icon={<LogOut className="text-gray-700" />}
-              title="Cerrar sesión"
-              subtitle="Salir de tu cuenta"
+              title={t("settings.logout")} 
+              subtitle={t("settings.logout_sub")} 
             />
           </button>
         </div>
@@ -99,9 +101,9 @@ export default function Settings() {
         show={showLogoutModal}
         onClose={() => setShowLogoutModal(false)}
         onConfirm={handleLogout}
-        message="¿Estás seguro que quieres cerrar sesión?"
-        confirmText="Cerrar sesión"
-        cancelText="Cancelar"
+        message={t("settings.logout_confirm")} 
+        confirmText={t("settings.logout")} 
+        cancelText={t("settings.logout_sub")} 
       />
     </div>
   );

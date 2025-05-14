@@ -1,0 +1,167 @@
+{
+  "header": {
+    "title": "Chispa",
+    "nav": {
+      "home": "Accueil",
+      "matches": "Chispazos",
+      "messages": "Messages",
+      "profile": "Profil",
+      "settings": "Paramètres",
+      "login": "Connexion"
+    }
+  },
+   "home": {
+    "swipe_hint": "Glissez vers la droite pour voir plus de profils"
+  },
+
+  "login": {
+   "title": "Connexion",
+    "emailLabel": "Adresse e-mail",
+    "emailPlaceholder": "votreemail@exemple.com",
+    "passwordLabel": "Mot de passe",
+    "passwordPlaceholder": "Votre mot de passe",
+    "loginButton": "Se connecter",
+    "or": "Ou",
+    "noAccount": "Vous n'avez pas de compte ?",
+    "register": "S'inscrire",
+    "error": "Échec de la connexion",
+    "loading": "Connexion en cours...",
+    "log_in": "Connectez-vous"
+  },
+  "signup": {
+    "title": "Inscription",
+    "firstname": "Prénom",
+    "lastname": "Nom",
+    "username": "Nom d'utilisateur",
+    "birthdate": "Date de naissance",
+    "gender": "Genre",
+    "location": "Localisation",
+    "bio": "Biographie",
+    "interests": "Centres d'intérêt",
+    "profile_photo": "Photo de profil",
+    "relationship": "Relation préférée",
+    "submit": "S'inscrire",
+    "subtitle": "Créez votre compte et trouvez votre Étincelle",
+    "username_placeholder": "Ex. utilisateur123",
+    "interests_hint": "séparés par des virgules",
+    "interests_placeholder": "Ex: musique, voyage, sport",
+    "emailLabel": "Adresse e-mail",
+    "emailPlaceholder": "votreemail@exemple.com",
+    "passwordPlaceholder": "Votre mot de passe",
+    "account": "Vous avez déjà un compte?"
+  },
+  "profile": {
+    "title": "Profil",
+    "edit": "Modifier le profil",
+    "basic_info": "Informations de base",
+    "about": "À propos",
+    "interests": "Centres d'intérêt",
+    "preferences": "Préférences",
+    "last_active": "Dernière connexion",
+    "online": "En ligne",
+    "offline": "Hors ligne",
+    "complete_profile": "Compléter le profil",
+    "preferences_button": "Préférences",
+    "logout_button": "Déconnexion",
+    "loading": "Chargement du profil...",
+    "not_found": "Profil non trouvé",
+    "load_error": "Erreur de chargement du profil",
+    "incomplete_warning": "Votre profil est incomplet. Complétez vos informations pour améliorer vos matches.",
+    "years": "ans",
+    "gender": "Genre",
+    "birthdate": "Date de naissance",
+    "location": "Localisation",
+    "relationship_type": "Type de relation",
+    "create_profile": "Créer un profil"
+  },
+  "matches": {
+    "title": "Vos Matches",
+    "no_matches": "Vous n'avez pas encore de matches. Continuez à explorer !",
+    "discover": "Découvrir des personnes",
+    "view_profile": "Voir le profil",
+    "chat": "Discuter",
+    "match_alert": "Match avec {name} !",
+    "no_profiles": "Aucun profil disponible"
+  },
+  "messages": {
+    "title": "Vos discussions",
+    "no_chats": "Vous n'avez pas encore de discussions. Allez faire un match !",
+    "new_match": "Nouveau match ! Envoyez un message"
+  },
+  "preferences": {
+    "title": "Mes Préférences",
+    "gender_interest": "Genre préféré",
+    "age_range": "Tranche d'âge",
+    "max_distance": "Distance max (km)",
+    "create_prefs": "Créer des Préférences",
+    "min": "Min",
+    "max": "Max"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "subtitle": "Gérez votre compte, vie privée et préférences",
+    "security": "Sécurité",
+    "security_sub": "Mot de passe et authentification",
+    "notifications": "Notifications",
+    "notifications_sub": "Préférences d'alertes",
+    "blocked": "Utilisateurs bloqués",
+    "blocked_sub": "Utilisateurs que vous avez bloqués",
+    "docs": "Documentation",
+    "docs_sub": "Guides, FAQ et plus",
+    "support": "Support / Aide",
+    "support_sub": "Contactez notre équipe",
+    "logout": "Déconnexion",
+    "logout_sub": "Quitter votre compte",
+    "logout_confirm": "Êtes-vous sûr de vouloir vous déconnecter ?"
+  },
+  "blocked": {
+    "title": "Utilisateurs bloqués",
+    "subtitle": "Ici vous pouvez voir tous les utilisateurs que vous avez bloqués",
+    "no_blocked": "Vous n'avez bloqué personne pour l'instant 😎",
+    "unblock": "Débloquer",
+    "unblock_confirm": "Êtes-vous sûr de vouloir débloquer {name} ?",
+    "default_reason": "Bloqué depuis le swipe"
+  },
+  "chat": {
+    "new_message": "Écrire un message...",
+    "block": "Bloquer",
+    "block_confirm": "Êtes-vous sûr de vouloir bloquer {name} ?",
+    "block_reason": "Raison du blocage (optionnel)"
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "back": "Retour",
+    "male": "Homme",
+    "female": "Femme",
+    "other": "Autre",
+    "casual": "Occasionnelle",
+    "serious": "Sérieuse",
+    "friendship": "Amitié",
+    "loading_profiles": "Chargement des profils...",
+    "block": "Bloquer",
+    "like": "J'aime",
+    "next": "Suivant"
+  },
+  "errors": {
+    "required": "Champ requis",
+    "invalid_email": "Format d'email invalide",
+    "min_length": "Minimum {count} caractères",
+    "underage": "Vous devez avoir au moins 18 ans",
+    "load_profiles": "Erreur lors du chargement des profils",
+    "no_user_profile": "Utilisateur non connecté ou profil actuel introuvable",
+    "like_error": "Erreur lors de l'envoi du like",
+    "block_error": "Erreur lors du blocage de l'utilisateur"
+  },
+   "error404": {
+    "title": "Page non trouvée",
+    "description": "Désolé, nous n'avons pas pu trouver la page que vous recherchez.",
+    "backToHome": "Retour à l'accueil",
+    "contactSupport": "Contacter le support technique",
+    "needHelp": "Besoin d'aide ?",
+    "contactUs": "Contactez-nous"
+  }
+}

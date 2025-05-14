@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import AuthService from "../services/AuthService";
 import ProfileService from "../services/ProfileService";
 import Header from "../components/Header";
@@ -8,6 +9,7 @@ const authService = new AuthService();
 const profileService = new ProfileService();
 
 const Profile = () => {
+  const { t } = useTranslation();
   const { id } = useParams();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -31,14 +33,14 @@ const Profile = () => {
       console.error("Error al obtener el perfil:", error);
       if (error.response?.status === 404) {
         setProfile(null);
-        setError("Perfil no encontrado");
+        setError(t("profile.not_found"));
       } else {
-        setError("Error al cargar el perfil");
+        setError(t("profile.load_error"));
       }
     } finally {
       setLoading(false);
     }
-  }, [id]);
+  }, [id, t]);
 
   useEffect(() => {
     const userInfo = authService.getUserInfo();
@@ -63,7 +65,7 @@ const Profile = () => {
         <div className="flex items-center justify-center h-[calc(100vh-80px)]">
           <div className="flex flex-col items-center">
             <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-            <p className="text-gray-600 font-medium">Cargando perfil...</p>
+            <p className="text-gray-600 font-medium">{t("profile.loading")}</p>
           </div>
         </div>
       </div>
@@ -86,7 +88,7 @@ const Profile = () => {
               onClick={handleCompleteProfile}
               className="mt-4 px-6 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg shadow-sm hover:shadow-md transition-all"
             >
-              Completar Perfil
+              {t("profile.complete_profile")}
             </button>
           </div>
         </div>
@@ -98,7 +100,7 @@ const Profile = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <Header />
 
-      <main className="container mx-auto px-4 py-8 max-w-5xl pb-16">
+      <main className="container mx-auto px-4 py-8 max-w-5xl">
         <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
           {/* Header con foto de perfil */}
           <div className="relative bg-gradient-to-r from-blue-500 to-indigo-600 h-48">
@@ -115,12 +117,12 @@ const Profile = () => {
               {profile?.isOnline ? (
                 <span className="inline-flex items-center px-3 py-1 rounded-full bg-green-100 text-green-800 text-sm font-medium">
                   <span className="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
-                  En línea
+                  {t("profile.online")}
                 </span>
               ) : (
                 <span className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 text-gray-800 text-sm font-medium">
                   <span className="w-2 h-2 rounded-full bg-gray-500 mr-2"></span>
-                  Desconectado
+                  {t("profile.offline")}
                 </span>
               )}
             </div>
@@ -134,7 +136,7 @@ const Profile = () => {
                   {profile?.name} {profile?.lastName}
                 </h1>
                 {profile?.age && (
-                  <p className="text-gray-500 text-sm sm:text-base">{profile.age} años</p>
+                  <p className="text-gray-500 text-sm sm:text-base">{profile.age} {t("profile.years")}</p>
                 )}
               </div>
 
@@ -143,11 +145,10 @@ const Profile = () => {
                   onClick={handleCompleteProfile}
                   className="self-start px-4 py-2 text-sm sm:text-base bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors shadow-sm"
                 >
-                  Editar perfil
+                  {t("profile.edit")}
                 </button>
               )}
             </div>
-
 
             {/* Alerta de perfil incompleto */}
             {(!profile || Object.values(profile).every((val) => !val)) && (
@@ -156,7 +157,7 @@ const Profile = () => {
                   <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                 </svg>
                 <p className="text-sm text-amber-700">
-                  Tu perfil está incompleto. Completa tu información para mejorar tus matches.
+                  {t("profile.incomplete_warning")}
                 </p>
               </div>
             )}
@@ -165,17 +166,17 @@ const Profile = () => {
             {profile ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-6">
-                  <ProfileSection title="Información básica">
-                    <ProfileField label="Género" value={profile.gender} />
+                  <ProfileSection title={t("profile.basic_info")}>
+                    <ProfileField label={t("profile.gender")} value={profile.gender} />
                     <ProfileField
-                      label="Fecha de nacimiento"
+                      label={t("profile.birthdate")}
                       value={profile.birthDate ? new Date(profile.birthDate).toLocaleDateString() : ''}
                     />
-                    <ProfileField label="Ubicación" value={profile.location} />
+                    <ProfileField label={t("profile.location")} value={profile.location} />
                   </ProfileSection>
 
                   {profile.bio && (
-                    <ProfileSection title="Sobre mí">
+                    <ProfileSection title={t("profile.about")}>
                       <p className="text-gray-700 whitespace-pre-line">{profile.bio}</p>
                     </ProfileSection>
                   )}
@@ -183,7 +184,7 @@ const Profile = () => {
 
                 <div className="space-y-6">
                   {profile.interests && (
-                    <ProfileSection title="Intereses">
+                    <ProfileSection title={t("profile.interests")}>
                       <div className="flex flex-wrap gap-2">
                         {profile.interests.split(',').map((interest, index) => (
                           <span key={index} className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
@@ -194,13 +195,13 @@ const Profile = () => {
                     </ProfileSection>
                   )}
 
-                  <ProfileSection title="Preferencias">
+                  <ProfileSection title={t("profile.preferences")}>
                     <ProfileField
-                      label="Tipo de relación"
+                      label={t("profile.relationship_type")}
                       value={profile.preferredRelationship}
                     />
                     <ProfileField
-                      label="Última conexión"
+                      label={t("profile.last_active")}
                       value={profile.lastActive ? new Date(profile.lastActive).toLocaleString() : ''}
                     />
                   </ProfileSection>
@@ -213,12 +214,12 @@ const Profile = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                   </svg>
                 </div>
-                <h3 className="text-xl font-medium text-gray-700 mb-2">No se encontró perfil</h3>
+                <h3 className="text-xl font-medium text-gray-700 mb-2">{t("profile.not_found")}</h3>
                 <button
                   onClick={handleCompleteProfile}
                   className="mt-4 px-6 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg shadow-sm hover:shadow-md transition-all"
                 >
-                  Crear Perfil
+                  {t("profile.complete_profile")}
                 </button>
               </div>
             )}
@@ -232,13 +233,13 @@ const Profile = () => {
                   onClick={handlePreferences}
                   className="px-6 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors shadow-sm"
                 >
-                  Preferencias
+                  {t("profile.preferences_button")}
                 </button>
                 <button
                   onClick={handleLogout}
                   className="px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors shadow-sm"
                 >
-                  Cerrar sesión
+                  {t("profile.logout_button")}
                 </button>
               </div>
             </div>

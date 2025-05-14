@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSwipeable } from 'react-swipeable';
+import { useTranslation } from 'react-i18next';
 import Header from '../components/Header';
 import ProfileService from '../services/ProfileService';
 import AuthService from '../services/AuthService';
@@ -7,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import LikesService from '../services/LikesService';
 import BlocksService from '../services/BlocksService';
 import Modal from '../components/Modal';
-import Logo from "../../public/images/logo.jpg"
+import Logo from "../../public/images/logo.jpg";
 import { Heart, ArrowRight, Ban } from 'lucide-react';
 
 const profileService = new ProfileService();
@@ -16,6 +17,7 @@ const likesService = new LikesService();
 const blocksService = new BlocksService();
 
 export default function HomePage() {
+  const { t } = useTranslation();
   const [profiles, setProfiles] = useState([]);
   const [currentProfileIndex, setCurrentProfileIndex] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -35,7 +37,6 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-    // Verificar autenticación primero
     const userInfo = authService.getUserInfo();
     if (!userInfo) {
       navigate("/login");
@@ -45,22 +46,17 @@ export default function HomePage() {
     const fetchProfilesAndLikes = async () => {
       try {
         const userInfo = authService.getUserInfo();
-
-        // Obtener todos los perfiles
         const response = await profileService.getAll();
         const filteredProfiles = response.data.filter(profile =>
           profile.user.id !== userInfo.id && profile.user.role !== "ADMIN"
         );
 
-        // Obtener los likes del usuario logueado
         const likesResponse = await likesService.getLikesByLikerId(userInfo.id);
         const likedUserIds = likesResponse.data.map(like => like.liked.id);
 
-        // Obtener los bloqueos del usuario logueado
         const blocksResponse = await blocksService.getByReporterId(userInfo.id);
         const blockedUserIds = blocksResponse.data.map(block => block.reported.id);
 
-        // Filtrar perfiles para excluir los que ya fueron likados o bloqueados
         const availableProfiles = filteredProfiles.filter(profile =>
           !likedUserIds.includes(profile.id) &&
           !blockedUserIds.includes(profile.id)
@@ -70,29 +66,18 @@ export default function HomePage() {
         setLoading(false);
       } catch (err) {
         console.error("Error al obtener perfiles:", err);
-        setError("Error al cargar perfiles");
+        setError(t('errors.load_profiles'));
         setLoading(false);
       }
     };
 
     fetchProfilesAndLikes();
-  }, [navigate]);
+  }, [navigate, t]);
 
   const handlers = useSwipeable({
     onSwipedLeft: () => {
       goToNextProfile();
     },
-
-    // TODO: No tiene sentido que se pueda ir para atras BORRAR
-    // onSwipedRight: () => {
-    //     goToPreviousProfile();
-    // },
-    // const goToPreviousProfile = () => {
-    //     setCurrentProfileIndex(prev =>
-    //         prev <= 0 ? profiles.length - 1 : prev - 1
-    //     );
-    // };
-
     trackMouse: true
   });
 
@@ -102,12 +87,11 @@ export default function HomePage() {
     );
   };
 
-  // En el handleLike del HomePage.jsx
   const handleLike = async () => {
     try {
       const userInfo = authService.getUserInfo();
       if (!userInfo || !currentProfile) {
-        console.error('No se encontró usuario logueado o perfil actual');
+        console.error(t('errors.no_user_profile'));
         return;
       }
 
@@ -119,16 +103,14 @@ export default function HomePage() {
 
       const response = await likesService.postLike(likeData);
 
-      // Mostrar notificación si hay match
       if (response.data?.matchCreated) {
-        alert(`¡Match con ${currentProfile.name}!`);
-        // O usar un sistema de notificaciones más elegante
+        alert(t('matches.match_alert', { name: currentProfile.name }));
       }
 
       setProfiles(prevProfiles => prevProfiles.filter(profile => profile.id !== currentProfile.id));
       goToNextProfile();
     } catch (err) {
-      console.error('Error al enviar like:', err);
+      console.error(t('errors.like_error'), err);
     }
   };
 
@@ -136,33 +118,30 @@ export default function HomePage() {
     try {
       const userInfo = authService.getUserInfo();
       if (!userInfo || !currentProfile) {
-        console.error('No se encontró usuario logueado o perfil actual');
+        console.error(t('errors.no_user_profile'));
         return;
       }
 
       const blockData = {
         reporter: { id: userInfo.id },
         reported: { id: currentProfile.id },
-        blockReason: blockReason || "Bloqueado desde swipe"
+        blockReason: blockReason || t('blocked.default_reason')
       };
 
       await blocksService.create(blockData);
-
-      // Quitar el perfil bloqueado y pasar al siguiente
       setProfiles(prev => prev.filter(p => p.id !== currentProfile.id));
       goToNextProfile();
     } catch (err) {
-      console.error('Error al bloquear usuario:', err);
+      console.error(t('errors.block_error'), err);
     }
   };
-
 
   if (loading) {
     return (
       <div className="flex flex-col min-h-screen">
         <Header />
         <div className="flex flex-1 items-center justify-center">
-          <div className="text-xl">Cargando perfiles...</div>
+          <div className="text-xl">{t('common.loading_profiles')}</div>
         </div>
       </div>
     );
@@ -184,7 +163,7 @@ export default function HomePage() {
       <div className="flex flex-col min-h-screen">
         <Header />
         <div className="flex flex-1 items-center justify-center">
-          <div className="text-xl">No hay perfiles disponibles</div>
+          <div className="text-xl">{t('matches.no_profiles')}</div>
         </div>
       </div>
     );
@@ -196,21 +175,17 @@ export default function HomePage() {
       <div className="lg:hidden fixed top-0 left-0 w-full flex justify-center bg-white shadow z-40 py-2">
         <img
           src={Logo}
-          alt="Chispa logo"
+          alt={t('header.title')}
           className="h-14"
         />
       </div>
       <div className="flex flex-1 flex-col items-center justify-center p-4 w-full">
-        {/* Contenedor del perfil con gestos de swipe */}
         <div
           {...handlers}
           className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg bg-white rounded-xl shadow-lg overflow-hidden relative max-h-[80vh]"
           style={{ touchAction: 'pan-y' }}
         >
-
-          <div
-            className="h-auto aspect-[3/4] bg-gray-100 flex items-center justify-center overflow-hidden"
-          >
+          <div className="h-auto aspect-[3/4] bg-gray-100 flex items-center justify-center overflow-hidden">
             {currentProfile.profilePhoto ? (
               <img
                 src={currentProfile.profilePhoto}
@@ -224,7 +199,6 @@ export default function HomePage() {
             )}
           </div>
 
-          {/* Información del perfil */}
           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 sm:p-6 text-white">
             <h2 className="text-xl sm:text-2xl font-bold">
               {currentProfile.name} {currentProfile.lastName}, {currentProfile.age}
@@ -250,11 +224,11 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Contenedor con tres botones (perfil, like, siguiente) */}
         <div className="flex gap-4 sm:gap-6 mt-3">
           <button
             onClick={() => setShowBlockModal(true)}
             className="bg-gray-200 hover:bg-gray-300 p-3 sm:p-4 rounded-full"
+            aria-label={t('common.block')}
           >
             <Ban className="h-5 w-5 sm:h-6 sm:w-6 text-gray-800" />
           </button>
@@ -262,23 +236,23 @@ export default function HomePage() {
           <button
             onClick={handleLike}
             className="bg-pink-500 hover:bg-pink-600 text-white p-3 sm:p-4 rounded-full"
+            aria-label={t('common.like')}
           >
             <Heart className="h-5 w-5 sm:h-6 sm:w-6" />
           </button>
           <button
             onClick={goToNextProfile}
             className="bg-gray-200 hover:bg-gray-300 p-3 sm:p-4 rounded-full"
+            aria-label={t('common.next')}
           >
             <ArrowRight className="h-5 w-5 sm:h-6 sm:w-6 text-gray-800" />
           </button>
         </div>
 
-        {/* Instrucciones para móvil */}
         <div
-          className={`mt-6 text-gray-100 text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-gray-800 shadow-md transition-opacity duration-700 ${showInstructions ? 'opacity-100' : 'opacity-0'
-            }`}
+          className={`mt-6 text-gray-100 text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-gray-800 shadow-md transition-opacity duration-700 ${showInstructions ? 'opacity-100' : 'opacity-0'}`}
         >
-          💡 Desliza hacia la derecha para ver más perfiles
+          💡 {t('home.swipe_hint')}
         </div>
       </div>
       <Modal
@@ -288,10 +262,12 @@ export default function HomePage() {
           handleBlock();
           setShowBlockModal(false);
         }}
-        title={`¿Estás seguro de que deseas bloquear a ${currentProfile?.name} ${currentProfile?.lastName}?`}
-        placeholder="Motivo del bloqueo (opcional)"
-        confirmText="Bloquear"
-        cancelText="Cancelar"
+        title={t('chat.block_confirm', { 
+          name: `${currentProfile?.name} ${currentProfile?.lastName}`
+        })}
+        placeholder={t('chat.block_reason')}
+        confirmText={t('common.block')}
+        cancelText={t('common.cancel')}
         showReasonInput={true}
         reason={blockReason}
         onReasonChange={setBlockReason}

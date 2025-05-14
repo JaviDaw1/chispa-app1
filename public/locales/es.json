@@ -1,0 +1,167 @@
+{
+  "header": {
+    "title": "Chispa",
+    "nav": {
+      "home": "Inicio",
+      "matches": " Chispazos",
+      "messages": "Mensajes",
+      "profile": "Perfil",
+      "settings": "Configuración",
+      "login": "Iniciar Sesión"
+    }
+  },
+   "home": {
+    "swipe_hint": "Desliza hacia la derecha para ver más perfiles"
+  },
+
+  "login": {
+    "title": "Inicia Sesión",
+    "emailLabel": "Correo electrónico",
+    "emailPlaceholder": "tucorreo@ejemplo.com",
+    "passwordLabel": "Contraseña",
+    "passwordPlaceholder": "Tu contraseña",
+    "loginButton": "Entrar",
+    "or": "O",
+    "noAccount": "¿No tienes una cuenta?",
+    "register": "Regístrate",
+    "error": "Error en el inicio de sesión",
+    "loading": "Iniciando sesión...",
+    "log_in": "Inicia sesión"
+  },
+  "signup": {
+    "title": "Regístrate",
+    "firstname": "Nombre",
+    "lastname": "Apellidos",
+    "username": "Nombre de usuario",
+    "birthdate": "Fecha de nacimiento",
+    "gender": "Género",
+    "location": "Ubicación",
+    "bio": "Biografía",
+    "interests": "Intereses",
+    "profile_photo": "Foto de perfil",
+    "relationship": "Relación preferida",
+    "submit": "Registrarse",
+    "subtitle": "Crea tu cuenta y encuentra tu Chispa",
+    "username_placeholder": "Ej. usuario123",
+    "interests_hint": "separados por comas",
+    "interests_placeholder": "Ej: música, viajes, deportes",
+    "emailLabel": "Correo electrónico",
+    "emailPlaceholder": "tucorreo@ejemplo.com",
+    "passwordPlaceholder": "Tu contraseña",
+    "account": "¿Ya tienes cuenta?"
+  },
+  "profile": {
+    "title": "Perfil",
+    "edit": "Editar perfil",
+    "basic_info": "Información básica",
+    "about": "Sobre mí",
+    "interests": "Intereses",
+    "preferences": "Preferencias",
+    "last_active": "Última conexión",
+    "online": "En línea",
+    "offline": "Desconectado",
+    "complete_profile": "Completar Perfil",
+    "preferences_button": "Preferencias",
+    "logout_button": "Cerrar sesión",
+    "loading": "Cargando perfil...",
+    "not_found": "Perfil no encontrado",
+    "load_error": "Error al cargar el perfil",
+    "incomplete_warning": "Tu perfil está incompleto. Completa tu información para mejorar tus matches.",
+    "years": "años",
+    "gender": "Género",
+    "birthdate": "Fecha de nacimiento",
+    "location": "Ubicación",
+    "relationship_type": "Tipo de relación",
+    "create_profile": "Crear Perfil"
+  },
+  "matches": {
+    "title": "Tus Matches",
+    "no_matches": "Aún no tienes matches. ¡Sigue explorando!",
+    "discover": "Descubrir personas",
+    "view_profile": "Ver perfil",
+    "chat": "Chatear",
+    "match_alert": "¡Match con {name}!",
+    "no_profiles": "No hay perfiles disponibles"
+  },
+  "messages": {
+    "title": "Tus chats",
+    "no_chats": "No tienes chats todavía. ¡Ve a hacer match!",
+    "new_match": "¡Nuevo match! Envía un mensaje"
+  },
+  "preferences": {
+    "title": "Mis Preferencias",
+    "gender_interest": "Género de interés",
+    "age_range": "Rango de edad",
+    "max_distance": "Distancia máxima (km)",
+    "create_prefs": "Crear Preferencias",
+    "min": "Mínimo",
+    "max": "Máximo"
+  },
+  "settings": {
+    "title": "Configuración",
+    "subtitle": "Administra tu cuenta, privacidad y preferencias",
+    "security": "Seguridad",
+    "security_sub": "Contraseña y autenticación",
+    "notifications": "Notificaciones",
+    "notifications_sub": "Preferencias de alertas",
+    "blocked": "Usuarios bloqueados",
+    "blocked_sub": "Usuarios que has bloqueado",
+    "docs": "Documentación",
+    "docs_sub": "Guías, preguntas frecuentes y más",
+    "support": "Soporte / Ayuda",
+    "support_sub": "Contacta con nuestro equipo",
+    "logout": "Cerrar sesión",
+    "logout_sub": "Salir de tu cuenta",
+    "logout_confirm": "¿Estás seguro que quieres cerrar sesión?"
+  },
+  "blocked": {
+    "title": "Usuarios Bloqueados",
+    "subtitle": "Aquí puedes ver todos los usuarios que has bloqueado",
+    "no_blocked": "No has bloqueado a nadie todavía 😎",
+    "unblock": "Desbloquear",
+    "unblock_confirm": "¿Estás seguro de que quieres desbloquear a {name}?",
+    "default_reason": "Bloqueado desde swipe"
+  },
+  "chat": {
+    "new_message": "Escribe un mensaje...",
+    "block": "Bloquear",
+    "block_confirm": "¿Estás seguro de que deseas bloquear a {name}?",
+    "block_reason": "Motivo del bloqueo (opcional)"
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "back": "Volver",
+    "male": "Hombre",
+    "female": "Mujer",
+    "other": "Otro",
+    "casual": "Casual",
+    "serious": "Seria",
+    "friendship": "Amistad",
+    "loading_profiles": "Cargando perfiles...",
+    "block": "Bloquear",
+    "like": "Me gusta",
+    "next": "Siguiente"
+  },
+  "errors": {
+    "required": "Campo requerido",
+    "invalid_email": "Formato de email inválido",
+    "min_length": "Mínimo {count} caracteres",
+    "underage": "Debes tener al menos 18 años",
+    "load_profiles": "Error al cargar perfiles",
+    "no_user_profile": "No se encontró usuario logueado o perfil actual",
+    "like_error": "Error al enviar like",
+    "block_error": "Error al bloquear usuario"
+  },
+  "error404": {
+    "title": "Page Not Found",
+    "description": "Sorry, we couldn't find the page you're looking for.",
+    "backToHome": "Back to Home",
+    "contactSupport": "Contact Technical Support",
+    "needHelp": "Need help?",
+    "contactUs": "Contact us"
+  }
+}

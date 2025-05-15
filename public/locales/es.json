@@ -75,18 +75,24 @@
     "create_profile": "Crear Perfil"
   },
   "matches": {
-    "title": "Tus Matches",
+   "title": "Tus Matches",
     "no_matches": "Aún no tienes matches. ¡Sigue explorando!",
     "discover": "Descubrir personas",
     "view_profile": "Ver perfil",
     "chat": "Chatear",
     "match_alert": "¡Match con {name}!",
-    "no_profiles": "No hay perfiles disponibles"
+    "no_profiles": "No hay perfiles disponibles",
+    "profile_not_available": "Perfil no disponible",
+    "no_description": "Sin descripción",
+    "location_unspecified": "Ubicación no especificada",
+    "view_profile_button": "Ver perfil",
+    "chat_button": "Chatear"
   },
   "messages": {
     "title": "Tus chats",
     "no_chats": "No tienes chats todavía. ¡Ve a hacer match!",
-    "new_match": "¡Nuevo match! Envía un mensaje"
+    "new_match": "¡Nuevo match! Envía un mensaje",
+    "loading": "Cargando chats..."
   },
   "preferences": {
     "title": "Mis Preferencias",
@@ -120,7 +126,9 @@
     "no_blocked": "No has bloqueado a nadie todavía 😎",
     "unblock": "Desbloquear",
     "unblock_confirm": "¿Estás seguro de que quieres desbloquear a {name}?",
-    "default_reason": "Bloqueado desde swipe"
+    "default_reason": "Bloqueado desde swipe",
+    "unblock_confirm_title": "Confirmar desbloqueo",
+    "blocked_count": "Has bloqueado {count} usuario(s)"
   },
   "chat": {
     "new_message": "Escribe un mensaje...",
@@ -129,7 +137,7 @@
     "block_reason": "Motivo del bloqueo (opcional)"
   },
   "common": {
-    "loading": "Cargando...",
+  "loading": "Cargando...",
     "error": "Error",
     "save": "Guardar",
     "cancel": "Cancelar",
@@ -157,11 +165,17 @@
     "block_error": "Error al bloquear usuario"
   },
   "error404": {
-    "title": "Page Not Found",
-    "description": "Sorry, we couldn't find the page you're looking for.",
-    "backToHome": "Back to Home",
-    "contactSupport": "Contact Technical Support",
-    "needHelp": "Need help?",
-    "contactUs": "Contact us"
+    "title": "Página no encontrada",
+    "description": "Lo sentimos, no pudimos encontrar la página que estás buscando.",
+    "backToHome": "Volver al inicio",
+    "contactSupport": "Contactar soporte técnico",
+    "needHelp": "¿Necesitas ayuda?",
+    "contactUs": "Contáctanos"
+  },
+
+  "modal": {
+    "cancel": "Cancelar",
+    "confirm": "Eliminar",
+    "placeholder": "Escribe una razón..."
   }
 }

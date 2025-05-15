@@ -7,19 +7,20 @@ import {
   Book,
   HelpCircle,
   LogOut,
+  ChevronRight,
 } from "lucide-react";
 import Header from "../components/Header";
 import Modal from "../components/Modal";
 import SettingItem from "../components/SettingItem";
 import AuthService from "../services/AuthService";
-import { useTranslation } from "react-i18next"; // Importa useTranslation
+import { useTranslation } from "react-i18next";
 
 const authService = new AuthService();
 
 export default function Settings() {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const navigate = useNavigate();
-  const { t } = useTranslation(); // Obtén las traducciones
+  const { t } = useTranslation();
 
   const handleLogout = () => {
     authService.logout();
@@ -27,83 +28,105 @@ export default function Settings() {
     navigate("/login");
   };
 
-  const itemClass =
-    "flex items-center justify-between bg-white p-4 rounded-xl shadow hover:shadow-md transition-all";
+  const settingItemClass = `
+    flex items-center justify-between 
+    bg-white p-6 rounded-2xl 
+    shadow-md hover:shadow-lg 
+    transition-shadow duration-300 
+    border border-gray-200
+    hover:border-gray-300
+    group
+  `;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-10 px-4 sm:px-6 lg:px-8 lg:mt-16 sm:mb-8 mb-4">
+    <div className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-200 py-16 px-6 sm:px-8 lg:px-12">
       <Header />
-      <div className="max-w-3xl mx-auto flex flex-col items-center">
-        <div className="mb-10">
-          <h1 className="text-3xl font-extrabold text-gray-900 text-center">
-            {t("settings.title")} {/* Traducción de título */}
-          </h1>
-          <p className="text-gray-600 mt-2 text-center">
-            {t("settings.subtitle")} {/* Traducción de descripción */}
-          </p>
-        </div>
 
+      <div className="max-w-lg mx-auto">
+        {/* Header Section */}
+        <div className="mb-6 text-center">
+  <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">
+    {t("settings.title")}
+  </h1>
+  <p className="text-gray-600 mt-2 text-lg max-w-xs mx-auto leading-relaxed">
+    {t("settings.subtitle")}
+  </p>
+</div>
+
+        {/* Settings Grid */}
         <div className="space-y-4">
-          <Link to="/settings/security" className={itemClass}>
-            <SettingItem
-              icon={<Lock className="text-rose-600" />}
-              title={t("settings.security")} 
-              subtitle={t("settings.security_sub")}
-            />
-          </Link>
+          {[{
+            to: "/settings/security",
+            icon: <Lock className="text-rose-600 w-6 h-6" />,
+            title: t("settings.security"),
+            subtitle: t("settings.security_sub"),
+            aria: "settings.security"
+          }, {
+            to: "/settings/notifications",
+            icon: <Bell className="text-amber-600 w-6 h-6" />,
+            title: t("settings.notifications"),
+            subtitle: t("settings.notifications_sub"),
+            aria: "settings.notifications"
+          }, {
+            to: "/blockedUsers",
+            icon: <Ban className="text-red-600 w-6 h-6" />,
+            title: t("settings.blocked"),
+            subtitle: t("settings.blocked_sub"),
+            aria: "settings.blocked"
+          }, {
+            to: "/settings/documentation",
+            icon: <Book className="text-blue-600 w-6 h-6" />,
+            title: t("settings.docs"),
+            subtitle: t("settings.docs_sub"),
+            aria: "settings.docs"
+          }, {
+            to: "/settings/support",
+            icon: <HelpCircle className="text-green-600 w-6 h-6" />,
+            title: t("settings.support"),
+            subtitle: t("settings.support_sub"),
+            aria: "settings.support"
+          }].map(({ to, icon, title, subtitle, aria }) => (
+            <Link
+              key={to}
+              to={to}
+              className={settingItemClass}
+              aria-label={t(aria)}
+            >
+              <SettingItem icon={icon} title={title} subtitle={subtitle} />
+              <ChevronRight className="text-gray-400 group-hover:text-gray-700 transition-colors" />
+            </Link>
+          ))}
 
-          <Link to="/settings/notifications" className={itemClass}>
-            <SettingItem
-              icon={<Bell className="text-amber-500" />}
-              title={t("settings.notifications")}
-              subtitle={t("settings.notifications_sub")} 
-            />
-          </Link>
-
-          <Link to="/blockedUsers" className={itemClass}>
-            <SettingItem
-              icon={<Ban className="text-red-500" />}
-              title={t("settings.blocked")} 
-              subtitle={t("settings.blocked_sub")} 
-            />
-          </Link>
-
-          <Link to="/settings/documentation" className={itemClass}>
-            <SettingItem
-              icon={<Book className="text-blue-500" />}
-              title={t("settings.docs")}
-              subtitle={t("settings.docs_sub")} 
-            />
-          </Link>
-
-          <Link to="/settings/support" className={itemClass}>
-            <SettingItem
-              icon={<HelpCircle className="text-green-600" />}
-              title={t("settings.support")} 
-              subtitle={t("settings.support_sub")} 
-            />
-          </Link>
-
+          {/* Logout Button */}
           <button
             onClick={() => setShowLogoutModal(true)}
-            className={`${itemClass} w-full text-left`}
+            className={`
+              ${settingItemClass} 
+              w-full text-left
+              border-red-300 hover:border-red-400
+              bg-red-50 hover:bg-red-100
+            `}
+            aria-label={t("settings.logout")}
           >
             <SettingItem
-              icon={<LogOut className="text-gray-700" />}
-              title={t("settings.logout")} 
-              subtitle={t("settings.logout_sub")} 
+              icon={<LogOut className="text-red-600 w-6 h-6" />}
+              title={t("settings.logout")}
+              subtitle={t("settings.logout_sub")}
             />
+            <ChevronRight className="text-red-400 group-hover:text-red-600 transition-colors" />
           </button>
         </div>
       </div>
 
+      {/* Logout Modal */}
       <Modal
         show={showLogoutModal}
         onClose={() => setShowLogoutModal(false)}
         onConfirm={handleLogout}
-        message={t("settings.logout_confirm")} 
-        confirmText={t("settings.logout")} 
-        cancelText={t("settings.logout_sub")} 
+        message={t("settings.logout_confirm")}
+        confirmText={t("settings.logout")}
+        cancelText={t("settings.cancel")}
+        confirmColor="red"
       />
     </div>
   );

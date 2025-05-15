@@ -10,12 +10,11 @@
       "login": "Connexion"
     }
   },
-   "home": {
+  "home": {
     "swipe_hint": "Glissez vers la droite pour voir plus de profils"
   },
-
   "login": {
-   "title": "Connexion",
+    "title": "Connexion",
     "emailLabel": "Adresse e-mail",
     "emailPlaceholder": "votreemail@exemple.com",
     "passwordLabel": "Mot de passe",
@@ -48,7 +47,7 @@
     "emailLabel": "Adresse e-mail",
     "emailPlaceholder": "votreemail@exemple.com",
     "passwordPlaceholder": "Votre mot de passe",
-    "account": "Vous avez déjà un compte?"
+    "account": "Vous avez déjà un compte ?"
   },
   "profile": {
     "title": "Profil",
@@ -81,12 +80,18 @@
     "view_profile": "Voir le profil",
     "chat": "Discuter",
     "match_alert": "Match avec {name} !",
-    "no_profiles": "Aucun profil disponible"
+    "no_profiles": "Aucun profil disponible",
+    "profile_not_available": "Profil non disponible",
+    "no_description": "Sans description",
+    "location_unspecified": "Localisation non spécifiée",
+    "view_profile_button": "Voir le profil",
+    "chat_button": "Discuter"
   },
   "messages": {
     "title": "Vos discussions",
     "no_chats": "Vous n'avez pas encore de discussions. Allez faire un match !",
-    "new_match": "Nouveau match ! Envoyez un message"
+    "new_match": "Nouveau match ! Envoyez un message",
+    "loading": "Chargement des chats..."
   },
   "preferences": {
     "title": "Mes Préférences",
@@ -120,7 +125,9 @@
     "no_blocked": "Vous n'avez bloqué personne pour l'instant 😎",
     "unblock": "Débloquer",
     "unblock_confirm": "Êtes-vous sûr de vouloir débloquer {name} ?",
-    "default_reason": "Bloqué depuis le swipe"
+    "default_reason": "Bloqué depuis le swipe",
+    "unblock_confirm_title": "Confirmer le déblocage",
+    "blocked_count": "Vous avez bloqué {count} utilisateur(s)"
   },
   "chat": {
     "new_message": "Écrire un message...",
@@ -156,12 +163,17 @@
     "like_error": "Erreur lors de l'envoi du like",
     "block_error": "Erreur lors du blocage de l'utilisateur"
   },
-   "error404": {
+  "error404": {
     "title": "Page non trouvée",
     "description": "Désolé, nous n'avons pas pu trouver la page que vous recherchez.",
     "backToHome": "Retour à l'accueil",
     "contactSupport": "Contacter le support technique",
     "needHelp": "Besoin d'aide ?",
     "contactUs": "Contactez-nous"
+  },
+  "modal": {
+    "cancel": "Annuler",
+    "confirm": "Supprimer",
+    "placeholder": "Entrez une raison..."
   }
 }

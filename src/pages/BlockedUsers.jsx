@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import BlocksService from "../services/BlocksService";
 import AuthService from "../services/AuthService";
@@ -10,6 +11,7 @@ import Modal from "../components/Modal";
 const likesService = new LikesService();
 
 export default function BlockedUsers() {
+  const { t } = useTranslation();
   const [blockedUsers, setBlockedUsers] = useState([]);
   const [blockedCount, setBlockedCount] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -29,7 +31,6 @@ export default function BlockedUsers() {
 
         const response = await new BlocksService().getByReporterId(userInfo.id);
 
-        // Extraer solo los usuarios reportados y agregar blockId para poder desbloquear luego
         const users = response.data.map((block) => ({
           blockId: block.id,
           id: block.reported.id,
@@ -41,7 +42,7 @@ export default function BlockedUsers() {
         setBlockedUsers(users);
         setBlockedCount(users.length);
       } catch (err) {
-        setError("Error al cargar los usuarios bloqueados");
+        setError(t('errors.load_profiles'));
         console.error(err);
       } finally {
         setLoading(false);
@@ -49,7 +50,7 @@ export default function BlockedUsers() {
     };
 
     fetchBlockedUsers();
-  }, [navigate]);
+  }, [navigate, t]);
 
   const handleUnblock = (user) => {
     setUserToUnblock(user);
@@ -69,7 +70,7 @@ export default function BlockedUsers() {
       );
       setBlockedCount((prev) => prev - 1);
     } catch (error) {
-      console.error("Error al desbloquear usuario:", error);
+      console.error(t('errors.block_error'), error);
     } finally {
       setShowModal(false);
     }
@@ -85,22 +86,26 @@ export default function BlockedUsers() {
       <Header />
       <div className="max-w-3xl mx-auto flex flex-col items-center">
         <div className="mb-10 w-full flex justify-between items-center">
-          <button onClick={() => navigate(-1)} className="text-gray-600 p-2 rounded-full hover:bg-gray-200">
+          <button 
+            onClick={() => navigate(-1)} 
+            className="text-gray-600 p-2 rounded-full hover:bg-gray-200"
+            aria-label={t('common.back')}
+          >
             <ArrowLeft size={24} />
           </button>
           <div>
             <h1 className="text-3xl font-extrabold text-gray-900 text-center">
-              Usuarios Bloqueados
+              {t('blocked.title')}
             </h1>
             <p className="text-gray-600 mt-2 text-center">
-              Aquí puedes ver todos los usuarios que has bloqueado.
+              {t('blocked.subtitle')}
             </p>
           </div>
           <div className="w-8" />
         </div>
 
         {loading ? (
-          <div className="text-center">Cargando...</div>
+          <div className="text-center">{t('common.loading')}</div>
         ) : error ? (
           <div className="text-red-500 text-center">{error}</div>
         ) : (
@@ -108,11 +113,11 @@ export default function BlockedUsers() {
             <div className="text-center mb-8">
               {blockedCount > 0 ? (
                 <h2 className="text-xl font-bold text-gray-800">
-                  Has bloqueado {blockedCount} usuario(s)
+                  {t('blocked.blocked_count', { count: blockedCount })}
                 </h2>
               ) : (
                 <h2 className="text-xl font-bold text-gray-800">
-                  No has bloqueado a nadie todavia 😎
+                  {t('blocked.no_blocked')}
                 </h2>
               )}
             </div>
@@ -134,7 +139,7 @@ export default function BlockedUsers() {
                       onClick={() => handleUnblock(user)}
                       className="px-4 py-2 text-red-500 hover:bg-red-100 rounded-lg"
                     >
-                      Desbloquear
+                      {t('blocked.unblock')}
                     </button>
                   </div>
                 ))}
@@ -148,10 +153,12 @@ export default function BlockedUsers() {
         show={showModal}
         onClose={handleCloseModal}
         onConfirm={confirmUnblock}
-        title="Confirmar desbloqueo"
-        message={`¿Estás seguro de que quieres desbloquear a ${userToUnblock?.firstname} ${userToUnblock?.lastname}?`}
-        confirmText="Desbloquear"
-        cancelText="Cancelar"
+        title={t('blocked.unblock_confirm_title')}
+        message={t('blocked.unblock_confirm', { 
+          name: `${userToUnblock?.firstname} ${userToUnblock?.lastname}`
+        })}
+        confirmText={t('blocked.unblock')}
+        cancelText={t('common.cancel')}
       />
     </div>
   );

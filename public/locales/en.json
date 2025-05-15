@@ -10,10 +10,9 @@
       "login": "Log In"
     }
   },
-    "home": {
+  "home": {
     "swipe_hint": "Swipe right to see more profiles"
   },
-  
   "login": {
     "title": "Login",
     "emailLabel": "Email",
@@ -26,8 +25,7 @@
     "register": "Sign up",
     "error": "Login failed",
     "loading": "Logging in...",
-    "log_in": "Log in"  
-    
+    "log_in": "Log in"
   },
   "signup": {
     "title": "Sign Up",
@@ -82,12 +80,18 @@
     "view_profile": "View Profile",
     "chat": "Chat",
     "match_alert": "Match with {name}!",
-    "no_profiles": "No profiles available"
+    "no_profiles": "No profiles available",
+    "profile_not_available": "Profile not available",
+    "no_description": "No description",
+    "location_unspecified": "Location unspecified",
+    "view_profile_button": "View Profile",
+    "chat_button": "Chat"
   },
   "messages": {
     "title": "Your Chats",
     "no_chats": "You don't have any chats yet. Go make a match!",
-    "new_match": "New match! Send a message"
+    "new_match": "New match! Send a message",
+    "loading": "Loading chats..."
   },
   "preferences": {
     "title": "My Preferences",
@@ -121,7 +125,9 @@
     "no_blocked": "You haven't blocked anyone yet 😎",
     "unblock": "Unblock",
     "unblock_confirm": "Are you sure you want to unblock {name}?",
-    "default_reason": "Blocked from swipe"
+    "default_reason": "Blocked from swipe",
+    "unblock_confirm_title": "Confirm unblock",
+    "blocked_count": "You've blocked {count} user(s)"
   },
   "chat": {
     "new_message": "Write a message...",
@@ -152,17 +158,22 @@
     "invalid_email": "Invalid email format",
     "min_length": "Minimum {count} characters",
     "underage": "You must be at least 18 years old",
-        "load_profiles": "Error loading profiles",
+    "load_profiles": "Error loading profiles",
     "no_user_profile": "No logged in user or current profile found",
     "like_error": "Error sending like",
     "block_error": "Error blocking user"
   },
   "error404": {
-    "title": "Página no encontrada",
-    "description": "Lo sentimos, no pudimos encontrar la página que estás buscando.",
-    "backToHome": "Volver al inicio",
-    "contactSupport": "Contactar soporte técnico",
-    "needHelp": "¿Necesitas ayuda?",
-    "contactUs": "Contáctanos"
+    "title": "Page Not Found",
+    "description": "Sorry, we couldn't find the page you're looking for.",
+    "backToHome": "Back to Home",
+    "contactSupport": "Contact Technical Support",
+    "needHelp": "Need help?",
+    "contactUs": "Contact us"
+  },
+  "modal": {
+    "cancel": "Cancel",
+    "confirm": "Delete",
+    "placeholder": "Enter a reason..."
   }
 }

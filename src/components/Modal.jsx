@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 const Modal = ({
   show,
@@ -13,6 +14,7 @@ const Modal = ({
   onReasonChange,
   placeholder = "",
 }) => {
+  const { t } = useTranslation();
   const [internalReason, setInternalReason] = useState(reason);
 
   useEffect(() => {
@@ -37,7 +39,7 @@ const Modal = ({
           <textarea
             className="w-full border border-gray-300 rounded-md p-2 mb-4 resize-none"
             rows="3"
-            placeholder={placeholder}
+            placeholder={placeholder || t("modal.placeholder")}
             value={internalReason}
             onChange={(e) => {
               setInternalReason(e.target.value);
@@ -51,13 +53,13 @@ const Modal = ({
             onClick={onClose}
             className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 transition-all duration-200"
           >
-            {cancelText || "Cancelar"}
+            {cancelText || t("modal.cancel")}
           </button>
           <button
             onClick={handleConfirm}
             className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-all duration-200"
           >
-            {confirmText || "Eliminar"}
+            {confirmText || t("modal.confirm")}
           </button>
         </div>
       </div>

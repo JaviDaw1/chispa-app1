@@ -48,14 +48,40 @@ const Profile = () => {
       navigate("/login");
       return;
     }
+
     fetchProfile(userInfo);
   }, [navigate, fetchProfile]);
 
-  const handlePreferences = () => navigate("/preference");
-  const handleLogout = () => {
-    authService.logout();
-    navigate("/");
+  const formatLastActive = (dateString) => {
+    if (!dateString) return t("profile.never_active");
+
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffInSeconds = Math.floor((now - date) / 1000);
+
+    if (diffInSeconds < 60) return t("profile.just_now");
+    if (diffInSeconds < 3600) return t("profile.minutes_ago", { minutes: Math.floor(diffInSeconds / 60) });
+    if (diffInSeconds < 86400) return t("profile.hours_ago", { hours: Math.floor(diffInSeconds / 3600) });
+
+    const days = Math.floor(diffInSeconds / 86400);
+    if (days === 1) return t("profile.yesterday");
+    if (days < 7) return t("profile.days_ago", { days });
+
+    return date.toLocaleDateString();
   };
+
+  const handlePreferences = () => navigate("/preference");
+
+  const handleLogout = async () => {
+    try {
+      await authService.logout();
+      navigate("/", { replace: true });
+    } catch (err) {
+      console.error("Error al cerrar sesión:", err);
+      navigate("/", { replace: true });
+    }
+  };
+
   const handleCompleteProfile = () => navigate("/create-profile");
 
   if (loading) {
@@ -122,7 +148,7 @@ const Profile = () => {
               ) : (
                 <span className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 text-gray-800 text-sm font-medium">
                   <span className="w-2 h-2 rounded-full bg-gray-500 mr-2"></span>
-                  {t("profile.offline")}
+                  {t("profile.last_active")}: {formatLastActive(profile?.lastActive)}
                 </span>
               )}
             </div>
@@ -200,10 +226,12 @@ const Profile = () => {
                       label={t("profile.relationship_type")}
                       value={profile.preferredRelationship}
                     />
-                    <ProfileField
-                      label={t("profile.last_active")}
-                      value={profile.lastActive ? new Date(profile.lastActive).toLocaleString() : ''}
-                    />
+                    {!profile.isOnline && (
+                      <ProfileField
+                        label={t("profile.last_active")}
+                        value={formatLastActive(profile.lastActive)}
+                      />
+                    )}
                   </ProfileSection>
                 </div>
               </div>

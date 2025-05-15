@@ -72,7 +72,13 @@
     "birthdate": "Fecha de nacimiento",
     "location": "Ubicación",
     "relationship_type": "Tipo de relación",
-    "create_profile": "Crear Perfil"
+    "create_profile": "Crear Perfil",
+    "just_now": "Ahora mismo",
+    "minutes_ago": "{{minutes}} minuto(s) atrás",
+    "hours_ago": "{{hours}} hora(s) atrás",
+    "yesterday": "Ayer",
+    "days_ago": "{{days}} día(s) atrás",
+    "never_active": "Nunca conectado"
   },
   "matches": {
    "title": "Tus Matches",

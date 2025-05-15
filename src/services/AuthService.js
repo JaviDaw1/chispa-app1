@@ -1,9 +1,12 @@
 import api from './api';
 import ProfileService from './ProfileService';
 
+const profileService = new ProfileService();
+
 export default class AuthService {
   constructor() {
     this.url = '/auth';
+    this.onlineStatusInterval = null;
   }
 
   async login(email, password) {
@@ -16,6 +19,9 @@ export default class AuthService {
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
 
+      await this.setOnlineStatus(true);
+      this.setupOnlineStatusHandlers();
+
       return response.data;
     } catch (error) {
       console.error("Error en login:", error.response?.data?.message || error.message);
@@ -25,7 +31,6 @@ export default class AuthService {
 
   async signup(data) {
     try {
-      // Crear usuario
       const response = await api.post(`${this.url}/signup`, {
         firstname: data.firstname,
         lastname: data.lastname,
@@ -36,10 +41,7 @@ export default class AuthService {
       });
 
       const newUser = response.data;
-
       await this.login(data.email, data.password);
-
-      const profileService = new ProfileService();
 
       const customProfile = {
         name: data.firstname,
@@ -56,18 +58,23 @@ export default class AuthService {
       };
 
       await profileService.create(customProfile);
-
-      console.log("Perfil creado correctamente");
       return newUser;
     } catch (error) {
-      console.error("Error en el registro o creación de perfil:", error.response?.data?.message || error.message);
+      console.error("Error en el registro:", error.response?.data?.message || error.message);
       throw new Error(error.response?.data?.message || "Error al registrar usuario");
     }
   }
 
-  logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+  async logout() {
+    try {
+      await this.setOnlineStatus(false);
+    } catch (error) {
+      console.error('Error al actualizar estado offline:', error);
+    } finally {
+      this.cleanupOnlineStatusHandlers();
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+    }
   }
 
   getToken() {
@@ -77,5 +84,48 @@ export default class AuthService {
   getUserInfo() {
     const user = localStorage.getItem('user');
     return user ? JSON.parse(user) : null;
+  }
+
+  async setOnlineStatus(isOnline) {
+    const user = this.getUserInfo();
+    if (!user) return;
+
+    try {
+      const profileResponse = await profileService.getByUserId(user.id);
+      const profile = profileResponse.data;
+
+      if (!profile) return;
+
+      await profileService.update(profile.id, {
+        ...profile,
+        isOnline,
+        lastActive: new Date().toISOString(),
+      });
+    } catch (error) {
+      console.error('Error actualizando estado online:', error);
+    }
+  }
+
+  setupOnlineStatusHandlers() {
+    this.cleanupOnlineStatusHandlers();
+
+    this.onlineStatusInterval = setInterval(() => {
+      this.setOnlineStatus(true);
+    }, 60000);
+
+    this.beforeUnloadHandler = () => this.setOnlineStatus(false);
+    window.addEventListener('beforeunload', this.beforeUnloadHandler);
+  }
+
+  cleanupOnlineStatusHandlers() {
+    if (this.onlineStatusInterval) {
+      clearInterval(this.onlineStatusInterval);
+      this.onlineStatusInterval = null;
+    }
+
+    if (this.beforeUnloadHandler) {
+      window.removeEventListener('beforeunload', this.beforeUnloadHandler);
+      this.beforeUnloadHandler = null;
+    }
   }
 }

@@ -22,11 +22,15 @@ export default function Settings() {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  const handleLogout = () => {
-    authService.logout();
-    setShowLogoutModal(false);
-    navigate("/login");
-  };
+const handleLogout = async () => {
+  try {
+    await authService.logout();
+    navigate("/", { replace: true });
+  } catch (err) {
+    console.error("Error al cerrar sesión:", err);
+    navigate("/", { replace: true });
+  }
+};
 
   const settingItemClass = `
     flex items-center justify-between 

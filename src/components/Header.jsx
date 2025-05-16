@@ -52,7 +52,7 @@ const Header = () => {
               const IconComponent = item.icon;
               const isActive = location.pathname === item.path;
               return (
-                <li key={item.label}>
+                <li key={item.label} className="mt-1">
                   <Link
                     to={item.path}
                     className={`flex items-center gap-2 transition text-lg ${isActive ? "text-orange-600 font-semibold" : "text-gray-700 hover:orange-orange-600"

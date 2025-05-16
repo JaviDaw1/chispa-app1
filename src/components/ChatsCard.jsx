@@ -44,11 +44,11 @@ const ChatsCard = ({ match, currentUserId }) => {
 
   return (
     <div
-      className="flex items-center p-4 bg-white rounded-xl shadow-md hover:shadow-lg hover:bg-pink-200 cursor-pointer transition duration-300 ease-in-out"
+      className="flex items-center p-4 bg-white rounded-xl shadow-md hover:shadow-lg hover:bg-orange-200 cursor-pointer transition duration-300 ease-in-out"
       onClick={() => navigate(`/chat/${match.id}`)}
     >
       <img
-        className="h-14 w-14 rounded-full object-cover border-2 border-pink-500"
+        className="h-14 w-14 rounded-full object-cover border-2 border-orange-500"
         src={otherUserProfile.profilePhoto || '/default-profile.png'}
         alt={`${otherUserProfile.name} ${otherUserProfile.lastName}`}
       />

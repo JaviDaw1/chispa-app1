@@ -7,7 +7,7 @@ import {
   Book,
   HelpCircle,
   LogOut,
-  ChevronRight,
+  Languages 
 } from "lucide-react";
 import Header from "../components/Header";
 import Modal from "../components/Modal";
@@ -22,15 +22,15 @@ export default function Settings() {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-const handleLogout = async () => {
-  try {
-    await authService.logout();
-    navigate("/", { replace: true });
-  } catch (err) {
-    console.error("Error al cerrar sesión:", err);
-    navigate("/", { replace: true });
-  }
-};
+  const handleLogout = async () => {
+    try {
+      await authService.logout();
+      navigate("/", { replace: true });
+    } catch (err) {
+      console.error("Error al cerrar sesión:", err);
+      navigate("/", { replace: true });
+    }
+  };
 
   const settingItemClass = `
     flex items-center justify-between 
@@ -43,19 +43,19 @@ const handleLogout = async () => {
   `;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-200 py-16 px-6 sm:px-8 lg:px-12">
+    <div className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-200 py-16 px-6 sm:px-8 lg:px-12 lg:pt-24">
       <Header />
 
-      <div className="max-w-lg mx-auto">
+      <div className="max-w-lg mx-auto pb-16 lg:pt-6">
         {/* Header Section */}
         <div className="mb-6 text-center">
-  <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">
-    {t("settings.title")}
-  </h1>
-  <p className="text-gray-600 mt-2 text-lg max-w-xs mx-auto leading-relaxed">
-    {t("settings.subtitle")}
-  </p>
-</div>
+          <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">
+            {t("settings.title")}
+          </h1>
+          <p className="text-gray-600 mt-2 text-lg max-w-xs mx-auto leading-relaxed">
+            {t("settings.subtitle")}
+          </p>
+        </div>
 
         {/* Settings Grid */}
         <div className="space-y-4">
@@ -71,6 +71,12 @@ const handleLogout = async () => {
             title: t("settings.notifications"),
             subtitle: t("settings.notifications_sub"),
             aria: "settings.notifications"
+          }, {
+            to: "/languages",
+            icon: <Languages className="text-sky-600 w-6 h-6" />,
+            title: t("settings.language"),
+            subtitle: t("settings.language_sub"),
+            aria: "settings.language"
           }, {
             to: "/blockedUsers",
             icon: <Ban className="text-red-600 w-6 h-6" />,
@@ -97,7 +103,6 @@ const handleLogout = async () => {
               aria-label={t(aria)}
             >
               <SettingItem icon={icon} title={title} subtitle={subtitle} />
-              <ChevronRight className="text-gray-400 group-hover:text-gray-700 transition-colors" />
             </Link>
           ))}
 
@@ -117,7 +122,6 @@ const handleLogout = async () => {
               title={t("settings.logout")}
               subtitle={t("settings.logout_sub")}
             />
-            <ChevronRight className="text-red-400 group-hover:text-red-600 transition-colors" />
           </button>
         </div>
       </div>
@@ -129,7 +133,7 @@ const handleLogout = async () => {
         onConfirm={handleLogout}
         message={t("settings.logout_confirm")}
         confirmText={t("settings.logout")}
-        cancelText={t("settings.cancel")}
+        cancelText={t("modal.cancel")}
         confirmColor="red"
       />
     </div>

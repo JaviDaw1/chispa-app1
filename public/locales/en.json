@@ -113,6 +113,8 @@
     "subtitle": "Manage your account, privacy and preferences",
     "security": "Security",
     "security_sub": "Password and authentication",
+    "language": "Language",
+    "language_sub": "Select your preferred language",
     "notifications": "Notifications",
     "notifications_sub": "Alert preferences",
     "blocked": "Blocked Users",

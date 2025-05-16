@@ -47,8 +47,8 @@ const ChatsPage = () => {
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       <Header />
-      <main className="flex-1 flex flex-col items-center px-4 sm:px-6 lg:px-8 pt-24 sm:pt-20">
-        <h1 className="text-4xl font-bold text-center text-gray-800 mb-8">
+      <main className="flex-1 flex flex-col items-center px-4 sm:px-6 lg:px-8 pt-24 sm:pt-20 lg:pt-24">
+        <h1 className="text-4xl font-extrabold text-center mb-8">
           {t('messages.title')}
         </h1>
 

@@ -114,6 +114,8 @@
     "subtitle": "Administra tu cuenta, privacidad y preferencias",
     "security": "Seguridad",
     "security_sub": "Contraseña y autenticación",
+    "language": "Idioma",
+    "language_sub": "Selecciona tu idioma preferido",
     "notifications": "Notificaciones",
     "notifications_sub": "Preferencias de alertas",
     "blocked": "Usuarios bloqueados",

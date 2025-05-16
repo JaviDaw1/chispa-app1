@@ -13,6 +13,7 @@ import Error404 from './pages/Error404';
 import Settings from './pages/Settings';
 import BlockedUsers from './pages/BlockedUsers';
 import AuthService from './services/AuthService';
+import Language from './pages/Language';
 
 const authService = new AuthService();
 
@@ -44,6 +45,7 @@ export default function App() {
         <Route path="*" element={<Error404 />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/blockedUsers" element={<BlockedUsers />} />
+        <Route path="/languages" element={<Language />} />
       </Routes>
     </Router>
   );

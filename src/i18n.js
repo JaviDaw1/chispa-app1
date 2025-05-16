@@ -8,14 +8,14 @@ i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
-    fallbackLng: 'es',  // Puede ser es o cualquier otro idioma predeterminado
-    supportedLngs: ['es', 'en', 'fr'],  // Añadimos francés
+    fallbackLng: 'es',
+    supportedLngs: ['es', 'en', 'fr'],
     debug: true,
     interpolation: {
       escapeValue: false,
     },
     backend: {
-      loadPath: '/locales/{{lng}}.json',  // Ruta para cargar los archivos JSON
+      loadPath: '/locales/{{lng}}.json',
     },
   });
 

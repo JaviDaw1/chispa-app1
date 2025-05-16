@@ -105,8 +105,6 @@ const Chat = () => {
       await messagesService.deleteMessagesByMatchId(matchId);
       await matchService.deleteMatch(matchId);
 
-      console.log("Usuario bloqueado con razón:", blockReason);
-
       setIsModalOpen(false);
       navigate('/messages');
     } catch (error) {
@@ -130,7 +128,7 @@ const Chat = () => {
       <Header />
 
       {/* Encabezado del chat */}
-      <div className="sticky top-0 bg-pink-600 text-white p-4 flex items-center z-10 lg:pt-20">
+      <div className="sticky top-0 bg-orange-600 text-white p-4 flex items-center z-10 lg:pt-20">
         <Link to="/messages" className="text-white mr-4">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 12H5" />
@@ -146,7 +144,7 @@ const Chat = () => {
               className="w-full h-full rounded-full object-cover"
             />
           ) : (
-            <span className="text-pink-600 font-bold">
+            <span className="text-orange-600 font-bold">
               {otherUser.firstname?.charAt(0)}
             </span>
           )}
@@ -175,11 +173,11 @@ const Chat = () => {
           >
             <div
               className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${msg.senderUser.id === currentUser.id
-                ? 'bg-pink-500 text-white rounded-br-none'
+                ? 'bg-orange-500 text-white rounded-br-none'
                 : 'bg-white border border-gray-200 rounded-bl-none'}`}
             >
               <p>{msg.content}</p>
-              <div className={`text-xs mt-1 ${msg.senderUser.id === currentUser.id ? 'text-pink-100' : 'text-gray-500'}`}>
+              <div className={`text-xs mt-1 ${msg.senderUser.id === currentUser.id ? 'text-orange-100' : 'text-gray-500'}`}>
                 {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 {msg.senderUser.id === currentUser.id && (
                   <span className="ml-1">
@@ -194,20 +192,20 @@ const Chat = () => {
       </div>
 
       {/* Input para enviar mensajes */}
-      <div className="sticky bottom-0 left-0 w-full bg-white p-3 border-t border-gray-200 pb-14 lg:pb-3">
+      <div className="sticky bottom-0 left-0 w-full bg-white p-3 border-t border-gray-200 pb-20 lg:pb-3">
         <div className="flex items-center gap-2">
           <input
             type="text"
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             placeholder="Escribe un mensaje..."
-            className="flex-1 border border-gray-300 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+            className="flex-1 border border-gray-300 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
             onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
           />
           <button
             onClick={handleSendMessage}
             disabled={!newMessage.trim()}
-            className={`p-2 rounded-full ${newMessage.trim() ? 'bg-pink-600 text-white' : 'bg-gray-200 text-gray-500'}`}
+            className={`p-2 rounded-full ${newMessage.trim() ? 'bg-orange-600 text-white' : 'bg-gray-200 text-gray-500'}`}
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />

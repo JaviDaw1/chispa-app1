@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next';
 import AuthService from '../services/AuthService';
 import Divider from '../components/Divider';
 import Header from '../components/Header';
+import LoadingScreen from '../components/LoadingScreen';
+import LanguageSelector from '../components/LanguageSelector';
 import Logo from '../../public/images/logo.jpg';
 import { Eye, EyeOff, User, Mail, Lock, MapPin, Calendar, Heart, Smile } from 'lucide-react';
 
@@ -112,18 +114,22 @@ export default function SignUp() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       <Header />
-      <div className="lg:hidden fixed top-0 left-0 w-full flex justify-center bg-white shadow z-40 py-2">
-        <img
-          src={Logo}
-          alt="Chispa logo"
-          className="h-14"
-        />
+
+      <div className="lg:hidden fixed top-0 left-0 w-full bg-white shadow z-40 py-2 px-4 flex items-center justify-center">
+        <img src={Logo} alt={t('header.title')} className="h-14 flex-shrink-0" />
+
+        {!localStorage.getItem("token") && !localStorage.getItem("usuario") && (
+          <div className="absolute right-4 top-1/2 transform -translate-y-1/2 w-20">
+            <LanguageSelector showText={false} />
+          </div>
+        )}
       </div>
-      <div className="flex-grow flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-20 pb-16">
+
+      <div className="flex-grow flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-20 pb-20">
         <div className="sm:mx-auto sm:w-full sm:max-w-3xl">
           <div className="bg-white px-8 py-12 shadow-xl rounded-2xl sm:px-12">
             <div className="text-center mb-10">
-              <h2 className="text-3xl font-extrabold text-gray-900 bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
+              <h2 className="text-3xl font-extrabold text-gray-900 bg-clip-text bg-gradient-to-r from-orange-600 to-amber-600">
                 {t('signup.title')}
               </h2>
               <p className="mt-2 text-lg text-gray-600">
@@ -148,7 +154,7 @@ export default function SignUp() {
                       type="text"
                       value={formData.firstname}
                       onChange={handleChange}
-                      className={`block w-full pl-10 rounded-xl border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 sm:text-sm sm:leading-6 ${errors.firstname ? 'ring-red-500' : 'ring-gray-300'}`}
+                      className={`block w-full pl-10 rounded-xl border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:outline-none focus:ring-orange-500 sm:text-sm sm:leading-6 ${errors.firstname ? 'ring-red-500' : 'ring-gray-300'}`}
                     />
                   </div>
                   {errors.firstname && <p className="mt-1 text-sm text-red-600">{errors.firstname}</p>}
@@ -165,7 +171,7 @@ export default function SignUp() {
                     type="text"
                     value={formData.lastname}
                     onChange={handleChange}
-                    className={`block w-full rounded-xl border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 pl-2 focus:ring-blue-500 sm:text-sm sm:leading-6 ${errors.lastname ? 'ring-red-500' : 'ring-gray-300'}`}
+                    className={`block w-full rounded-xl border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:outline-none pl-2 focus:ring-orange-500 sm:text-sm sm:leading-6 ${errors.lastname ? 'ring-red-500' : 'ring-gray-300'}`}
                   />
                   {errors.lastname && <p className="mt-1 text-sm text-red-600">{errors.lastname}</p>}
                 </div>
@@ -186,7 +192,7 @@ export default function SignUp() {
                       value={formData.username}
                       onChange={handleChange}
                       placeholder={t('signup.username_placeholder')}
-                      className={`block w-full pl-10 rounded-xl border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 sm:text-sm sm:leading-6 ${errors.username ? 'ring-red-500' : 'ring-gray-300'}`}
+                      className={`block w-full pl-10 rounded-xl border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:outline-none focus:ring-orange-500 sm:text-sm sm:leading-6 ${errors.username ? 'ring-red-500' : 'ring-gray-300'}`}
                     />
                   </div>
                   {errors.username && <p className="mt-1 text-sm text-red-600">{errors.username}</p>}
@@ -208,7 +214,7 @@ export default function SignUp() {
                       value={formData.email}
                       onChange={handleChange}
                       placeholder={t('signup.emailPlaceholder')}
-                      className={`block w-full pl-10 rounded-xl border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 sm:text-sm sm:leading-6 ${errors.email ? 'ring-red-500' : 'ring-gray-300'}`}
+                      className={`block w-full pl-10 rounded-xl border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:outline-none focus:ring-orange-500 sm:text-sm sm:leading-6 ${errors.email ? 'ring-red-500' : 'ring-gray-300'}`}
                     />
                   </div>
                   {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
@@ -230,7 +236,7 @@ export default function SignUp() {
                       value={formData.password}
                       onChange={handleChange}
                       placeholder={t('signup.passwordPlaceholder')}
-                      className={`block w-full pl-10 rounded-xl border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 sm:text-sm sm:leading-6 ${errors.password ? 'ring-red-500' : 'ring-gray-300'}`}
+                      className={`block w-full pl-10 rounded-xl border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:outline-none focus:ring-orange-500 sm:text-sm sm:leading-6 ${errors.password ? 'ring-red-500' : 'ring-gray-300'}`}
                     />
                     <div className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer" onClick={toggleShowPassword}>
                       {showPassword ? <EyeOff className="h-5 w-5 text-gray-400" /> : <Eye className="h-5 w-5 text-gray-400" />}
@@ -254,7 +260,7 @@ export default function SignUp() {
                       type="text"
                       value={formData.location}
                       onChange={handleChange}
-                      className={`block w-full pl-10 rounded-xl border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 sm:text-sm sm:leading-6 ${errors.location ? 'ring-red-500' : 'ring-gray-300'}`}
+                      className={`block w-full pl-10 rounded-xl border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:outline-none focus:ring-orange-500 sm:text-sm sm:leading-6 ${errors.location ? 'ring-red-500' : 'ring-gray-300'}`}
                     />
                   </div>
                   {errors.location && <p className="mt-1 text-sm text-red-600">{errors.location}</p>}
@@ -275,7 +281,7 @@ export default function SignUp() {
                       type="date"
                       value={formData.birthDate}
                       onChange={handleChange}
-                      className={`block w-full pl-10 rounded-xl border-0 py-3 pr-2 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 sm:text-sm sm:leading-6 ${errors.birthDate ? 'ring-red-500' : 'ring-gray-300'}`}
+                      className={`block w-full pl-10 rounded-xl border-0 py-3 pr-2 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:outline-none focus:ring-orange-500 sm:text-sm sm:leading-6 ${errors.birthDate ? 'ring-red-500' : 'ring-gray-300'}`}
                     />
                   </div>
                   {errors.birthDate && <p className="mt-1 text-sm text-red-600">{errors.birthDate}</p>}
@@ -291,7 +297,7 @@ export default function SignUp() {
                     name="gender"
                     value={formData.gender}
                     onChange={handleChange}
-                    className={`block w-full rounded-xl border-0 py-3 text-gray-900 pl-2 shadow-sm ring-1 ring-inset focus:ring-2 focus:ring-blue-500 sm:text-sm sm:leading-6 ${errors.gender ? 'ring-red-500' : 'ring-gray-300'}`}
+                    className={`block w-full rounded-xl border-0 py-3 text-gray-900 pl-2 shadow-sm ring-1 ring-inset focus:ring-2 focus:ring-orange-500 sm:text-sm sm:leading-6 ${errors.gender ? 'ring-red-500' : 'ring-gray-300'}`}
                   >
                     <option value="MALE">{t('common.male')}</option>
                     <option value="FEMALE">{t('common.female')}</option>
@@ -314,7 +320,7 @@ export default function SignUp() {
                       name="preferredRelationship"
                       value={formData.preferredRelationship}
                       onChange={handleChange}
-                      className={`block w-full pl-10 rounded-xl border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset focus:ring-2 focus:ring-blue-500 sm:text-sm sm:leading-6 ${errors.preferredRelationship ? 'ring-red-500' : 'ring-gray-300'}`}
+                      className={`block w-full pl-10 rounded-xl border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset focus:ring-2 focus:ring-orange-500 sm:text-sm sm:leading-6 ${errors.preferredRelationship ? 'ring-red-500' : 'ring-gray-300'}`}
                     >
                       <option value="CASUAL">{t('common.casual')}</option>
                       <option value="SERIOUS">{t('common.serious')}</option>
@@ -335,7 +341,7 @@ export default function SignUp() {
                     type="url"
                     value={formData.profilePhoto}
                     onChange={handleChange}
-                    className={`block w-full rounded-xl border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset pl-2 placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 sm:text-sm sm:leading-6 ${errors.profilePhoto ? 'ring-red-500' : 'ring-gray-300'}`}
+                    className={`block w-full rounded-xl border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset pl-2 placeholder:text-gray-400 focus:ring-2 focus:outline-none focus:ring-orange-500 sm:text-sm sm:leading-6 ${errors.profilePhoto ? 'ring-red-500' : 'ring-gray-300'}`}
                   />
                   {errors.profilePhoto && <p className="mt-1 text-sm text-red-600">{errors.profilePhoto}</p>}
                 </div>
@@ -355,7 +361,7 @@ export default function SignUp() {
                       value={formData.bio}
                       onChange={handleChange}
                       rows={3}
-                      className={`block w-full pl-10 rounded-xl border-0 py-3 pr-1 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 sm:text-sm sm:leading-6 ${errors.bio ? 'ring-red-500' : 'ring-gray-300'}`}
+                      className={`block w-full pl-10 rounded-xl border-0 py-3 pr-1 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:outline-none focus:ring-orange-500 sm:text-sm sm:leading-6 ${errors.bio ? 'ring-red-500' : 'ring-gray-300'}`}
                     />
                   </div>
                   {errors.bio && <p className="mt-1 text-sm text-red-600">{errors.bio}</p>}
@@ -373,7 +379,7 @@ export default function SignUp() {
                     value={formData.interests}
                     onChange={handleChange}
                     placeholder={t('signup.interests_placeholder')}
-                    className={`block w-full rounded-xl border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset pl-2 placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 sm:text-sm sm:leading-6 ${errors.interests ? 'ring-red-500' : 'ring-gray-300'}`}
+                    className={`block w-full rounded-xl border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset pl-2 placeholder:text-gray-400 focus:ring-2 focus:outline-none focus:ring-orange-500 sm:text-sm sm:leading-6 ${errors.interests ? 'ring-red-500' : 'ring-gray-300'}`}
                   />
                   {errors.interests && <p className="mt-1 text-sm text-red-600">{errors.interests}</p>}
                 </div>
@@ -383,7 +389,7 @@ export default function SignUp() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className={`flex w-full justify-center rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-3 text-lg font-semibold text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:from-blue-500 hover:to-indigo-500 transform hover:-translate-y-0.5 ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
+                  className={`flex w-full justify-center rounded-xl bg-gradient-to-r from-orange-600 to-amber-600 px-4 py-3 text-lg font-semibold text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:from-orange-500 hover:to-amber-500 transform hover:-translate-y-0.5 ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
                 >
                   {isSubmitting ? (
                     <span className="flex items-center">
@@ -402,13 +408,13 @@ export default function SignUp() {
             <div className="mt-8 text-center">
               <Divider text={t('login.or')} className="mb-4" />
               <p className="text-sm text-gray-600">
-  {t('signup.account')}{' '}
-  <Link
-    to="/login"
-    className="font-medium text-blue-600 hover:text-blue-500 transition-colors duration-200 ease-in-out"
-  >
-    {t('login.log_in')}  {/* Usa la nueva clave aquí */}
-  </Link>
+                {t('signup.account')}{' '}
+                <Link
+                  to="/login"
+                  className="font-medium text-orange-600 hover:text-orange-500 transition-colors duration-200 ease-in-out"
+                >
+                  {t('login.log_in')}
+                </Link>
               </p>
             </div>
           </div>

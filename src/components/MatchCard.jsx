@@ -51,7 +51,7 @@ const MatchCard = ({ match, currentUserId }) => {
           <img
             src={otherUserProfile.profilePhoto || '/default-profile.png'}
             alt={`${otherUserProfile.name} ${otherUserProfile.lastName}`}
-            className="h-20 w-20 rounded-full object-cover border-4 border-pink-500 shadow-sm"
+            className="h-20 w-20 rounded-full object-cover border-4 border-orange-500 shadow-sm"
           />
           <div className="flex-1">
             <h2 className="text-xl font-semibold text-gray-800 truncate">
@@ -62,7 +62,7 @@ const MatchCard = ({ match, currentUserId }) => {
             </p>
             <p className="text-sm text-gray-500 mt-2 flex items-center">
               <svg
-                className="h-4 w-4 mr-1 text-pink-600"
+                className="h-4 w-4 mr-1 text-orange-600"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
@@ -108,7 +108,7 @@ const MatchCard = ({ match, currentUserId }) => {
 
             <button
               onClick={() => navigate(`/chat/${match.id}`)}
-              className="flex items-center px-4 py-2 bg-pink-600 text-white rounded-md hover:bg-pink-700 text-sm transition"
+              className="flex items-center px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700 text-sm transition"
             >
               <svg
                 className="h-4 w-4 mr-1"

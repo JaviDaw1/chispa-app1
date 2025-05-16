@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import Header from '../components/Header';
 import AuthService from '../services/AuthService';
 import Divider from '../components/Divider';
+import LanguageSelector from '../components/LanguageSelector';
 import Alert from '../components/Alert';
 import Logo from '../../public/images/logo.jpg';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
@@ -44,9 +45,14 @@ export default function Login() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col">
       <Header />
 
-      {/* Logo para móviles */}
-      <div className="lg:hidden fixed top-0 left-0 w-full flex justify-center bg-white shadow z-40 py-2">
-        <img src={Logo} alt={t('header.title')} className="h-14" />
+      <div className="lg:hidden fixed top-0 left-0 w-full bg-white shadow z-40 py-2 px-4 flex items-center justify-center">
+        <img src={Logo} alt={t('header.title')} className="h-14 flex-shrink-0" />
+
+        {!localStorage.getItem("token") && !localStorage.getItem("usuario") && (
+          <div className="absolute right-4 top-1/2 transform -translate-y-1/2 w-20">
+            <LanguageSelector showText={false} />
+          </div>
+        )}
       </div>
 
       {isSubmitting && (
@@ -61,7 +67,7 @@ export default function Login() {
       <div className="flex-grow flex items-center justify-center px-4 sm:px-6 lg:px-8">
         <div className="bg-white px-8 py-10 shadow-xl rounded-2xl w-full max-w-md space-y-6">
           <div className="text-center">
-            <h2 className="text-3xl font-extrabold text-gray-900 bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
+            <h2 className="text-3xl font-extrabold text-gray-900 bg-clip-text bg-gradient-to-r from-orange-400 to-amber-500">
               {t('login.title')}
             </h2>
           </div>
@@ -85,7 +91,7 @@ export default function Login() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="block w-full pl-10 rounded-xl border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 sm:text-sm sm:leading-6"
+                  className="block w-full pl-10 rounded-xl border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:outline-none focus:ring-orange-500 sm:text-sm sm:leading-6"
                   placeholder={t('login.emailPlaceholder')}
                 />
               </div>
@@ -107,7 +113,7 @@ export default function Login() {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full pl-10 pr-10 rounded-xl border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 sm:text-sm sm:leading-6"
+                  className="block w-full pl-10 pr-10 rounded-xl border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:outline-none focus:ring-orange-500 sm:text-sm sm:leading-6"
                   placeholder={t('login.passwordPlaceholder')}
                 />
                 <div
@@ -122,17 +128,17 @@ export default function Login() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3 px-4 border border-transparent rounded-xl shadow-sm text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm font-medium transition"
+              className="w-full py-3 px-4 border border-transparent rounded-xl shadow-sm text-white bg-gradient-to-r from-orange-400 to-amber-500 hover:from-orange-700 hover:to-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 text-sm font-medium transition"
             >
               {t('login.loginButton')}
             </button>
           </form>
 
-          <Divider label={t('login.or')} />
+          <Divider text={t('login.or')} />
 
           <div className="text-center text-sm text-gray-600">
             {t('login.noAccount')}{' '}
-            <Link to="/signup" className="text-blue-600 hover:underline font-medium">
+            <Link to="/signup" className="text-orange-600 hover:underline font-medium">
               {t('login.register')}
             </Link>
           </div>

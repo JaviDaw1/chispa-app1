@@ -102,7 +102,7 @@ const Profile = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
         <Header />
-        <div className="flex items-center justify-center h-[calc(100vh-80px)]">
+        <div className="flex items-center justify-center h-[calc(100vh-80px)] ">
           <div className="text-center max-w-md p-6 bg-white rounded-xl shadow-sm">
             <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <svg className="w-10 h-10 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -112,7 +112,7 @@ const Profile = () => {
             <h3 className="text-xl font-semibold text-gray-800 mb-2">{error}</h3>
             <button
               onClick={handleCompleteProfile}
-              className="mt-4 px-6 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg shadow-sm hover:shadow-md transition-all"
+              className="mt-4 px-6 py-2 bg-gradient-to-r from-orange-400 to-amber-500 text-white rounded-lg shadow-sm hover:shadow-md transition-all"
             >
               {t("profile.complete_profile")}
             </button>
@@ -126,10 +126,10 @@ const Profile = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <Header />
 
-      <main className="container mx-auto px-4 py-8 max-w-5xl">
+      <main className="container mx-auto px-4 py-8 max-w-5xl pb-16">
         <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
           {/* Header con foto de perfil */}
-          <div className="relative bg-gradient-to-r from-blue-500 to-indigo-600 h-48">
+          <div className="relative bg-gradient-to-r from-orange-400 to-amber-500 h-48">
             {profile?.profilePhoto && (
               <div className="absolute -bottom-16 left-8">
                 <img
@@ -245,7 +245,7 @@ const Profile = () => {
                 <h3 className="text-xl font-medium text-gray-700 mb-2">{t("profile.not_found")}</h3>
                 <button
                   onClick={handleCompleteProfile}
-                  className="mt-4 px-6 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg shadow-sm hover:shadow-md transition-all"
+                  className="mt-4 px-6 py-2 bg-gradient-to-r from-orange-400 to-amber-500 text-white rounded-lg shadow-sm hover:shadow-md transition-all"
                 >
                   {t("profile.complete_profile")}
                 </button>

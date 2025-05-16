@@ -114,6 +114,8 @@
     "subtitle": "Gérez votre compte, vie privée et préférences",
     "security": "Sécurité",
     "security_sub": "Mot de passe et authentification",
+    "language": "Langue",
+    "language_sub": "Choisissez votre langue",
     "notifications": "Notifications",
     "notifications_sub": "Préférences d'alertes",
     "blocked": "Utilisateurs bloqués",

@@ -100,7 +100,7 @@ const Profile = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200">
         <Header />
         <div className="flex items-center justify-center h-[calc(100vh-80px)] ">
           <div className="text-center max-w-md p-6 bg-white rounded-xl shadow-sm">

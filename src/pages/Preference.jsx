@@ -9,7 +9,7 @@ const authService = new AuthService();
 const preferenceService = new PreferenceService();
 
 const Preference = () => {
-  const [preferencias, setPreferencias] = useState(null); // Cambiado a null inicialmente
+  const [preferencias, setPreferencias] = useState(null);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [tempPreferences, setTempPreferences] = useState({
@@ -30,7 +30,7 @@ const Preference = () => {
     }
   };
 
-  const cargarPreferencias = async () => {
+  const loadPreferences = async () => {
     try {
       const user = authService.getUserInfo();
       if (!user?.id) {
@@ -67,7 +67,6 @@ const Preference = () => {
 
   const handleEdit = () => {
     setEditing(true);
-    // Si no hay preferencias, usamos los valores por defecto
     if (!preferencias) {
       setTempPreferences({
         favoriteGender: "",
@@ -101,19 +100,16 @@ const Preference = () => {
 
       let response;
       if (preferencias) {
-        // Actualización de preferencias existentes
         const currentPrefs = await preferenceService.getByUserId(user.id);
         response = await preferenceService.update(currentPrefs.data.id, preferencesToSend);
       } else {
-        // Creación de nuevas preferencias
         response = await preferenceService.create(preferencesToSend);
       }
 
       if (response.data) {
         setPreferencias(response.data);
         setEditing(false);
-        // Recargamos las preferencias para asegurar consistencia
-        await cargarPreferencias();
+        await loadPreferences();
       }
     } catch (error) {
       console.log("Error al guardar preferencias:", error);
@@ -131,7 +127,7 @@ const Preference = () => {
   };
 
   useEffect(() => {
-    cargarPreferencias();
+    loadPreferences();
   }, [navigate]);
 
   if (loading) {
@@ -153,31 +149,31 @@ const Preference = () => {
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-3xl font-bold text-gray-800">Mis Preferencias</h2>
             {!editing ? (
-              <button 
+              <button
                 onClick={handleEdit}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-xl transition duration-200"
+                className="bg-orange-600 hover:bg-orange-700 text-white font-medium py-2 px-4 rounded-xl transition duration-200"
               >
                 {preferencias ? "Editar" : "Crear Preferencias"}
               </button>
             ) : (
               <div className="flex gap-3">
-                <button 
+                <button
                   onClick={handleCancel}
                   className="bg-gray-400 hover:bg-gray-500 text-white font-medium py-2 px-4 rounded-xl transition duration-200"
                 >
                   Cancelar
                 </button>
-                <button 
+                <button
                   onClick={handleSave}
                   disabled={isSaving}
-                  className="bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-xl transition duration-200 disabled:opacity-50"
+                  className="bg-orange-600 hover:bg-orange-700 text-white font-medium py-2 px-4 rounded-xl transition duration-200 disabled:opacity-50"
                 >
                   {isSaving ? "Guardando..." : "Guardar"}
                 </button>
               </div>
             )}
           </div>
-  
+
           {!editing ? (
             preferencias ? (
               <div className="space-y-4">
@@ -206,7 +202,7 @@ const Preference = () => {
                   name="favoriteGender"
                   value={tempPreferences.favoriteGender}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
                 >
                   <option value="">Selecciona un género</option>
                   <option value="MALE">Hombre</option>
@@ -214,7 +210,7 @@ const Preference = () => {
                   <option value="OTHER">Otro</option>
                 </select>
               </div>
-  
+
               {/* Rango de edad */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Rango de edad:</label>
@@ -228,7 +224,7 @@ const Preference = () => {
                       max={tempPreferences.maxAgeRange}
                       value={tempPreferences.minAgeRange}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
                     />
                   </div>
                   <div className="flex-1">
@@ -240,12 +236,12 @@ const Preference = () => {
                       max="100"
                       value={tempPreferences.maxAgeRange}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
                     />
                   </div>
                 </div>
               </div>
-  
+
               {/* Distancia */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Distancia máxima (km):</label>
@@ -256,18 +252,18 @@ const Preference = () => {
                   max="100"
                   value={tempPreferences.maxDistance}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
                 />
               </div>
             </div>
           )}
-  
+
           <Divider className="my-6" />
-  
+
           <div className="flex justify-end">
-            <button 
-              onClick={() => navigate("/")} 
-              className="bg-gray-700 hover:bg-gray-800 text-white font-medium py-2 px-4 rounded-xl transition duration-200"
+            <button
+              onClick={() => navigate("/")}
+              className="bg-gray-400 hover:bg-gray-500 text-white font-medium py-2 px-4 rounded-xl transition duration-200"
             >
               Volver al Inicio
             </button>
@@ -276,7 +272,7 @@ const Preference = () => {
       </div>
     </div>
   );
-  
+
 };
 
 export default Preference;

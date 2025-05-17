@@ -4,12 +4,12 @@ import { useTranslation } from 'react-i18next';
 import AuthService from '../services/AuthService';
 import Divider from '../components/Divider';
 import Header from '../components/Header';
-import LoadingScreen from '../components/LoadingScreen';
 import LanguageSelector from '../components/LanguageSelector';
 import Logo from '../../public/images/logo.jpg';
 import { Eye, EyeOff, User, Mail, Lock, MapPin, Calendar, Heart, Smile } from 'lucide-react';
 
 const authService = new AuthService();
+
 
 export default function SignUp() {
   const { t } = useTranslation();
@@ -27,7 +27,16 @@ export default function SignUp() {
     profilePhoto: '',
     preferredRelationship: 'CASUAL',
   });
-
+  const relationshipOptions = [
+    { value: 'FRIENDSHIP', label: t('common.friendship') },   // Amistad
+    { value: 'CASUAL', label: t('common.casual') },           // Relación casual
+    { value: 'SERIOUS', label: t('common.serious') },         // Relación seria
+    { value: 'LONG_TERM', label: t('common.longTerm') },      // Relación a largo plazo
+    { value: 'OPEN', label: t('common.open') },               // Relación abierta
+    { value: 'HOOKUP', label: t('common.hookup') },           // Encuentros casuales
+    { value: 'MARRIAGE', label: t('common.marriage') },       // Búsqueda de matrimonio
+    { value: 'NOT_SURE', label: t('common.notSure') },        // No estoy seguro
+  ];
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -102,7 +111,14 @@ export default function SignUp() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    let newValue = value;
+
+    if (name === 'interests') {
+      newValue = value.replace(/[^a-zA-Z,\s]/g, '').toLowerCase();
+    }
+
+    setFormData((prev) => ({ ...prev, [name]: newValue }));
     clearError(name);
   };
 
@@ -320,11 +336,14 @@ export default function SignUp() {
                       name="preferredRelationship"
                       value={formData.preferredRelationship}
                       onChange={handleChange}
-                      className={`block w-full pl-10 rounded-xl border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset focus:ring-2 focus:ring-orange-500 sm:text-sm sm:leading-6 ${errors.preferredRelationship ? 'ring-red-500' : 'ring-gray-300'}`}
+                      className={`block w-full pl-10 rounded-xl border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset focus:ring-2 focus:ring-orange-500 sm:text-sm sm:leading-6 ${errors.preferredRelationship ? 'ring-red-500' : 'ring-gray-300'
+                        }`}
                     >
-                      <option value="CASUAL">{t('common.casual')}</option>
-                      <option value="SERIOUS">{t('common.serious')}</option>
-                      <option value="FRIENDSHIP">{t('common.friendship')}</option>
+                      {relationshipOptions.map(({ value, label }) => (
+                        <option key={value} value={value}>
+                          {label}
+                        </option>
+                      ))}
                     </select>
                   </div>
                   {errors.preferredRelationship && <p className="mt-1 text-sm text-red-600">{errors.preferredRelationship}</p>}

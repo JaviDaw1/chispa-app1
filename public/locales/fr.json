@@ -46,6 +46,7 @@
     "interests_placeholder": "Ex: musique, voyage, sport",
     "emailLabel": "Adresse e-mail",
     "emailPlaceholder": "votreemail@exemple.com",
+    "passwordLabel": "Mot de passe",
     "passwordPlaceholder": "Votre mot de passe",
     "account": "Vous avez déjà un compte ?"
   },
@@ -133,15 +134,15 @@
     "subtitle": "Ici vous pouvez voir tous les utilisateurs que vous avez bloqués",
     "no_blocked": "Vous n'avez bloqué personne pour l'instant 😎",
     "unblock": "Débloquer",
-    "unblock_confirm": "Êtes-vous sûr de vouloir débloquer {name} ?",
+    "unblock_confirm": "Êtes-vous sûr de vouloir débloquer {{name}}?",
     "default_reason": "Bloqué depuis le swipe",
     "unblock_confirm_title": "Confirmer le déblocage",
-    "blocked_count": "Vous avez bloqué {count} utilisateur(s)"
+    "blocked_count": "Vous avez bloqué {{count}} utilisateur(s)"
   },
   "chat": {
     "new_message": "Écrire un message...",
     "block": "Bloquer",
-    "block_confirm": "Êtes-vous sûr de vouloir bloquer {name} ?",
+    "block_confirm": "Êtes-vous sûr de vouloir bloquer {{name}}?",
     "block_reason": "Raison du blocage (optionnel)"
   },
   "common": {
@@ -154,9 +155,14 @@
     "male": "Homme",
     "female": "Femme",
     "other": "Autre",
-    "casual": "Occasionnelle",
-    "serious": "Sérieuse",
     "friendship": "Amitié",
+    "casual": "Occasionnel",
+    "serious": "Sérieuse",
+    "longTerm": "À long terme",
+    "open": "Ouvert",
+    "hookup": "Rencontres occasionnelles",
+    "marriage": "Mariage",
+    "notSure": "Pas sûr",
     "loading_profiles": "Chargement des profils...",
     "block": "Bloquer",
     "like": "J'aime",
@@ -165,12 +171,13 @@
   "errors": {
     "required": "Champ requis",
     "invalid_email": "Format d'email invalide",
-    "min_length": "Minimum {count} caractères",
+    "min_length": "Minimum {{count}} caractères",
     "underage": "Vous devez avoir au moins 18 ans",
     "load_profiles": "Erreur lors du chargement des profils",
     "no_user_profile": "Utilisateur non connecté ou profil actuel introuvable",
     "like_error": "Erreur lors de l'envoi du like",
-    "block_error": "Erreur lors du blocage de l'utilisateur"
+    "block_error": "Erreur lors du blocage de l'utilisateur",
+    "invalid_interests_format": "Veuillez saisir des centres d’intérêt séparés par des virgules, en n’utilisant que des lettres."
   },
   "error404": {
     "title": "Page non trouvée",

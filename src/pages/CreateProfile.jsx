@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 import Header from "../components/Header";
 import ProfileService from "../services/ProfileService";
 import AuthService from "../services/AuthService";
@@ -8,6 +9,7 @@ const profileService = new ProfileService();
 const authService = new AuthService();
 
 export default function CreateProfile() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
@@ -103,8 +105,8 @@ export default function CreateProfile() {
       }
 
       navigate("/profile");
-      {/* TODO: revisar si hay otra manera de hacer esto de recargar para que se vean los cambios de perfil*/}
-      window.location.reload();  
+      {/* TODO: revisar si hay otra manera de hacer esto de recargar para que se vean los cambios de perfil*/ }
+      window.location.reload();
     } catch (error) {
       console.error("Error saving profile:", error);
       alert(`Error al guardar el perfil: ${error.message}. Por favor intenta nuevamente.`);
@@ -228,6 +230,28 @@ export default function CreateProfile() {
               />
             </div>
 
+             {/* Relación preferida */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                {t('signup.relationship')}
+              </label>
+              <select
+                name="preferredRelationship"
+                value={formData.preferredRelationship}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border rounded-md"
+              >
+                <option value="FRIENDSHIP">{t('common.friendship')}</option>
+                <option value="CASUAL">{t('common.casual')}</option>
+                <option value="SERIOUS">{t('common.serious')}</option>
+                <option value="LONG_TERM">{t('common.longTerm')}</option>
+                <option value="OPEN">{t('common.open')}</option>
+                <option value="HOOKUP">{t('common.hookup')}</option>
+                <option value="MARRIAGE">{t('common.marriage')}</option>
+                <option value="NOT_SURE">{t('common.notSure')}</option>
+              </select>
+            </div>
+
             {/* Intereses */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -263,30 +287,12 @@ export default function CreateProfile() {
               )}
             </div>
 
-            {/* Relación preferida */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Tipo de relación preferida
-              </label>
-              <select
-                name="preferredRelationship"
-                value={formData.preferredRelationship}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border rounded-md"
-              >
-                <option value="CASUAL">Casual</option>
-                <option value="SERIOUS">Seria</option>
-                <option value="FRIENDSHIP">Amistad</option>
-              </select>
-            </div>
-
             {/* Botón de envío */}
             <button
               type="submit"
               disabled={loading}
-              className={`w-full py-2 px-4 rounded-md text-white font-medium ${
-                loading ? "bg-blue-400" : "bg-blue-600 hover:bg-blue-700"
-              }`}
+              className={`w-full py-2 px-4 rounded-md text-white font-medium ${loading ? "bg-blue-400" : "bg-blue-600 hover:bg-blue-700"
+                }`}
             >
               {loading ? "Guardando..." : "Guardar Perfil"}
             </button>

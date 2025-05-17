@@ -27,6 +27,14 @@ const MatchCard = ({ match, currentUserId }) => {
     fetchData();
   }, [otherUserId, match.id, t]);
 
+  const formatDate = (isoString) => {
+  const date = new Date(isoString);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}-${month}-${year}`;
+};
+
   if (loading) {
     return (
       <div className="p-6 bg-white rounded-xl shadow-md animate-pulse h-40">
@@ -128,11 +136,7 @@ const MatchCard = ({ match, currentUserId }) => {
           </div>
 
           <span className="text-xs text-gray-400">
-            {new Date(match.matchDate).toLocaleDateString('es-ES', {
-              day: 'numeric',
-              month: 'short',
-              year: 'numeric'
-            })}
+            {formatDate(match.matchDate)}
           </span>
         </div>
       </div>

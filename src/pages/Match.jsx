@@ -73,7 +73,7 @@ const Match = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <div className="flex-1 p-6 pt-16 lg:pt-24">
+      <div className="flex-1 p-6 pt-16 lg:pt-24 from-gray-100 to-gray-200">
         <h1 className="text-center mb-8 text-3xl font-extrabold">
           {t('matches.title')}
         </h1>

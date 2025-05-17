@@ -47,6 +47,7 @@
     "interests_placeholder": "Ej: música, viajes, deportes",
     "emailLabel": "Correo electrónico",
     "emailPlaceholder": "tucorreo@ejemplo.com",
+    "passwordLabel": "Contraseña",
     "passwordPlaceholder": "Tu contraseña",
     "account": "¿Ya tienes cuenta?"
   },
@@ -133,19 +134,19 @@
     "subtitle": "Aquí puedes ver todos los usuarios que has bloqueado",
     "no_blocked": "No has bloqueado a nadie todavía 😎",
     "unblock": "Desbloquear",
-    "unblock_confirm": "¿Estás seguro de que quieres desbloquear a {name}?",
+    "unblock_confirm": "¿Estás seguro de que quieres desbloquear a {{name}}?",
     "default_reason": "Bloqueado desde swipe",
     "unblock_confirm_title": "Confirmar desbloqueo",
-    "blocked_count": "Has bloqueado {count} usuario(s)"
+    "blocked_count": "Has bloqueado {{count}} usuario(s)"
   },
   "chat": {
     "new_message": "Escribe un mensaje...",
     "block": "Bloquear",
-    "block_confirm": "¿Estás seguro de que deseas bloquear a {name}?",
+    "block_confirm": "¿Estás seguro de que deseas bloquear a {{name}}?",
     "block_reason": "Motivo del bloqueo (opcional)"
   },
   "common": {
-  "loading": "Cargando...",
+    "loading": "Cargando...",
     "error": "Error",
     "save": "Guardar",
     "cancel": "Cancelar",
@@ -154,9 +155,14 @@
     "male": "Hombre",
     "female": "Mujer",
     "other": "Otro",
+    "friendship": "Amistad",
     "casual": "Casual",
     "serious": "Seria",
-    "friendship": "Amistad",
+    "longTerm": "A largo plazo",
+    "open": "Abierta",
+    "hookup": "Encuentros casuales",
+    "marriage": "Matrimonio",
+    "notSure": "No estoy seguro",
     "loading_profiles": "Cargando perfiles...",
     "block": "Bloquear",
     "like": "Me gusta",
@@ -165,12 +171,13 @@
   "errors": {
     "required": "Campo requerido",
     "invalid_email": "Formato de email inválido",
-    "min_length": "Mínimo {count} caracteres",
+    "min_length": "Mínimo {{count}} caracteres",
     "underage": "Debes tener al menos 18 años",
     "load_profiles": "Error al cargar perfiles",
     "no_user_profile": "No se encontró usuario logueado o perfil actual",
     "like_error": "Error al enviar like",
-    "block_error": "Error al bloquear usuario"
+    "block_error": "Error al bloquear usuario",
+    "invalid_interests": "Solo texto separado por comas, sin números ni símbolos especiales"
   },
   "error404": {
     "title": "Página no encontrada",

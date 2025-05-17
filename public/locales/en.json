@@ -46,6 +46,7 @@
     "interests_placeholder": "E.g. music, travel, sports",
     "emailLabel": "Email",
     "emailPlaceholder": "youremail@example.com",
+    "passwordLabel": "Password",
     "passwordPlaceholder": "Your password",
     "account": "Already have an account?"
   },
@@ -132,15 +133,15 @@
     "subtitle": "Here you can see all users you've blocked",
     "no_blocked": "You haven't blocked anyone yet 😎",
     "unblock": "Unblock",
-    "unblock_confirm": "Are you sure you want to unblock {name}?",
+    "unblock_confirm": "Are you sure you want to unblock {{name}}?",
     "default_reason": "Blocked from swipe",
     "unblock_confirm_title": "Confirm unblock",
-    "blocked_count": "You've blocked {count} user(s)"
+    "blocked_count": "You've blocked {{count}} user(s)"
   },
   "chat": {
     "new_message": "Write a message...",
     "block": "Block",
-    "block_confirm": "Are you sure you want to block {name}?",
+    "block_confirm": "Are you sure you want to block {{name}}?",
     "block_reason": "Block reason (optional)"
   },
   "common": {
@@ -153,9 +154,14 @@
     "male": "Male",
     "female": "Female",
     "other": "Other",
+    "friendship": "Friendship",
     "casual": "Casual",
     "serious": "Serious",
-    "friendship": "Friendship",
+    "longTerm": "Long-term",
+    "open": "Open",
+    "hookup": "Hookup",
+    "marriage": "Marriage",
+    "notSure": "Not sure",
     "loading_profiles": "Loading profiles...",
     "block": "Block",
     "like": "Like",
@@ -164,12 +170,13 @@
   "errors": {
     "required": "Required field",
     "invalid_email": "Invalid email format",
-    "min_length": "Minimum {count} characters",
+    "min_length": "Minimum {{count}} characters",
     "underage": "You must be at least 18 years old",
     "load_profiles": "Error loading profiles",
     "no_user_profile": "No logged in user or current profile found",
     "like_error": "Error sending like",
-    "block_error": "Error blocking user"
+    "block_error": "Error blocking user",
+    "invalid_interests_format": "Please enter interests separated by commas, only using letters."
   },
   "error404": {
     "title": "Page Not Found",

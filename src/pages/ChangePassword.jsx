@@ -1,0 +1,168 @@
+import React, { useState, useEffect } from "react";
+import Modal from "../components/Modal";
+import Header from "../components/Header";
+import Alert from "../components/Alert";
+import { useTranslation } from "react-i18next";
+import AuthService from "../services/AuthService";
+import { useNavigate } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
+
+const ChangePassword = () => {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const authService = new AuthService();
+  const user = authService.getUserInfo();
+
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [error, setError] = useState("");
+  const [attemptsLeft, setAttemptsLeft] = useState(3);
+  const [cooldown, setCooldown] = useState(0);
+
+  const ATTEMPT_LIMIT = 3;
+  const COOLDOWN_MINUTES = 5;
+
+  useEffect(() => {
+    const savedAttempts = parseInt(localStorage.getItem("attemptsLeft")) || ATTEMPT_LIMIT;
+    const cooldownUntil = localStorage.getItem("cooldownUntil");
+
+    setAttemptsLeft(savedAttempts);
+
+    if (cooldownUntil) {
+      const now = Date.now();
+      const remaining = parseInt(cooldownUntil) - now;
+      if (remaining > 0) {
+        setCooldown(Math.ceil(remaining / 1000));
+        const interval = setInterval(() => {
+          const timeLeft = parseInt(cooldownUntil) - Date.now();
+          if (timeLeft <= 0) {
+            clearInterval(interval);
+            setCooldown(0);
+            localStorage.removeItem("cooldownUntil");
+            localStorage.setItem("attemptsLeft", ATTEMPT_LIMIT.toString());
+            setAttemptsLeft(ATTEMPT_LIMIT);
+          } else {
+            setCooldown(Math.ceil(timeLeft / 1000));
+          }
+        }, 1000);
+        return () => clearInterval(interval);
+      }
+    }
+  }, []);
+
+  const handleSubmit = async () => {
+    try {
+      await authService.changePassword({ userId: user.id, currentPassword, newPassword });
+      localStorage.setItem("attemptsLeft", ATTEMPT_LIMIT.toString());
+      setError("");
+      navigate("/settings");
+    } catch (error) {
+      console.error("Error en cambio de contraseña:", error.response?.data);
+
+      const responseMessage = error.response?.data?.message || "";
+
+      let userFriendlyError = t("changePassword.failed"); // Mensaje genérico por defecto
+
+      if (responseMessage.includes("currentPasswordIncorrect")) {
+        userFriendlyError = t("changePassword.error_current_password");
+      } else if (responseMessage.includes("newPasswordInvalid")) {
+        userFriendlyError = t("changePassword.error_new_password");
+      }
+
+      const newAttempts = attemptsLeft - 1;
+      localStorage.setItem("attemptsLeft", newAttempts.toString());
+      setAttemptsLeft(newAttempts);
+
+      setError(`${userFriendlyError} (${t("changePassword.attempts_left", { count: newAttempts })})`);
+
+      if (newAttempts <= 0) {
+        const cooldownUntil = Date.now() + COOLDOWN_MINUTES * 60 * 1000;
+        localStorage.setItem("cooldownUntil", cooldownUntil.toString());
+        setCooldown(COOLDOWN_MINUTES * 60);
+      }
+      setShowModal(false);
+    }
+  };
+
+
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        setError("");
+      }, 8000);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-200 relative">
+      <Header />
+
+      {/* Flecha de volver */}
+      <button
+        onClick={() => navigate(-1)}
+        className="absolute top-4 left-4 text-gray-600 p-2 rounded-full hover:bg-gray-200"
+        aria-label={t('common.back')}
+      >
+        <ArrowLeft size={24} />
+      </button>
+
+      {/* Contenido centrado */}
+      <div className="flex items-center justify-center min-h-screen px-4">
+        <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
+          <h2 className="text-2xl font-bold mb-4">{t("changePassword.title")}</h2>
+
+          {error && (
+            <div className="mb-4">
+              <Alert message={error} type="error" />
+            </div>
+          )}
+
+          {cooldown > 0 ? (
+            <p className="text-red-500 mb-4">
+              {t("changePassword.locked")} ({cooldown}s)
+            </p>
+          ) : (
+            <>
+              <input
+                type="password"
+                className="w-full border p-2 rounded mb-4"
+                placeholder={t("changePassword.current")}
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+              />
+              <input
+                type="password"
+                className="w-full border p-2 rounded mb-4"
+                placeholder={t("changePassword.new")}
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+              />
+
+              <button
+                className="w-full from-orange-600 to-amber-600 bg-gradient-to-r text-white p-2 rounded hover:bg-orange-700"
+                onClick={() => setShowModal(true)}
+                disabled={attemptsLeft <= 0}
+              >
+                {t("changePassword.submit")}
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+
+      <Modal
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        onConfirm={handleSubmit}
+        title={t("modal.title")}
+        message={t("modal.confirm_password_change")}
+        confirmText={t("modal.confirm_password")}
+        cancelText={t("modal.cancel")}
+      />
+    </div>
+  );
+};
+
+export default ChangePassword;

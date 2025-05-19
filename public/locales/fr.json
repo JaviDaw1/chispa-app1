@@ -114,7 +114,7 @@
     "title": "Paramètres",
     "subtitle": "Gérez votre compte, vie privée et préférences",
     "security": "Sécurité",
-    "security_sub": "Mot de passe et authentification",
+    "security_sub": "Changement de mot de passe",
     "language": "Langue",
     "language_sub": "Choisissez votre langue",
     "notifications": "Notifications",
@@ -188,8 +188,23 @@
     "contactUs": "Contactez-nous"
   },
   "modal": {
+    "title": "Êtes-vous sûr ?",
+    "confirm_password_change": "Voulez-vous changer votre mot de passe ?",
+    "confirm_password": "Confirmer",
     "cancel": "Annuler",
     "confirm": "Supprimer",
     "placeholder": "Entrez une raison..."
+  },
+  "changePassword": {
+    "title": "Changer le mot de passe",
+    "current": "Mot de passe actuel",
+    "new": "Nouveau mot de passe",
+    "submit": "Changer le mot de passe",
+    "success": "Mot de passe changé avec succès.",
+    "failed": "Échec du changement de mot de passe.",
+    "locked": "Trop de tentatives. Réessayez dans quelques minutes.",
+    "attempts_left": "Tentatives restantes : {{count}}",
+    "error_current_password": "Le mot de passe actuel est incorrect.",
+    "error_new_password": "Le nouveau mot de passe ne respecte pas les exigences."
   }
 }

@@ -1,31 +1,36 @@
-import api from './api';
-import ProfileService from './ProfileService';
+import api from "./api";
+import ProfileService from "./ProfileService";
 
 const profileService = new ProfileService();
 
 export default class AuthService {
   constructor() {
-    this.url = '/auth';
+    this.url = "/auth";
     this.onlineStatusInterval = null;
   }
 
   async login(email, password) {
-    if (!email || !password) throw new Error('Correo y contraseña requeridos');
+    if (!email || !password) throw new Error("Correo y contraseña requeridos");
 
     try {
       const response = await api.post(`${this.url}/login`, { email, password });
       const { token, user } = response.data;
 
-      localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
 
       await this.setOnlineStatus(true);
       this.setupOnlineStatusHandlers();
 
       return response.data;
     } catch (error) {
-      console.error("Error en login:", error.response?.data?.message || error.message);
-      throw new Error(error.response?.data?.message || "Error al iniciar sesión");
+      console.error(
+        "Error en login:",
+        error.response?.data?.message || error.message
+      );
+      throw new Error(
+        error.response?.data?.message || "Error al iniciar sesión"
+      );
     }
   }
 
@@ -37,7 +42,7 @@ export default class AuthService {
         username: data.username,
         email: data.email,
         password: data.password,
-        userRole: "USER"
+        userRole: "USER",
       });
 
       const newUser = response.data;
@@ -54,14 +59,19 @@ export default class AuthService {
         profilePhoto: data.profilePhoto,
         lastActive: new Date().toISOString(),
         preferredRelationship: data.preferredRelationship,
-        user: { id: newUser.id }
+        user: { id: newUser.id },
       };
 
       await profileService.create(customProfile);
       return newUser;
     } catch (error) {
-      console.error("Error en el registro:", error.response?.data?.message || error.message);
-      throw new Error(error.response?.data?.message || "Error al registrar usuario");
+      console.error(
+        "Error en el registro:",
+        error.response?.data?.message || error.message
+      );
+      throw new Error(
+        error.response?.data?.message || "Error al registrar usuario"
+      );
     }
   }
 
@@ -69,20 +79,20 @@ export default class AuthService {
     try {
       await this.setOnlineStatus(false);
     } catch (error) {
-      console.error('Error al actualizar estado offline:', error);
+      console.error("Error al actualizar estado offline:", error);
     } finally {
       this.cleanupOnlineStatusHandlers();
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
     }
   }
 
   getToken() {
-    return localStorage.getItem('token');
+    return localStorage.getItem("token");
   }
 
   getUserInfo() {
-    const user = localStorage.getItem('user');
+    const user = localStorage.getItem("user");
     return user ? JSON.parse(user) : null;
   }
 
@@ -102,7 +112,7 @@ export default class AuthService {
         lastActive: new Date().toISOString(),
       });
     } catch (error) {
-      console.error('Error actualizando estado online:', error);
+      console.error("Error actualizando estado online:", error);
     }
   }
 
@@ -114,7 +124,7 @@ export default class AuthService {
     }, 60000);
 
     this.beforeUnloadHandler = () => this.setOnlineStatus(false);
-    window.addEventListener('beforeunload', this.beforeUnloadHandler);
+    window.addEventListener("beforeunload", this.beforeUnloadHandler);
   }
 
   cleanupOnlineStatusHandlers() {
@@ -124,8 +134,28 @@ export default class AuthService {
     }
 
     if (this.beforeUnloadHandler) {
-      window.removeEventListener('beforeunload', this.beforeUnloadHandler);
+      window.removeEventListener("beforeunload", this.beforeUnloadHandler);
       this.beforeUnloadHandler = null;
+    }
+  }
+
+  async changePassword({ currentPassword, newPassword }) {
+    try {
+      const user = this.getUserInfo();
+      if (!user || !user.id) {
+        throw new Error("Usuario no autenticado o sin ID");
+      }
+
+      const response = await api.put(`${this.url}/change-password/${user.id}`, {currentPassword, newPassword,});
+      return response.data;
+    } catch (error) {
+      console.error(
+        "Error al cambiar la contraseña:",
+        error.response?.data?.message || error.message
+      );
+      throw new Error(
+        error.response?.data?.message || "Error al cambiar la contraseña"
+      );
     }
   }
 }

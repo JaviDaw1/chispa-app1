@@ -113,7 +113,7 @@
     "title": "Settings",
     "subtitle": "Manage your account, privacy and preferences",
     "security": "Security",
-    "security_sub": "Password and authentication",
+    "security_sub": "Change your password",
     "language": "Language",
     "language_sub": "Select your preferred language",
     "notifications": "Notifications",
@@ -187,8 +187,23 @@
     "contactUs": "Contact us"
   },
   "modal": {
-    "cancel": "Cancel",
-    "confirm": "Delete",
-    "placeholder": "Enter a reason..."
+  "title": "Are you sure?",
+  "confirm_password_change": "Do you want to change your password?",
+  "confirm_password": "Confirm",
+  "cancel": "Cancel",
+  "confirm": "Delete",
+  "placeholder": "Enter a reason..."
+  },
+  "changePassword": {
+    "title": "Change Password",
+    "current": "Current password",
+    "new": "New password",
+    "submit": "Change password",
+    "success": "Password changed successfully.",
+    "failed": "Failed to change the password.",
+    "locked": "Too many attempts. Try again in a few minutes.",
+    "attempts_left": "Attempts left: {{count}}",
+    "error_current_password": "Current password is incorrect.",
+    "error_new_password": "New password does not meet requirements."
   }
 }

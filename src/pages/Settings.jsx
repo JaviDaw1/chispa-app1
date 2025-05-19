@@ -60,7 +60,7 @@ export default function Settings() {
         {/* Settings Grid */}
         <div className="space-y-4">
           {[{
-            to: "/settings/security",
+            to: "/settings/change-password",
             icon: <Lock className="text-rose-600 w-6 h-6" />,
             title: t("settings.security"),
             subtitle: t("settings.security_sub"),
@@ -72,13 +72,13 @@ export default function Settings() {
             subtitle: t("settings.notifications_sub"),
             aria: "settings.notifications"
           }, {
-            to: "/languages",
+            to: "/settings/languages",
             icon: <Languages className="text-sky-600 w-6 h-6" />,
             title: t("settings.language"),
             subtitle: t("settings.language_sub"),
             aria: "settings.language"
           }, {
-            to: "/blockedUsers",
+            to: "/settings/blockedUsers",
             icon: <Ban className="text-red-600 w-6 h-6" />,
             title: t("settings.blocked"),
             subtitle: t("settings.blocked_sub"),

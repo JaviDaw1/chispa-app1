@@ -4,7 +4,7 @@ import MessagesService from '../services/MessagesService';
 import MatchService from '../services/MatchService';
 import AuthService from '../services/AuthService';
 import Header from '../components/Header';
-import Modal from '../components/Modal'; // Importamos el modal
+import Modal from '../components/Modal';
 import BlockService from '../services/BlocksService';
 
 const messagesService = new MessagesService();

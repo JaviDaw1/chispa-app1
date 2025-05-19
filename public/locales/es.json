@@ -114,7 +114,7 @@
     "title": "Configuración",
     "subtitle": "Administra tu cuenta, privacidad y preferencias",
     "security": "Seguridad",
-    "security_sub": "Contraseña y autenticación",
+    "security_sub": "Cambio de contraseña",
     "language": "Idioma",
     "language_sub": "Selecciona tu idioma preferido",
     "notifications": "Notificaciones",
@@ -187,10 +187,24 @@
     "needHelp": "¿Necesitas ayuda?",
     "contactUs": "Contáctanos"
   },
-
   "modal": {
+    "title": "¿Estás seguro?",
+    "confirm_password_change": "¿Quieres cambiar tu contraseña?",
+    "confirm_password": "Confirmar",
     "cancel": "Cancelar",
     "confirm": "Eliminar",
     "placeholder": "Escribe una razón..."
+  },
+  "changePassword": {
+    "title": "Cambiar contraseña",
+    "current": "Contraseña actual",
+    "new": "Nueva contraseña",
+    "submit": "Cambiar contraseña",
+    "success": "Contraseña cambiada correctamente.",
+    "failed": "No se pudo cambiar la contraseña.",
+    "locked": "Demasiados intentos. Intenta de nuevo en unos minutos.",
+    "attempts_left": "Intentos restantes: {{count}}",
+    "error_current_password": "La contraseña actual es incorrecta.",
+    "error_new_password": "La nueva contraseña no cumple los requisitos."
   }
 }

@@ -226,12 +226,6 @@ const Profile = () => {
                       label={t("profile.relationship_type")}
                       value={profile.preferredRelationship}
                     />
-                    {!profile.isOnline && (
-                      <ProfileField
-                        label={t("profile.last_active")}
-                        value={formatLastActive(profile.lastActive)}
-                      />
-                    )}
                   </ProfileSection>
                 </div>
               </div>

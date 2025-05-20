@@ -87,7 +87,8 @@
     "discover": "Descubrir personas",
     "view_profile": "Ver perfil",
     "chat": "Chatear",
-    "match_alert": "¡Match con {name}!",
+    "match_alert": "¡Es un match con {{name}}!",
+    "like_alert": "Has dado me gusta a {{name}}",
     "no_profiles": "No hay perfiles disponibles",
     "profile_not_available": "Perfil no disponible",
     "no_description": "Sin descripción",
@@ -108,7 +109,8 @@
     "max_distance": "Distancia máxima (km)",
     "create_prefs": "Crear Preferencias",
     "min": "Mínimo",
-    "max": "Máximo"
+    "max": "Máximo",
+    "missing_alert": "Aún no has configurado tus preferencias. Hazlo para obtener mejores coincidencias."
   },
   "settings": {
     "title": "Configuración",
@@ -131,13 +133,15 @@
   },
   "blocked": {
     "title": "Usuarios Bloqueados",
+    "block_alert": "Has bloqueado a {{name}} correctamente.",
     "subtitle": "Aquí puedes ver todos los usuarios que has bloqueado",
     "no_blocked": "No has bloqueado a nadie todavía 😎",
     "unblock": "Desbloquear",
     "unblock_confirm": "¿Estás seguro de que quieres desbloquear a {{name}}?",
     "default_reason": "Bloqueado desde swipe",
     "unblock_confirm_title": "Confirmar desbloqueo",
-    "blocked_count": "Has bloqueado {{count}} usuario(s)"
+    "blocked_count": "Has bloqueado {{count}} usuario(s)",
+    "unblock_alert": "Has desbloqueado a {{name}} correctamente."
   },
   "chat": {
     "new_message": "Escribe un mensaje...",

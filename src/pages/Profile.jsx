@@ -1,20 +1,39 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import AuthService from "../services/AuthService";
 import ProfileService from "../services/ProfileService";
 import Header from "../components/Header";
+import Notification from "../components/Notification";
 
 const authService = new AuthService();
 const profileService = new ProfileService();
 
 const Profile = () => {
+  const location = useLocation();
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationData, setNotificationData] = useState({});
   const { t } = useTranslation();
   const { id } = useParams();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (location.state?.notification?.show) {
+      setNotificationData(location.state.notification);
+      setShowNotification(true);
+
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
+
+  useEffect(() => {
+    if (location.state?.notification?.show) {
+      setTimeout(() => window.scrollTo({ top: 0, behavior: "smooth" }), 100);
+    }
+  }, [location.state]);
 
   const fetchProfile = useCallback(async (userInfo) => {
     try {
@@ -125,6 +144,14 @@ const Profile = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <Header />
+      {showNotification && (
+        <Notification
+          show={showNotification}
+          type={notificationData.type}
+          message={notificationData.message}
+          onClose={() => setShowNotification(false)}
+        />
+      )}
 
       <main className="container mx-auto px-4 py-8 max-w-5xl pb-16">
         <div className="bg-white rounded-2xl shadow-sm overflow-hidden">

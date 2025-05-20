@@ -86,7 +86,8 @@
     "discover": "Discover People",
     "view_profile": "View Profile",
     "chat": "Chat",
-    "match_alert": "Match with {name}!",
+    "match_alert": "It's a match with {{name}}!",
+    "like_alert": "You liked {{name}}",
     "no_profiles": "No profiles available",
     "profile_not_available": "Profile not available",
     "no_description": "No description",
@@ -107,7 +108,8 @@
     "max_distance": "Max Distance (km)",
     "create_prefs": "Create Preferences",
     "min": "Min",
-    "max": "Max"
+    "max": "Max",
+    "missing_alert": "You haven't set your preferences yet. Set them to get better matches."
   },
   "settings": {
     "title": "Settings",
@@ -136,7 +138,9 @@
     "unblock_confirm": "Are you sure you want to unblock {{name}}?",
     "default_reason": "Blocked from swipe",
     "unblock_confirm_title": "Confirm unblock",
-    "blocked_count": "You've blocked {{count}} user(s)"
+    "blocked_count": "You've blocked {{count}} user(s)",
+    "block_alert": "You have successfully blocked {{name}}.",
+    "unblock_alert": "You have unblocked {{name}} successfully."
   },
   "chat": {
     "new_message": "Write a message...",

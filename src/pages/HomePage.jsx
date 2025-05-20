@@ -3,7 +3,9 @@ import { useSwipeable } from 'react-swipeable';
 import { useTranslation } from 'react-i18next';
 import Header from '../components/Header';
 import ProfileService from '../services/ProfileService';
+import Notification from '../components/Notification';
 import AuthService from '../services/AuthService';
+import PreferenceService from '../services/PreferenceService';
 import { useNavigate } from 'react-router-dom';
 import LikesService from '../services/LikesService';
 import BlocksService from '../services/BlocksService';
@@ -15,6 +17,7 @@ const profileService = new ProfileService();
 const authService = new AuthService();
 const likesService = new LikesService();
 const blocksService = new BlocksService();
+const preferenceService = new PreferenceService();
 
 export default function HomePage() {
   const { t } = useTranslation();
@@ -23,9 +26,14 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [blockReason, setBlockReason] = useState('');
+  const [showBlockNotification, setShowBlockNotification] = useState(false);
+  const [blockedProfile, setBlockedProfile] = useState(null);
   const [showInstructions, setShowInstructions] = useState(true);
   const [showBlockModal, setShowBlockModal] = useState(false);
   const [showLikeNotification, setShowLikeNotification] = useState(false);
+  const [likedProfile, setLikedProfile] = useState(null);
+  const [showMatchNotification, setShowMatchNotification] = useState(false);
+  const [showPreferenceNotification, setShowPreferenceNotification] = useState(false);
   const currentProfile = profiles[currentProfileIndex];
   const navigate = useNavigate();
 
@@ -71,7 +79,19 @@ export default function HomePage() {
         setLoading(false);
       }
     };
+    const checkPreferences = async () => {
+      try {
+        const response = await preferenceService.getByUserId(userInfo.id);
+        if (!response.data || Object.keys(response.data).length === 0) {
+          setShowPreferenceNotification(true);
+          setTimeout(() => setShowPreferenceNotification(false), 3000);
+        }
+      } catch (err) {
+        console.error("Error al verificar preferencias:", err);
+      }
+    };
 
+    checkPreferences();
     fetchProfilesAndLikes();
   }, [navigate, t]);
 
@@ -96,45 +116,57 @@ export default function HomePage() {
         return;
       }
 
+      const likedProfile = currentProfile;
+      setLikedProfile(likedProfile);
+
       const likeData = {
         liker: { id: userInfo.id },
-        liked: { id: currentProfile.id },
+        liked: { id: likedProfile.id },
         state: "PENDING"
       };
 
       const response = await likesService.postLike(likeData);
 
       if (response.data?.matchCreated) {
-        alert(t('matches.match_alert', { name: currentProfile.name }));
+        setShowMatchNotification(true);
+        setShowLikeNotification(false);
+        setTimeout(() => setShowMatchNotification(false), 2500);
+      } else {
+        setShowLikeNotification(true);
+        setShowMatchNotification(false);
+        setTimeout(() => setShowLikeNotification(false), 2000);
       }
 
-   // Mostrar la notificación
-    setShowLikeNotification(true);
-    setTimeout(() => setShowLikeNotification(false), 2000); // 2 segundos
+      setProfiles(prevProfiles => prevProfiles.filter(profile => profile.id !== likedProfile.id));
+      goToNextProfile();
 
-    setProfiles(prevProfiles => prevProfiles.filter(profile => profile.id !== currentProfile.id));
-    goToNextProfile();
-  } catch (err) {
-    console.error(t('errors.like_error'), err);
-  }
+    } catch (err) {
+      console.error(t('errors.like_error'), err);
+    }
   };
 
-  const handleBlock = async () => {
+
+  const handleBlock = async (profileToBlock) => {
     try {
       const userInfo = authService.getUserInfo();
-      if (!userInfo || !currentProfile) {
+      if (!userInfo || !profileToBlock) {
         console.error(t('errors.no_user_profile'));
         return;
       }
 
       const blockData = {
         reporter: { id: userInfo.id },
-        reported: { id: currentProfile.id },
+        reported: { id: profileToBlock.id },
         blockReason: blockReason || t('blocked.default_reason')
       };
 
       await blocksService.create(blockData);
-      setProfiles(prev => prev.filter(p => p.id !== currentProfile.id));
+
+      setBlockedProfile(profileToBlock); // guardamos el perfil bloqueado
+      setShowBlockNotification(true); // mostramos la noti
+      setTimeout(() => setShowBlockNotification(false), 2500);
+
+      setProfiles(prev => prev.filter(p => p.id !== profileToBlock.id));
       goToNextProfile();
     } catch (err) {
       console.error(t('errors.block_error'), err);
@@ -264,10 +296,10 @@ export default function HomePage() {
         show={showBlockModal}
         onClose={() => setShowBlockModal(false)}
         onConfirm={() => {
-          handleBlock();
+          handleBlock(currentProfile);
           setShowBlockModal(false);
         }}
-        title={t('chat.block_confirm', { 
+        title={t('chat.block_confirm', {
           name: `${currentProfile?.name} ${currentProfile?.lastName}`
         })}
         placeholder={t('chat.block_reason')}
@@ -277,12 +309,35 @@ export default function HomePage() {
         reason={blockReason}
         onReasonChange={setBlockReason}
       />
-      {/* Notificación de Like */}
-      {showLikeNotification && ( 
-  <div className="fixed top-20 left-1/2 transform -translate-x-1/2 bg-pink-500 text-white px-4 py-2 rounded-full shadow-lg transition-opacity duration-300 z-50">
-    ❤️ {t('common.liked_message', 'HAS DADO LIKE')}
-  </div>
-      )}
+      <Notification
+        show={showMatchNotification}
+        message={t('matches.match_alert', { name: currentProfile?.name })}
+        type="match"
+        duration={2500}
+        onClose={() => setShowMatchNotification(false)}
+      />
+      <Notification
+        show={showLikeNotification}
+        message={t('matches.like_alert', { name: likedProfile?.name })}
+        type="like"
+        duration={2000}
+        onClose={() => setShowLikeNotification(false)}
+      />
+      <Notification
+        show={showBlockNotification}
+        message={t('blocked.block_alert', { name: blockedProfile?.name })}
+        type="success"
+        duration={2500}
+        onClose={() => setShowBlockNotification(false)}
+      />
+
+      <Notification
+        show={showPreferenceNotification}
+        message={t('preferences.missing_alert')}
+        type="info"
+        duration={3000}
+        onClose={() => setShowPreferenceNotification(false)}
+      />
     </div>
   );
 }

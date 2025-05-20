@@ -263,7 +263,7 @@ const Preference = () => {
           <div className="flex justify-end">
             <button
               onClick={() => navigate("/")}
-              className="bg-gray-400 hover:bg-gray-500 text-white font-medium py-2 px-4 rounded-xl transition duration-200"
+              className="bg-gray-400 hover:bg-gray-500 text-white font-medium py-2 px-4 rounded-xl transition duration-200 ease-in-out"
             >
               Volver al Inicio
             </button>

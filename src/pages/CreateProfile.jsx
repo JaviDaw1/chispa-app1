@@ -103,10 +103,15 @@ export default function CreateProfile() {
         await profileService.create(profileData);
         profileService.clearCache(); // Limpiar cache después de crear
       }
-
-      navigate("/profile");
-      {/* TODO: revisar si hay otra manera de hacer esto de recargar para que se vean los cambios de perfil*/ }
-      window.location.reload();
+      navigate("/profile", {
+        state: {
+          notification: {
+            show: true,
+            type: "success",
+            message: "Perfil guardado correctamente."
+          }
+        }
+      });
     } catch (error) {
       console.error("Error saving profile:", error);
       alert(`Error al guardar el perfil: ${error.message}. Por favor intenta nuevamente.`);
@@ -129,7 +134,7 @@ export default function CreateProfile() {
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
       <Header />
-      <div className="flex-grow flex items-center justify-center px-4 sm:px-6 lg:px-8 lg:pt-20 pb-16 pt-4">
+      <div className="flex-grow flex items-center justify-center px-4 sm:px-6 lg:px-8 lg:pt-20 pb-20 pt-4">
         <form
           onSubmit={handleSubmit}
           className="bg-white p-6 rounded-lg shadow-md w-full max-w-md"
@@ -230,7 +235,7 @@ export default function CreateProfile() {
               />
             </div>
 
-             {/* Relación preferida */}
+            {/* Relación preferida */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 {t('signup.relationship')}
@@ -286,15 +291,20 @@ export default function CreateProfile() {
                 />
               )}
             </div>
-
-            {/* Botón de envío */}
             <button
               type="submit"
               disabled={loading}
-              className={`w-full py-2 px-4 rounded-md text-white font-medium ${loading ? "bg-blue-400" : "bg-blue-600 hover:bg-blue-700"
+              className={`w-full py-2 px-4 rounded-md text-white font-medium transition duration-200 ease-in-out ${loading ? "bg-blue-400" : "bg-blue-600 hover:bg-blue-700"
                 }`}
             >
               {loading ? "Guardando..." : "Guardar Perfil"}
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate(-1)}
+              className="mt-6 w-full py-2 px-4 rounded-md bg-gray-400 hover:bg-gray-500 text-white font-medium flex items-center justify-center transition duration-200 ease-in-out"
+            >
+              Cancelar
             </button>
           </div>
         </form>

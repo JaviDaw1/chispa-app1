@@ -7,6 +7,7 @@ import LikesService from '../services/LikesService';
 import { User, ArrowLeft } from "lucide-react";
 import Header from "../components/Header";
 import Modal from "../components/Modal";
+import Notification from '../components/Notification';
 
 const likesService = new LikesService();
 
@@ -18,6 +19,8 @@ export default function BlockedUsers() {
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [userToUnblock, setUserToUnblock] = useState(null);
+  const [showUnblockNotification, setShowUnblockNotification] = useState(false);
+  const [unblockedUser, setUnblockedUser] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -69,12 +72,16 @@ export default function BlockedUsers() {
         prev.filter((user) => user.blockId !== userToUnblock.blockId)
       );
       setBlockedCount((prev) => prev - 1);
+
+      setUnblockedUser(userToUnblock); // nuevo
+      setShowUnblockNotification(true); // nuevo
     } catch (error) {
       console.error(t('errors.block_error'), error);
     } finally {
       setShowModal(false);
     }
   };
+
 
   const handleCloseModal = () => {
     setShowModal(false);
@@ -86,8 +93,8 @@ export default function BlockedUsers() {
       <Header />
       <div className="max-w-3xl mx-auto flex flex-col items-center">
         <div className="mb-10 w-full flex justify-between items-center">
-          <button 
-            onClick={() => navigate(-1)} 
+          <button
+            onClick={() => navigate(-1)}
             className="text-gray-600 p-2 rounded-full hover:bg-gray-200"
             aria-label={t('common.back')}
           >
@@ -154,11 +161,21 @@ export default function BlockedUsers() {
         onClose={handleCloseModal}
         onConfirm={confirmUnblock}
         title={t('blocked.unblock_confirm_title')}
-        message={t('blocked.unblock_confirm', { 
+        message={t('blocked.unblock_confirm', {
           name: `${userToUnblock?.firstname} ${userToUnblock?.lastname}`
         })}
         confirmText={t('blocked.unblock')}
         cancelText={t('common.cancel')}
+      />
+      
+      <Notification
+        show={showUnblockNotification}
+        message={t('blocked.unblock_alert', {
+          name: `${unblockedUser?.firstname} ${unblockedUser?.lastname}`
+        })}
+        type="success"
+        duration={2000}
+        onClose={() => setShowUnblockNotification(false)}
       />
     </div>
   );

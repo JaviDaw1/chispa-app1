@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import Modal from "../components/Modal";
 import Header from "../components/Header";
 import Alert from "../components/Alert";
+import Logo from "../../public/images/logo.jpg";
+import LoadingScreen from "../components/LoadingScreen";
 import { useTranslation } from "react-i18next";
 import AuthService from "../services/AuthService";
 import { useNavigate } from "react-router-dom";
@@ -19,6 +21,8 @@ const ChangePassword = () => {
   const [error, setError] = useState("");
   const [attemptsLeft, setAttemptsLeft] = useState(3);
   const [cooldown, setCooldown] = useState(0);
+  const [loading, setLoading] = useState(false);
+
 
   const ATTEMPT_LIMIT = 3;
   const COOLDOWN_MINUTES = 5;
@@ -52,17 +56,26 @@ const ChangePassword = () => {
   }, []);
 
   const handleSubmit = async () => {
+    setLoading(true);
+    const MIN_LOADING_TIME = 2000; // 2 segundos
+    const startTime = Date.now();
+
     try {
       await authService.changePassword({ userId: user.id, currentPassword, newPassword });
       localStorage.setItem("attemptsLeft", ATTEMPT_LIMIT.toString());
       setError("");
-      navigate("/settings");
+      // Asegurar que la pantalla de carga dure al menos 2 segundos
+      const elapsed = Date.now() - startTime;
+      if (elapsed < MIN_LOADING_TIME) {
+        await new Promise((res) => setTimeout(res, MIN_LOADING_TIME - elapsed));
+      }
+      setLoading(false);
+      navigate("/");
     } catch (error) {
       console.error("Error en cambio de contraseña:", error.response?.data);
-
       const responseMessage = error.response?.data?.message || "";
 
-      let userFriendlyError = t("changePassword.failed"); // Mensaje genérico por defecto
+      let userFriendlyError = t("changePassword.failed");
 
       if (responseMessage.includes("currentPasswordIncorrect")) {
         userFriendlyError = t("changePassword.error_current_password");
@@ -82,9 +95,14 @@ const ChangePassword = () => {
         setCooldown(COOLDOWN_MINUTES * 60);
       }
       setShowModal(false);
+      // También esperar el mínimo de 2 segundos en error
+      const elapsed = Date.now() - startTime;
+      if (elapsed < MIN_LOADING_TIME) {
+        await new Promise((res) => setTimeout(res, MIN_LOADING_TIME - elapsed));
+      }
+      setLoading(false);
     }
   };
-
 
   useEffect(() => {
     if (error) {
@@ -94,6 +112,15 @@ const ChangePassword = () => {
       return () => clearTimeout(timer);
     }
   }, [error]);
+
+  if (loading) {
+    return <LoadingScreen
+      size="lg"
+      message={t('login.loading')}
+      showLogo={true}
+      logoSrc={Logo}
+    />;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-200 relative">
@@ -124,30 +151,30 @@ const ChangePassword = () => {
               {t("changePassword.locked")} ({cooldown}s)
             </p>
           ) : (
-            <>
+            <div className="space-y-4">
               <input
                 type="password"
-                className="w-full border p-2 rounded mb-4"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
                 placeholder={t("changePassword.current")}
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
               />
               <input
                 type="password"
-                className="w-full border p-2 rounded mb-4"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
                 placeholder={t("changePassword.new")}
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
               />
 
               <button
-                className="w-full from-orange-600 to-amber-600 bg-gradient-to-r text-white p-2 rounded hover:bg-orange-700"
+                className="flex w-full justify-center rounded-xl bg-gradient-to-r from-orange-600 to-amber-600 px-4 py-3 text-lg font-semibold text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:from-orange-500 hover:to-amber-500 transform hover:-translate-y-0.5"
                 onClick={() => setShowModal(true)}
                 disabled={attemptsLeft <= 0}
               >
                 {t("changePassword.submit")}
               </button>
-            </>
+            </div>
           )}
         </div>
       </div>

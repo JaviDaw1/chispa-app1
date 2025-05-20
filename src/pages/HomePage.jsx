@@ -25,6 +25,7 @@ export default function HomePage() {
   const [blockReason, setBlockReason] = useState('');
   const [showInstructions, setShowInstructions] = useState(true);
   const [showBlockModal, setShowBlockModal] = useState(false);
+  const [showLikeNotification, setShowLikeNotification] = useState(false);
   const currentProfile = profiles[currentProfileIndex];
   const navigate = useNavigate();
 
@@ -107,11 +108,15 @@ export default function HomePage() {
         alert(t('matches.match_alert', { name: currentProfile.name }));
       }
 
-      setProfiles(prevProfiles => prevProfiles.filter(profile => profile.id !== currentProfile.id));
-      goToNextProfile();
-    } catch (err) {
-      console.error(t('errors.like_error'), err);
-    }
+   // Mostrar la notificación
+    setShowLikeNotification(true);
+    setTimeout(() => setShowLikeNotification(false), 2000); // 2 segundos
+
+    setProfiles(prevProfiles => prevProfiles.filter(profile => profile.id !== currentProfile.id));
+    goToNextProfile();
+  } catch (err) {
+    console.error(t('errors.like_error'), err);
+  }
   };
 
   const handleBlock = async () => {
@@ -272,6 +277,12 @@ export default function HomePage() {
         reason={blockReason}
         onReasonChange={setBlockReason}
       />
+      {/* Notificación de Like */}
+      {showLikeNotification && ( 
+  <div className="fixed top-20 left-1/2 transform -translate-x-1/2 bg-pink-500 text-white px-4 py-2 rounded-full shadow-lg transition-opacity duration-300 z-50">
+    ❤️ {t('common.liked_message', 'HAS DADO LIKE')}
+  </div>
+      )}
     </div>
   );
 }

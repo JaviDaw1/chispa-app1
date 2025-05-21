@@ -10,7 +10,7 @@ export default function Sparkle() {
       {sparkles.map((_, i) => (
         <motion.div
           key={i}
-          className="absolute w-2 h-2 bg-yellow-400 rounded-full"
+          className="absolute w-2 h-2 bg-yellow-400 dark:bg-yellow-300 rounded-full"
           initial={{
             opacity: 1,
             top: '50%',

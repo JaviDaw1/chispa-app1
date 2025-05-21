@@ -123,13 +123,13 @@ const ChangePassword = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-200 relative">
+    <div className="min-h-screen relative transition-colors duration-500">
       <Header />
 
       {/* Flecha de volver */}
       <button
         onClick={() => navigate(-1)}
-        className="absolute top-4 left-4 text-gray-600 p-2 rounded-full hover:bg-gray-200"
+        className="absolute top-4 left-4 text-gray-600 dark:text-gray-300 p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
         aria-label={t('common.back')}
       >
         <ArrowLeft size={24} />
@@ -137,8 +137,8 @@ const ChangePassword = () => {
 
       {/* Contenido centrado */}
       <div className="flex items-center justify-center min-h-screen px-4">
-        <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
-          <h2 className="text-2xl font-bold mb-4">{t("changePassword.title")}</h2>
+        <div className="bg-white dark:bg-gray-900 p-8 rounded shadow-md w-full max-w-md transition-colors duration-500">
+          <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">{t("changePassword.title")}</h2>
 
           {error && (
             <div className="mb-4">
@@ -154,21 +154,21 @@ const ChangePassword = () => {
             <div className="space-y-4">
               <input
                 type="password"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 dark:bg-gray-700 dark:text-gray-100"
                 placeholder={t("changePassword.current")}
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
               />
               <input
                 type="password"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 dark:bg-gray-700 dark:text-gray-100"
                 placeholder={t("changePassword.new")}
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
               />
 
               <button
-                className="flex w-full justify-center rounded-xl bg-gradient-to-r from-orange-600 to-amber-600 px-4 py-3 text-lg font-semibold text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:from-orange-500 hover:to-amber-500 transform hover:-translate-y-0.5"
+                className="flex w-full justify-center rounded-xl bg-gradient-to-r from-orange-600 to-amber-600 px-4 py-3 text-lg font-semibold text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:from-orange-500 hover:to-amber-500 transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={() => setShowModal(true)}
                 disabled={attemptsLeft <= 0}
               >

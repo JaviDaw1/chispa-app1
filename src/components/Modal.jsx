@@ -29,15 +29,15 @@ const Modal = ({
   if (!show) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 overflow-auto bg-gray-800 bg-opacity-75">
+    <div className="fixed inset-0 flex items-center justify-center z-50 overflow-auto bg-gray-800 bg-opacity-75 dark:bg-black dark:bg-opacity-70">
       <div className="absolute mx-4" />
-      <div className="absolute bg-white p-6 rounded-md shadow-md w-full max-w-2xl z-50">
+      <div className="absolute bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-6 rounded-md shadow-md w-full max-w-2xl z-50">
         <h2 className="text-xl font-bold mb-4">{title}</h2>
         <p className="mb-4">{message}</p>
 
         {showReasonInput && (
           <textarea
-            className="w-full border border-gray-300 rounded-md p-2 mb-4 resize-none"
+            className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-md p-2 mb-4 resize-none"
             rows="3"
             placeholder={placeholder || t("modal.placeholder")}
             value={internalReason}
@@ -51,7 +51,7 @@ const Modal = ({
         <div className="flex justify-end space-x-4">
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 transition-all duration-200"
+            className="px-4 py-2 bg-gray-300 dark:bg-gray-700 dark:text-white rounded hover:bg-gray-400 dark:hover:bg-gray-600 transition-all duration-200"
           >
             {cancelText || t("modal.cancel")}
           </button>

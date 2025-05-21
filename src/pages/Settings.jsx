@@ -60,21 +60,19 @@ export default function Settings() {
   };
 
   const settingItemClass = `
-    flex items-center justify-between 
-    bg-white p-6 rounded-2xl 
-    shadow-md hover:shadow-lg 
-    transition-shadow duration-300 
-    border border-gray-200
-    hover:border-gray-300
-    group
-  `;
+  flex items-center justify-between 
+  bg-white dark:bg-gray-900 p-6 rounded-2xl 
+  shadow-md hover:shadow-lg 
+  transition-shadow duration-300 
+  border border-gray-200 dark:border-gray-700
+  hover:border-gray-300 dark:hover:border-gray-500
+  group
+`;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-200 py-16 px-6 sm:px-8 lg:px-12 lg:pt-24 dark:bg-gray-900">
+    <div className="min-h-screen py-16 px-6 sm:px-8 lg:px-12 lg:pt-24 ">
       <Header />
-
       <div className="max-w-lg mx-auto pb-16 lg:pt-6">
-        {/* Header Section */}
         <div className="mb-6 text-center">
           <h1 className="text-4xl font-extrabold text-gray-900 dark:text-gray-100 tracking-tight">
             {t("settings.title")}

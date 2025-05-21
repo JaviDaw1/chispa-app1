@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import AuthService from "../services/AuthService";
+import ProfileField from "../components/ProfileField";
+import ProfileSection from "../components/ProfileSection";
 import ProfileService from "../services/ProfileService";
 import Header from "../components/Header";
 import Notification from "../components/Notification";
@@ -105,7 +107,7 @@ const Profile = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="min-h-screen">
         <Header />
         <div className="flex items-center justify-center h-[calc(100vh-80px)]">
           <div className="flex flex-col items-center">
@@ -119,7 +121,7 @@ const Profile = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200">
+      <div className="min-h-screen">
         <Header />
         <div className="flex items-center justify-center h-[calc(100vh-80px)] ">
           <div className="text-center max-w-md p-6 bg-white rounded-xl shadow-sm">
@@ -142,7 +144,7 @@ const Profile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen transition-colors duration-300">
       <Header />
       {showNotification && (
         <Notification
@@ -153,8 +155,8 @@ const Profile = () => {
         />
       )}
 
-      <main className="container mx-auto px-4 py-8 max-w-5xl pb-16">
-        <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+      <main className="container mx-auto px-4 py-8 max-w-5xl pb-20">
+        <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm overflow-hidden">
           {/* Header con foto de perfil */}
           <div className="relative bg-gradient-to-r from-orange-400 to-amber-500 h-48">
             {profile?.profilePhoto && (
@@ -173,7 +175,7 @@ const Profile = () => {
                   {t("profile.online")}
                 </span>
               ) : (
-                <span className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 text-gray-800 text-sm font-medium">
+                <span className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200 text-sm font-medium">
                   <span className="w-2 h-2 rounded-full bg-gray-500 mr-2"></span>
                   {t("profile.last_active")}: {formatLastActive(profile?.lastActive)}
                 </span>
@@ -185,18 +187,20 @@ const Profile = () => {
           <div className="pt-20 px-8 pb-8">
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-6">
               <div>
-                <h1 className="text-xl sm:text-3xl font-bold text-gray-900">
+                <h1 className="text-xl sm:text-3xl font-bold text-gray-900 dark:text-white">
                   {profile?.name} {profile?.lastName}
                 </h1>
                 {profile?.age && (
-                  <p className="text-gray-500 text-sm sm:text-base">{profile.age} {t("profile.years")}</p>
+                  <p className="text-gray-500 dark:text-gray-400 text-sm sm:text-base">
+                    {profile.age} {t("profile.years")}
+                  </p>
                 )}
               </div>
 
               {!id && (
                 <button
                   onClick={handleCompleteProfile}
-                  className="self-start px-4 py-2 text-sm sm:text-base bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors shadow-sm"
+                  className="self-start px-4 py-2 text-sm sm:text-base bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors shadow-sm"
                 >
                   {t("profile.edit")}
                 </button>
@@ -205,11 +209,11 @@ const Profile = () => {
 
             {/* Alerta de perfil incompleto */}
             {(!profile || Object.values(profile).every((val) => !val)) && (
-              <div className="mb-6 p-4 bg-amber-50 border-l-4 border-amber-400 rounded-lg flex items-start gap-3">
-                <svg className="h-5 w-5 text-amber-500 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+              <div className="mb-6 p-4 bg-amber-50 dark:bg-amber-900 border-l-4 border-amber-400 dark:border-amber-600 rounded-lg flex items-start gap-3">
+                <svg className="h-5 w-5 text-amber-500 dark:text-amber-300 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                 </svg>
-                <p className="text-sm text-amber-700">
+                <p className="text-sm text-amber-700 dark:text-amber-200">
                   {t("profile.incomplete_warning")}
                 </p>
               </div>
@@ -230,7 +234,7 @@ const Profile = () => {
 
                   {profile.bio && (
                     <ProfileSection title={t("profile.about")}>
-                      <p className="text-gray-700 whitespace-pre-line">{profile.bio}</p>
+                      <p className="text-gray-700 dark:text-gray-200 whitespace-pre-line">{profile.bio}</p>
                     </ProfileSection>
                   )}
                 </div>
@@ -240,7 +244,7 @@ const Profile = () => {
                     <ProfileSection title={t("profile.interests")}>
                       <div className="flex flex-wrap gap-2">
                         {profile.interests.split(',').map((interest, index) => (
-                          <span key={index} className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
+                          <span key={index} className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm">
                             {interest.trim()}
                           </span>
                         ))}
@@ -258,12 +262,12 @@ const Profile = () => {
               </div>
             ) : (
               <div className="text-center py-12">
-                <div className="mx-auto w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center mb-4">
-                  <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="mx-auto w-24 h-24 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center mb-4">
+                  <svg className="w-12 h-12 text-gray-400 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                   </svg>
                 </div>
-                <h3 className="text-xl font-medium text-gray-700 mb-2">{t("profile.not_found")}</h3>
+                <h3 className="text-xl font-medium text-gray-700 dark:text-gray-200 mb-2">{t("profile.not_found")}</h3>
                 <button
                   onClick={handleCompleteProfile}
                   className="mt-4 px-6 py-2 bg-gradient-to-r from-orange-400 to-amber-500 text-white rounded-lg shadow-sm hover:shadow-md transition-all"
@@ -276,11 +280,11 @@ const Profile = () => {
 
           {/* Footer con acciones */}
           {!id && (
-            <div className="border-t border-gray-200 px-8 py-6 bg-gray-50">
+            <div className="border-t border-gray-200 dark:border-gray-700 px-8 py-6 bg-gray-50 dark:bg-gray-900">
               <div className="flex flex-col sm:flex-row justify-end gap-3">
                 <button
                   onClick={handlePreferences}
-                  className="px-6 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors shadow-sm"
+                  className="px-6 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors shadow-sm"
                 >
                   {t("profile.preferences_button")}
                 </button>
@@ -297,22 +301,7 @@ const Profile = () => {
       </main>
     </div>
   );
+
 };
-
-const ProfileSection = ({ title, children }) => (
-  <div>
-    <h3 className="text-lg font-semibold text-gray-800 mb-3 pb-2 border-b border-gray-200">{title}</h3>
-    <div className="space-y-4">
-      {children}
-    </div>
-  </div>
-);
-
-const ProfileField = ({ label, value }) => (
-  <div>
-    <p className="text-sm font-medium text-gray-500">{label}</p>
-    <p className="text-gray-800 mt-1">{value || '-'}</p>
-  </div>
-);
 
 export default Profile;

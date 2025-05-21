@@ -215,11 +215,11 @@ export default function HomePage() {
   return (
     <div className="flex flex-col min-h-screen lg:pt-16">
       <Header />
-      <div className="lg:hidden fixed top-0 left-0 w-full flex justify-center bg-white shadow z-40 py-2">
+      <div className="lg:hidden fixed top-0 left-0 w-full flex justify-center bg-white dark:bg-gray-900 shadow z-40 py-2">
         <img
           src={Logo}
           alt={t('header.title')}
-          className="h-14"
+          className="h-14 rounded-xl"
         />
       </div>
       <div className="flex flex-1 flex-col items-center justify-center p-4 w-full">
@@ -293,7 +293,7 @@ export default function HomePage() {
         </div>
 
         <div
-          className={`mt-6 text-gray-100 text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-gray-800 shadow-md transition-opacity duration-700 ${showInstructions ? 'opacity-100' : 'opacity-0'}`}
+          className={`mt-6 text-gray-100 text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-gray-800 dark:bg-gray-300 dark:text-gray-800 shadow-md transition-opacity duration-700 ${showInstructions ? 'opacity-100' : 'opacity-0'}`}
         >
           💡 {t('home.swipe_hint')}
         </div>

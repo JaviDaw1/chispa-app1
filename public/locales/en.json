@@ -109,7 +109,7 @@
     "create_prefs": "Create Preferences",
     "min": "Min",
     "max": "Max",
-    "missing_alert": "You haven't set your preferences yet. Set them to get better matches."
+    "missing_alert": "You haven't set your preferences yet, please do it in your profile."
   },
   "settings": {
     "title": "Settings",

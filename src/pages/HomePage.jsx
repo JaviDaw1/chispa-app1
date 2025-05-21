@@ -79,19 +79,25 @@ export default function HomePage() {
         setLoading(false);
       }
     };
-    const checkPreferences = async () => {
+    const checkPreferences = async (user) => {
       try {
-        const response = await preferenceService.getByUserId(userInfo.id);
+        const response = await preferenceService.getByUserId(user.id);
+
         if (!response.data || Object.keys(response.data).length === 0) {
           setShowPreferenceNotification(true);
           setTimeout(() => setShowPreferenceNotification(false), 3000);
         }
       } catch (err) {
-        console.error("Error al verificar preferencias:", err);
+        if (err.response && err.response.status === 404) {
+          setShowPreferenceNotification(true);
+          setTimeout(() => setShowPreferenceNotification(false), 3000);
+        } else {
+          console.error("Error inesperado al verificar preferencias:", err);
+        }
       }
     };
 
-    checkPreferences();
+    checkPreferences(userInfo);
     fetchProfilesAndLikes();
   }, [navigate, t]);
 
@@ -310,6 +316,13 @@ export default function HomePage() {
         onReasonChange={setBlockReason}
       />
       <Notification
+        show={showPreferenceNotification}
+        message={t('preferences.missing_alert')}
+        type="info"
+        duration={3000}
+        onClose={() => setShowPreferenceNotification(false)}
+      />
+      <Notification
         show={showMatchNotification}
         message={t('matches.match_alert', { name: currentProfile?.name })}
         type="match"
@@ -329,14 +342,6 @@ export default function HomePage() {
         type="success"
         duration={2500}
         onClose={() => setShowBlockNotification(false)}
-      />
-
-      <Notification
-        show={showPreferenceNotification}
-        message={t('preferences.missing_alert')}
-        type="info"
-        duration={3000}
-        onClose={() => setShowPreferenceNotification(false)}
       />
     </div>
   );

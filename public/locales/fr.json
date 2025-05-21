@@ -110,7 +110,7 @@
     "create_prefs": "Créer des Préférences",
     "min": "Min",
     "max": "Max",
-    "missing_alert": "Vous n'avez pas encore défini vos préférences. Faites-le pour obtenir de meilleures correspondances."
+    "missing_alert": "Vous n'avez pas encore configuré vos préférences, faites-le dans votre profil."
   },
   "settings": {
     "title": "Paramètres",

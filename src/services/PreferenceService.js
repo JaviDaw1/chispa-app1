@@ -1,4 +1,3 @@
-// src/services/PreferenceService.js
 import api from './api';
 
 export default class PreferenceService {
@@ -7,26 +6,62 @@ export default class PreferenceService {
   }
 
   async getAll() {
-    return api.get(this.url);
+    try {
+      const response = await api.get(this.url);
+      return response;
+    } catch (error) {
+      console.error('Error fetching all preferences:', error);
+      throw error;
+    }
   }
 
   async getById(id) {
-    return api.get(`${this.url}/${id}`);
+    try {
+      const response = await api.get(`${this.url}/${id}`);
+      return response;
+    } catch (error) {
+      console.error(`Error fetching preference by id ${id}:`, error);
+      throw error;
+    }
   }
 
   async getByUserId(userId) {
-    return api.get(`${this.url}/user/${userId}`);
+    try {
+      const response = await api.get(`${this.url}/user/${userId}`);
+      return response;
+    } catch (error) {
+      console.error(`Error fetching preference for user ${userId}:`, error);
+      throw error;
+    }
   }
 
   async create(preference) {
-    return api.post(this.url, preference);
+    try {
+      const response = await api.post(this.url, preference);
+      return response;
+    } catch (error) {
+      console.error('Error creating preference:', error);
+      throw error;
+    }
   }
 
   async update(id, preference) {
-    return api.put(`${this.url}/${id}`, preference);
+    try {
+      const response = await api.put(`${this.url}/${id}`, preference);
+      return response;
+    } catch (error) {
+      console.error(`Error updating preference with id ${id}:`, error);
+      throw error;
+    }
   }
 
   async delete(id) {
-    return api.delete(`${this.url}/${id}`);
+    try {
+      const response = await api.delete(`${this.url}/${id}`);
+      return response;
+    } catch (error) {
+      console.error(`Error deleting preference with id ${id}:`, error);
+      throw error;
+    }
   }
 }

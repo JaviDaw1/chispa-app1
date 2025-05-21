@@ -49,7 +49,6 @@ const Preference = () => {
         setPreferencias(prefs);
         setTempPreferences(prefs);
       } else {
-        // Si no hay preferencias, inicializamos con valores por defecto
         const defaultPrefs = {
           favoriteGender: "",
           minAgeRange: 18,

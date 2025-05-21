@@ -110,7 +110,7 @@
     "create_prefs": "Crear Preferencias",
     "min": "Mínimo",
     "max": "Máximo",
-    "missing_alert": "Aún no has configurado tus preferencias. Hazlo para obtener mejores coincidencias."
+    "missing_alert": "Aún no has configurado tus preferencias, hazlo en tu perfil."
   },
   "settings": {
     "title": "Configuración",

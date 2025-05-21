@@ -36,9 +36,12 @@ const LanguageSelector = ({ showText = true, showTextInDropdown = true }) => {
     <div className="relative inline-block text-left" ref={dropdownRef}>
       <button
         onClick={() => setShowDropdown(prev => !prev)}
-        className={`inline-flex items-center justify-between gap-2 py-2 border border-gray-300 rounded-xl shadow-sm bg-white hover:bg-gray-50 transition-all
-          ${showText ? "px-4 min-w-[160px]" : "px-2 min-w-[40px]"}
-        `}
+        className={`inline-flex items-center justify-between gap-2 py-2 border rounded-xl shadow-sm 
+  bg-white border-gray-300 hover:bg-gray-50 transition-all
+  dark:bg-gray-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:text-gray-200
+  ${showText ? "px-4 min-w-[160px]" : "px-2 min-w-[40px]"}
+`}
+
       >
         <img
           src={currentLang.flag}

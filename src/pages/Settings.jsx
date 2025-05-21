@@ -7,7 +7,9 @@ import {
   Book,
   HelpCircle,
   LogOut,
-  Languages 
+  Languages,
+  Sun,
+  Moon,
 } from "lucide-react";
 import Header from "../components/Header";
 import Modal from "../components/Modal";
@@ -21,6 +23,31 @@ export default function Settings() {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const navigate = useNavigate();
   const { t } = useTranslation();
+
+  // Estado para modo oscuro/claro
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    if (typeof window !== "undefined") {
+      return (
+        localStorage.getItem("theme") === "dark" ||
+        (!localStorage.getItem("theme") &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches)
+      );
+    }
+    return false;
+  });
+
+  // Función para alternar modo
+  const toggleDarkMode = () => {
+    const newMode = !isDarkMode;
+    setIsDarkMode(newMode);
+    if (newMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  };
 
   const handleLogout = async () => {
     try {
@@ -43,59 +70,66 @@ export default function Settings() {
   `;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-200 py-16 px-6 sm:px-8 lg:px-12 lg:pt-24">
+    <div className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-200 py-16 px-6 sm:px-8 lg:px-12 lg:pt-24 dark:bg-gray-900">
       <Header />
 
       <div className="max-w-lg mx-auto pb-16 lg:pt-6">
         {/* Header Section */}
         <div className="mb-6 text-center">
-          <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">
+          <h1 className="text-4xl font-extrabold text-gray-900 dark:text-gray-100 tracking-tight">
             {t("settings.title")}
           </h1>
-          <p className="text-gray-600 mt-2 text-lg max-w-xs mx-auto leading-relaxed">
+          <p className="text-gray-600 dark:text-gray-300 mt-2 text-lg max-w-xs mx-auto leading-relaxed">
             {t("settings.subtitle")}
           </p>
         </div>
 
         {/* Settings Grid */}
         <div className="space-y-4">
-          {[{
-            to: "/settings/change-password",
-            icon: <Lock className="text-rose-600 w-6 h-6" />,
-            title: t("settings.security"),
-            subtitle: t("settings.security_sub"),
-            aria: "settings.security"
-          }, {
-            to: "/settings/notifications",
-            icon: <Bell className="text-amber-600 w-6 h-6" />,
-            title: t("settings.notifications"),
-            subtitle: t("settings.notifications_sub"),
-            aria: "settings.notifications"
-          }, {
-            to: "/settings/languages",
-            icon: <Languages className="text-sky-600 w-6 h-6" />,
-            title: t("settings.language"),
-            subtitle: t("settings.language_sub"),
-            aria: "settings.language"
-          }, {
-            to: "/settings/blockedUsers",
-            icon: <Ban className="text-red-600 w-6 h-6" />,
-            title: t("settings.blocked"),
-            subtitle: t("settings.blocked_sub"),
-            aria: "settings.blocked"
-          }, {
-            to: "/settings/documentation",
-            icon: <Book className="text-blue-600 w-6 h-6" />,
-            title: t("settings.docs"),
-            subtitle: t("settings.docs_sub"),
-            aria: "settings.docs"
-          }, {
-            to: "/settings/support",
-            icon: <HelpCircle className="text-green-600 w-6 h-6" />,
-            title: t("settings.support"),
-            subtitle: t("settings.support_sub"),
-            aria: "settings.support"
-          }].map(({ to, icon, title, subtitle, aria }) => (
+          {[
+            {
+              to: "/settings/change-password",
+              icon: <Lock className="text-rose-600 w-6 h-6" />,
+              title: t("settings.security"),
+              subtitle: t("settings.security_sub"),
+              aria: "settings.security",
+            },
+            {
+              to: "/settings/notifications",
+              icon: <Bell className="text-amber-600 w-6 h-6" />,
+              title: t("settings.notifications"),
+              subtitle: t("settings.notifications_sub"),
+              aria: "settings.notifications",
+            },
+            {
+              to: "/settings/languages",
+              icon: <Languages className="text-sky-600 w-6 h-6" />,
+              title: t("settings.language"),
+              subtitle: t("settings.language_sub"),
+              aria: "settings.language",
+            },
+            {
+              to: "/settings/blockedUsers",
+              icon: <Ban className="text-red-600 w-6 h-6" />,
+              title: t("settings.blocked"),
+              subtitle: t("settings.blocked_sub"),
+              aria: "settings.blocked",
+            },
+            {
+              to: "/settings/documentation",
+              icon: <Book className="text-blue-600 w-6 h-6" />,
+              title: t("settings.docs"),
+              subtitle: t("settings.docs_sub"),
+              aria: "settings.docs",
+            },
+            {
+              to: "/settings/support",
+              icon: <HelpCircle className="text-green-600 w-6 h-6" />,
+              title: t("settings.support"),
+              subtitle: t("settings.support_sub"),
+              aria: "settings.support",
+            },
+          ].map(({ to, icon, title, subtitle, aria }) => (
             <Link
               key={to}
               to={to}
@@ -105,6 +139,32 @@ export default function Settings() {
               <SettingItem icon={icon} title={title} subtitle={subtitle} />
             </Link>
           ))}
+
+          {/* Tema oscuro/claro */}
+          <div
+            className={settingItemClass + " cursor-pointer"}
+            onClick={toggleDarkMode}
+            role="button"
+            tabIndex={0}
+            aria-label={t("settings.toggleTheme")}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") toggleDarkMode();
+            }}
+          >
+            <SettingItem
+              icon={
+                isDarkMode ? (
+                  <Sun className="text-yellow-400 w-6 h-6" />
+                ) : (
+                  <Moon className="text-gray-600 w-6 h-6" />
+                )
+              }
+              title={t("settings.theme")}
+              subtitle={
+                isDarkMode ? t("settings.theme_dark") : t("settings.theme_light")
+              }
+            />
+          </div>
 
           {/* Logout Button */}
           <button

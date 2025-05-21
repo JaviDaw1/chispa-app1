@@ -79,8 +79,15 @@
     "hours_ago": "{{hours}} hora(s) atrás",
     "yesterday": "Ayer",
     "days_ago": "{{days}} día(s) atrás",
-    "never_active": "Nunca conectado"
+    "never_active": "Nunca conectado",
+      "editProfile": "Editar perfil",
+  "completeProfile": "Completar perfil",
+  "saveProfile": "Guardar Perfil",
+  "saving": "Guardando...",
+  "savedSuccess": "Perfil guardado correctamente.",
+  "errorSaving": "Error al guardar el perfil. Por favor intenta nuevamente."
   },
+
   "matches": {
    "title": "Tus Matches",
     "no_matches": "Aún no tienes matches. ¡Sigue explorando!",
@@ -129,7 +136,12 @@
     "support_sub": "Contacta con nuestro equipo",
     "logout": "Cerrar sesión",
     "logout_sub": "Salir de tu cuenta",
-    "logout_confirm": "¿Estás seguro que quieres cerrar sesión?"
+    "logout_confirm": "¿Estás seguro que quieres cerrar sesión?",
+    "theme": "Tema",
+    "theme_dark": "Modo oscuro activado",
+    "theme_light": "Modo claro activado",
+    "toggleTheme": "Alternar tema oscuro/claro"
+
   },
   "blocked": {
     "title": "Usuarios Bloqueados",

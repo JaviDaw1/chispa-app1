@@ -74,7 +74,6 @@ export default function CreateProfile() {
       return;
     }
 
-    // Formatear los datos según la estructura requerida
     const profileData = {
       user: {
         id: user.id,
@@ -101,20 +100,21 @@ export default function CreateProfile() {
         profileService.clearCache();
       } else {
         await profileService.create(profileData);
-        profileService.clearCache(); // Limpiar cache después de crear
+        profileService.clearCache();
       }
+
       navigate("/profile", {
         state: {
           notification: {
             show: true,
             type: "success",
-            message: "Perfil guardado correctamente."
+            message: t("profile.savedSuccess")
           }
         }
       });
     } catch (error) {
       console.error("Error saving profile:", error);
-      alert(`Error al guardar el perfil: ${error.message}. Por favor intenta nuevamente.`);
+      alert(`${t("profile.errorSaving")} ${error.message}`);
     } finally {
       setLoading(false);
     }
@@ -125,7 +125,7 @@ export default function CreateProfile() {
       <div className="flex flex-col min-h-screen">
         <Header />
         <div className="flex flex-1 items-center justify-center">
-          <div className="text-xl">Cargando...</div>
+          <div className="text-xl">{t("common.loading")}</div>
         </div>
       </div>
     );
@@ -140,14 +140,14 @@ export default function CreateProfile() {
           className="bg-white p-6 rounded-lg shadow-md w-full max-w-md"
         >
           <h2 className="text-2xl font-bold mb-6 text-center">
-            {formData.name ? "Editar Perfil" : "Completar Perfil"}
+            {formData.name ? t("profile.editProfile") : t("profile.completeProfile")}
           </h2>
 
           <div className="space-y-4">
             {/* Nombre */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Nombre*
+                {t("signup.firstname")}*
               </label>
               <input
                 type="text"
@@ -162,7 +162,7 @@ export default function CreateProfile() {
             {/* Apellido */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Apellido*
+                {t("signup.lastname")}*
               </label>
               <input
                 type="text"
@@ -177,7 +177,7 @@ export default function CreateProfile() {
             {/* Género */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Género*
+                {t("signup.gender")}*
               </label>
               <select
                 name="gender"
@@ -186,16 +186,16 @@ export default function CreateProfile() {
                 className="w-full px-3 py-2 border rounded-md"
                 required
               >
-                <option value="MALE">Hombre</option>
-                <option value="FEMALE">Mujer</option>
-                <option value="OTHER">Otro</option>
+                <option value="MALE">{t("common.male")}</option>
+                <option value="FEMALE">{t("common.female")}</option>
+                <option value="OTHER">{t("common.other")}</option>
               </select>
             </div>
 
             {/* Fecha de nacimiento */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Fecha de nacimiento*
+                {t("signup.birthdate")}*
               </label>
               <input
                 type="date"
@@ -210,7 +210,7 @@ export default function CreateProfile() {
             {/* Ubicación */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Ubicación
+                {t("signup.location")}
               </label>
               <input
                 type="text"
@@ -224,7 +224,7 @@ export default function CreateProfile() {
             {/* Biografía */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Biografía
+                {t("signup.bio")}
               </label>
               <textarea
                 name="bio"
@@ -238,7 +238,7 @@ export default function CreateProfile() {
             {/* Relación preferida */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t('signup.relationship')}
+                {t("signup.relationship")}
               </label>
               <select
                 name="preferredRelationship"
@@ -246,21 +246,21 @@ export default function CreateProfile() {
                 onChange={handleChange}
                 className="w-full px-3 py-2 border rounded-md"
               >
-                <option value="FRIENDSHIP">{t('common.friendship')}</option>
-                <option value="CASUAL">{t('common.casual')}</option>
-                <option value="SERIOUS">{t('common.serious')}</option>
-                <option value="LONG_TERM">{t('common.longTerm')}</option>
-                <option value="OPEN">{t('common.open')}</option>
-                <option value="HOOKUP">{t('common.hookup')}</option>
-                <option value="MARRIAGE">{t('common.marriage')}</option>
-                <option value="NOT_SURE">{t('common.notSure')}</option>
+                <option value="FRIENDSHIP">{t("common.friendship")}</option>
+                <option value="CASUAL">{t("common.casual")}</option>
+                <option value="SERIOUS">{t("common.serious")}</option>
+                <option value="LONG_TERM">{t("common.longTerm")}</option>
+                <option value="OPEN">{t("common.open")}</option>
+                <option value="HOOKUP">{t("common.hookup")}</option>
+                <option value="MARRIAGE">{t("common.marriage")}</option>
+                <option value="NOT_SURE">{t("common.notSure")}</option>
               </select>
             </div>
 
             {/* Intereses */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Intereses
+                {t("signup.interests")}
               </label>
               <textarea
                 name="interests"
@@ -274,7 +274,7 @@ export default function CreateProfile() {
             {/* Foto de perfil */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                URL de foto de perfil
+                {t("signup.profile_photo")}
               </label>
               <input
                 type="text"
@@ -291,20 +291,21 @@ export default function CreateProfile() {
                 />
               )}
             </div>
+
+            {/* Botones */}
             <button
               type="submit"
               disabled={loading}
-              className={`w-full py-2 px-4 rounded-md text-white font-medium transition duration-200 ease-in-out ${loading ? "bg-blue-400" : "bg-blue-600 hover:bg-blue-700"
-                }`}
+              className={`w-full py-2 px-4 rounded-md text-white font-medium transition duration-200 ease-in-out ${loading ? "bg-blue-400" : "bg-blue-600 hover:bg-blue-700"}`}
             >
-              {loading ? "Guardando..." : "Guardar Perfil"}
+              {loading ? t("profile.saving") : t("profile.saveProfile")}
             </button>
             <button
               type="button"
               onClick={() => navigate(-1)}
               className="mt-6 w-full py-2 px-4 rounded-md bg-gray-400 hover:bg-gray-500 text-white font-medium flex items-center justify-center transition duration-200 ease-in-out"
             >
-              Cancelar
+              {t("common.cancel")}
             </button>
           </div>
         </form>

@@ -6,11 +6,13 @@ import AuthService from '../services/AuthService';
 import Header from '../components/Header';
 import Modal from '../components/Modal';
 import BlockService from '../services/BlocksService';
+import ProfileService from '../services/ProfileService'; // <-- Añadido para obtener perfil
 
 const messagesService = new MessagesService();
 const matchService = new MatchService();
 const authService = new AuthService();
 const blockService = new BlockService();
+const profileService = new ProfileService(); // <-- Instancia del servicio
 
 const Chat = () => {
   const { matchId } = useParams();
@@ -21,10 +23,10 @@ const Chat = () => {
   const [unreadCount, setUnreadCount] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [blockReason, setBlockReason] = useState('');
+  const [showMenu, setShowMenu] = useState(false);
   const currentUser = authService.getUserInfo();
   const messagesEndRef = useRef(null);
   const navigate = useNavigate();
-
 
   useEffect(() => {
     scrollToBottom();
@@ -40,10 +42,18 @@ const Chat = () => {
         const matchResponse = await matchService.getMatchById(matchId);
         setMatch(matchResponse.data);
 
+        // Determinar el otro usuario
         const other = matchResponse.data.user1.id === currentUser.id
           ? matchResponse.data.user2
           : matchResponse.data.user1;
-        setOtherUser(other);
+
+        // Obtener perfil completo del otro usuario
+        const profileResponse = await profileService.getByUserId(other.id);
+
+        setOtherUser({
+          ...other,
+          profile: profileResponse.data
+        });
 
         const messagesResponse = await messagesService.getMessagesByMatch(matchId);
         const fetchedMessages = messagesResponse.data;
@@ -124,7 +134,7 @@ const Chat = () => {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
+    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900">
       <Header />
 
       {/* Encabezado del chat */}
@@ -156,12 +166,31 @@ const Chat = () => {
           </p>
         </div>
 
-        {/* Botón de bloqueo */}
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="ml-auto rounded-lg px-4 py-2 font-semibold text-white">
-          Bloquear
-        </button>
+        {/* Botón de menú de opciones */}
+        <div className="ml-auto relative">
+          <button
+            onClick={() => setShowMenu(!showMenu)}
+            className="text-white px-3 py-2 rounded-full focus:outline-none"
+          >
+            <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 6a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm0 5a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm0 5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" />
+            </svg>
+          </button>
+
+          {showMenu && (
+            <div className="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg z-50">
+              <button
+                onClick={() => {
+                  setShowMenu(false);
+                  setIsModalOpen(true);
+                }}
+                className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+              >
+                Bloquear
+              </button>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Área de mensajes */}
@@ -174,7 +203,8 @@ const Chat = () => {
             <div
               className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${msg.senderUser.id === currentUser.id
                 ? 'bg-orange-500 text-white rounded-br-none'
-                : 'bg-white border border-gray-200 rounded-bl-none'}`}
+                : 'bg-white dark:bg-gray-700 dark:border-gray-600 border border-gray-200 rounded-bl-none'
+              }`}
             >
               <p>{msg.content}</p>
               <div className={`text-xs mt-1 ${msg.senderUser.id === currentUser.id ? 'text-orange-100' : 'text-gray-500'}`}>
@@ -192,14 +222,14 @@ const Chat = () => {
       </div>
 
       {/* Input para enviar mensajes */}
-      <div className="sticky bottom-0 left-0 w-full bg-white p-3 border-t border-gray-200 pb-20 lg:pb-3">
+      <div className="sticky bottom-0 left-0 w-full bg-white dark:bg-gray-800 p-3 border-t border-gray-200 dark:border-gray-700 pb-20 lg:pb-3">
         <div className="flex items-center gap-2">
           <input
             type="text"
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             placeholder="Escribe un mensaje..."
-            className="flex-1 border border-gray-300 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+            className="flex-1 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-black dark:text-white rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
             onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
           />
           <button
@@ -218,7 +248,7 @@ const Chat = () => {
       <Modal
         show={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onConfirm={() => { handleBlockUser(); }}
+        onConfirm={handleBlockUser}
         title={`¿Estás seguro de que deseas bloquear a ${otherUser.firstname} ${otherUser.lastname}?`}
         placeholder="Motivo del bloqueo (opcional)"
         confirmText="Bloquear"

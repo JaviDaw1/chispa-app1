@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import MessagesService from '../services/MessagesService';
 import MatchService from '../services/MatchService';
@@ -6,13 +6,15 @@ import AuthService from '../services/AuthService';
 import Header from '../components/Header';
 import Modal from '../components/Modal';
 import BlockService from '../services/BlocksService';
-import ProfileService from '../services/ProfileService'; // <-- Añadido para obtener perfil
+import ProfileService from '../services/ProfileService';
+import SockJS from 'sockjs-client';
+import { over } from 'stompjs';
 
 const messagesService = new MessagesService();
 const matchService = new MatchService();
 const authService = new AuthService();
 const blockService = new BlockService();
-const profileService = new ProfileService(); // <-- Instancia del servicio
+const profileService = new ProfileService();
 
 const Chat = () => {
   const { matchId } = useParams();
@@ -24,81 +26,161 @@ const Chat = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [blockReason, setBlockReason] = useState('');
   const [showMenu, setShowMenu] = useState(false);
+  const [stompClient, setStompClient] = useState(null);
+  const [connectionStatus, setConnectionStatus] = useState('connecting');
+  const [isSending, setIsSending] = useState(false);
+  
   const currentUser = authService.getUserInfo();
   const messagesEndRef = useRef(null);
   const navigate = useNavigate();
 
+  // Función para desplazarse al final de los mensajes
+  const scrollToBottom = useCallback(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, []);
+
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, scrollToBottom]);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
+  // Manejadores optimizados con useCallback
+  const handleNewMessage = useCallback((newMsg) => {
+    setMessages(prev => [...prev, newMsg]);
+    if (newMsg.receiverUser.id === currentUser.id) {
+      stompClient?.send(
+        `/app/chat/${matchId}/markAsRead`, 
+        {}, 
+        JSON.stringify(newMsg.id)
+      );
+    }
+  }, [currentUser.id, matchId, stompClient]);
 
+  const handleUpdateMessage = useCallback((updatedMsg) => {
+    setMessages(prev => prev.map(msg => 
+      msg.id === updatedMsg.id ? updatedMsg : msg
+    ));
+  }, []);
+
+  // Carga inicial de datos y conexión WebSocket
   useEffect(() => {
+    let isMounted = true;
     const loadChatData = async () => {
       try {
-        const matchResponse = await matchService.getMatchById(matchId);
+        const [matchResponse, messagesResponse] = await Promise.all([
+          matchService.getMatchById(matchId),
+          messagesService.getMessagesByMatch(matchId)
+        ]);
+
+        if (!isMounted) return;
+
         setMatch(matchResponse.data);
 
-        // Determinar el otro usuario
         const other = matchResponse.data.user1.id === currentUser.id
           ? matchResponse.data.user2
           : matchResponse.data.user1;
 
-        // Obtener perfil completo del otro usuario
         const profileResponse = await profileService.getByUserId(other.id);
-
         setOtherUser({
           ...other,
           profile: profileResponse.data
         });
 
-        const messagesResponse = await messagesService.getMessagesByMatch(matchId);
         const fetchedMessages = messagesResponse.data;
-
         setMessages(fetchedMessages);
 
         const unreadMessages = fetchedMessages.filter(
           msg => msg.receiverUser.id === currentUser.id && !msg.isRead
         );
         setUnreadCount(unreadMessages.length);
+
+        if (unreadMessages.length > 0) {
+         await Promise.all(
+  unreadMessages.map(msg => messagesService.markAsRead(matchId, msg.id))
+);
+          setUnreadCount(0);
+        }
+
+        // Configurar WebSocket después de cargar datos iniciales
+        setupWebSocket();
       } catch (error) {
         console.error('Error loading chat:', error);
+        setConnectionStatus('disconnected');
       }
+    };
+
+    const setupWebSocket = () => {
+      const socket = new SockJS('http://localhost:8080/ws');
+      const client = over(socket);
+      
+      client.connect({}, () => {
+        if (!isMounted) return;
+        
+        setStompClient(client);
+        setConnectionStatus('connected');
+        
+        client.subscribe(`/topic/chat/${matchId}`, (message) => {
+          const newMsg = JSON.parse(message.body);
+          handleNewMessage(newMsg);
+        });
+        
+        client.subscribe(`/topic/chat/${matchId}/updates`, (message) => {
+          const updatedMsg = JSON.parse(message.body);
+          handleUpdateMessage(updatedMsg);
+        });
+      }, (error) => {
+        if (!isMounted) return;
+        console.error('WebSocket error:', error);
+        setConnectionStatus('disconnected');
+        // Intentar reconectar después de 5 segundos
+        setTimeout(setupWebSocket, 5000);
+      });
     };
 
     loadChatData();
 
-    const intervalId = setInterval(async () => {
-      try {
-        const messagesResponse = await messagesService.getMessagesByMatch(matchId);
-        const fetchedMessages = messagesResponse.data;
-        setMessages(fetchedMessages);
-      } catch (error) {
-        console.error('Error fetching messages:', error);
+    return () => {
+      isMounted = false;
+      if (stompClient) {
+        stompClient.disconnect();
       }
-    }, 5000);
-
-    return () => clearInterval(intervalId);
-  }, [matchId, currentUser.id]);
+    };
+  }, [matchId, currentUser.id, handleNewMessage, handleUpdateMessage]);
 
   const handleSendMessage = async () => {
-    if (!newMessage.trim()) return;
+    if (!newMessage.trim() || isSending) return;
 
+    setIsSending(true);
     try {
-      const response = await messagesService.sendMessage(
-        matchId,
-        currentUser.id,
-        otherUser.id,
-        newMessage
-      );
+      const messageData = {
+        match: { id: matchId },
+        senderUser: { id: currentUser.id },
+        receiverUser: { id: otherUser.id },
+        content: newMessage,
+        isRead: false
+      };
 
-      setMessages(prev => [...prev, response.data]);
+      if (stompClient && connectionStatus === 'connected') {
+        stompClient.send(
+          `/app/chat/${matchId}/send`, 
+          {}, 
+          JSON.stringify(messageData)
+        );
+      } else {
+        // Fallback a HTTP
+        const response = await messagesService.sendMessage(
+          matchId,
+          currentUser.id,
+          otherUser.id,
+          newMessage
+        );
+        setMessages(prev => [...prev, response.data]);
+      }
+      
       setNewMessage('');
     } catch (error) {
       console.error('Error sending message:', error);
+    } finally {
+      setIsSending(false);
     }
   };
 
@@ -111,7 +193,6 @@ const Chat = () => {
       };
 
       await blockService.create(blockData);
-
       await messagesService.deleteMessagesByMatchId(matchId);
       await matchService.deleteMatch(matchId);
 
@@ -162,7 +243,9 @@ const Chat = () => {
         <div>
           <h2 className="font-bold">{otherUser.firstname} {otherUser.lastname}</h2>
           <p className="text-xs opacity-80">
-            {unreadCount > 0 ? `${unreadCount} mensajes nuevos` : 'En línea'}
+            {connectionStatus === 'connected' 
+              ? unreadCount > 0 ? `${unreadCount} mensajes nuevos` : 'En línea'
+              : 'Conectando...'}
           </p>
         </div>
 
@@ -171,6 +254,7 @@ const Chat = () => {
           <button
             onClick={() => setShowMenu(!showMenu)}
             className="text-white px-3 py-2 rounded-full focus:outline-none"
+            aria-label="Menú de opciones"
           >
             <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
               <path d="M10 6a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm0 5a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm0 5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" />
@@ -231,15 +315,26 @@ const Chat = () => {
             placeholder="Escribe un mensaje..."
             className="flex-1 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-black dark:text-white rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
             onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+            disabled={isSending}
           />
           <button
             onClick={handleSendMessage}
-            disabled={!newMessage.trim()}
-            className={`p-2 rounded-full ${newMessage.trim() ? 'bg-orange-600 text-white' : 'bg-gray-200 text-gray-500'}`}
+            disabled={!newMessage.trim() || isSending}
+            className={`p-2 rounded-full ${newMessage.trim() && !isSending 
+              ? 'bg-orange-600 text-white' 
+              : 'bg-gray-200 text-gray-500'}`}
+            aria-label="Enviar mensaje"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-            </svg>
+            {isSending ? (
+              <svg className="animate-spin h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+              </svg>
+            )}
           </button>
         </div>
       </div>

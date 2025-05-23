@@ -37,11 +37,9 @@ const LanguageSelector = ({ showText = true, showTextInDropdown = true }) => {
       <button
         onClick={() => setShowDropdown(prev => !prev)}
         className={`inline-flex items-center justify-between gap-2 py-2 border rounded-xl shadow-sm 
-  bg-white border-gray-300 hover:bg-gray-50 transition-all
-  dark:bg-gray-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:text-gray-200
-  ${showText ? "px-4 min-w-[160px]" : "px-2 min-w-[40px]"}
-`}
-
+        bg-white border-gray-300 hover:bg-gray-50 transition-all
+        dark:bg-gray-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:text-gray-200
+        ${showText ? "px-4 min-w-[160px]" : "px-2 min-w-[40px]"}`}
       >
         <img
           src={currentLang.flag}
@@ -53,7 +51,7 @@ const LanguageSelector = ({ showText = true, showTextInDropdown = true }) => {
       </button>
 
       {showDropdown && (
-        <div className="absolute right-0 z-50 mt-2 w-56 rounded-xl shadow-xl bg-white ring-1 ring-black/5">
+        <div className="absolute right-0 z-50 mt-2 w-56 rounded-xl shadow-xl bg-white dark:bg-gray-700 ring-1 ring-black/5 dark:ring-white/10">
           <div className="py-2">
             {languageOptions.map(lang => (
               <button
@@ -61,8 +59,8 @@ const LanguageSelector = ({ showText = true, showTextInDropdown = true }) => {
                 onClick={() => changeLanguage(lang.code)}
                 className={`flex items-center gap-3 w-full px-4 py-2 text-sm transition-colors
                   ${currentLanguage === lang.code
-                    ? 'bg-blue-100 text-blue-700 font-semibold'
-                    : 'hover:bg-gray-100 text-gray-800'}`}
+                    ? 'bg-blue-100 text-blue-700 font-semibold dark:bg-blue-900 dark:text-blue-200'
+                    : 'hover:bg-gray-100 text-gray-800 dark:hover:bg-gray-600 dark:text-gray-100'}`}
               >
                 <img
                   src={lang.flag}

@@ -171,7 +171,7 @@ export default function Settings() {
               ${settingItemClass} 
               w-full text-left
               border-red-300 hover:border-red-400
-              bg-red-50 hover:bg-red-100
+              bg-red-50 hover:bg-red-100 dark:border-red-600 dark:hover:border-red-500
             `}
             aria-label={t("settings.logout")}
           >

@@ -5,6 +5,7 @@ import AuthService from '../services/AuthService';
 import Divider from '../components/Divider';
 import Header from '../components/Header';
 import LanguageSelector from '../components/LanguageSelector';
+import ThemeSwitcher from '../components/ThemeSwitcher';
 import Logo from '../../public/images/logo.jpg';
 import { Eye, EyeOff, User, Mail, Lock, MapPin, Calendar, Heart, Smile } from 'lucide-react';
 
@@ -113,30 +114,30 @@ export default function SignUp() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen">
       <Header />
-      <div className="lg:hidden fixed top-0 left-0 w-full bg-white shadow z-40 py-2 px-4 flex items-center justify-center">
-        <img src={Logo} alt={t('header.title')} className="h-14 flex-shrink-0" />
+      <div className="lg:hidden fixed top-0 left-0 w-full bg-white dark:bg-gray-900 shadow z-40 py-2 px-4 flex items-center justify-center">
+        <img src={Logo} alt={t('header.title')} className="h-14 flex-shrink-0 rounded-xl" />
         {!localStorage.getItem("token") && !localStorage.getItem("usuario") && (
-          <div className="absolute right-4 top-1/2 transform -translate-y-1/2 w-20">
+          <div className="absolute right-4 top-1/2 transform -translate-y-1/2 flex items-center gap-2">
+            <ThemeSwitcher />
             <LanguageSelector showText={false} />
           </div>
         )}
       </div>
 
       <div className="flex-grow flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-24 pb-20">
-        <div className="w-full max-w-4xl mx-auto bg-white rounded-2xl shadow-xl p-6 sm:p-10 md:p-12">
+        <div className="w-full max-w-4xl mx-auto bg-white dark:bg-gray-900 rounded-2xl shadow-xl p-6 sm:p-10 md:p-12">
           <div className="text-center mb-8">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 bg-clip-text bg-gradient-to-r from-orange-600 to-amber-600">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold bg-clip-text bg-gradient-to-r from-orange-600 to-amber-600 text-transparent">
               {t('signup.title')}
             </h2>
-            <p className="mt-2 text-base sm:text-lg text-gray-600">
+            <p className="mt-2 text-base sm:text-lg text-gray-600 dark:text-gray-300">
               {t('signup.subtitle')}
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* INPUTS - Usar un componente separado es ideal pero aquí mantenemos directo */}
             {[
               ['firstname', 'text', <User />, t('signup.firstname')],
               ['lastname', 'text', <User />, t('signup.lastname')],
@@ -149,7 +150,7 @@ export default function SignUp() {
               ['interests', 'text', null, `${t('signup.interests')} (${t('signup.interests_hint')})`]
             ].map(([name, type, icon, label]) => (
               <div key={name} className={name === 'interests' || name === 'profilePhoto' ? 'md:col-span-2' : ''}>
-                <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+                <label htmlFor={name} className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{label}</label>
                 <div className="relative">
                   {icon && <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">{icon}</div>}
                   <input
@@ -158,7 +159,7 @@ export default function SignUp() {
                     type={type}
                     value={formData[name]}
                     onChange={handleChange}
-                    className={`block w-full ${icon ? 'pl-10' : 'pl-3'} rounded-xl border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:outline-none focus:ring-orange-500 sm:text-sm sm:leading-6 ${errors[name] ? 'ring-red-500' : 'ring-gray-300'}`}
+                    className={`block w-full ${icon ? 'pl-10' : 'pl-3'} rounded-xl border-0 py-3 text-gray-900 dark:text-white bg-white dark:bg-gray-700 shadow-sm ring-1 ring-inset placeholder:text-gray-400 dark:placeholder:text-gray-300 focus:ring-2 focus:outline-none focus:ring-orange-500 pr-2 sm:text-sm sm:leading-6 ${errors[name] ? 'ring-red-500' : 'ring-gray-300 dark:ring-gray-600'}`}
                   />
                   {name === 'password' && (
                     <div className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer" onClick={toggleShowPassword}>
@@ -170,15 +171,14 @@ export default function SignUp() {
               </div>
             ))}
 
-            {/* Gender */}
             <div>
-              <label htmlFor="gender" className="block text-sm font-medium text-gray-700 mb-1">{t('signup.gender')}</label>
+              <label htmlFor="gender" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('signup.gender')}</label>
               <select
                 id="gender"
                 name="gender"
                 value={formData.gender}
                 onChange={handleChange}
-                className={`block w-full rounded-xl border-0 py-3 text-gray-900 pl-3 shadow-sm ring-1 ring-inset focus:ring-2 focus:ring-orange-500 sm:text-sm sm:leading-6 ${errors.gender ? 'ring-red-500' : 'ring-gray-300'}`}
+                className={`block w-full rounded-xl border-0 py-3 text-gray-900 dark:text-white bg-white dark:bg-gray-700 pl-3 shadow-sm ring-1 ring-inset focus:ring-2 focus:ring-orange-500 sm:text-sm sm:leading-6 ${errors.gender ? 'ring-red-500' : 'ring-gray-300 dark:ring-gray-600'}`}
               >
                 <option value="MALE">{t('common.male')}</option>
                 <option value="FEMALE">{t('common.female')}</option>
@@ -187,19 +187,18 @@ export default function SignUp() {
               {errors.gender && <p className="mt-1 text-sm text-red-600">{errors.gender}</p>}
             </div>
 
-            {/* Preferred Relationship */}
             <div>
-              <label htmlFor="preferredRelationship" className="block text-sm font-medium text-gray-700 mb-1">{t('signup.relationship')}</label>
+              <label htmlFor="preferredRelationship" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('signup.relationship')}</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Heart className="text-gray-900" />
+                  <Heart className="text-gray-900 dark:text-white" />
                 </div>
                 <select
                   id="preferredRelationship"
                   name="preferredRelationship"
                   value={formData.preferredRelationship}
                   onChange={handleChange}
-                  className={`block w-full pl-10 rounded-xl border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset focus:ring-2 focus:ring-orange-500 sm:text-sm sm:leading-6 ${errors.preferredRelationship ? 'ring-red-500' : 'ring-gray-300'}`}
+                  className={`block w-full pl-10 rounded-xl border-0 py-3 text-gray-900 dark:text-white bg-white dark:bg-gray-700 shadow-sm ring-1 ring-inset focus:ring-2 focus:ring-orange-500 sm:text-sm sm:leading-6 ${errors.preferredRelationship ? 'ring-red-500' : 'ring-gray-300 dark:ring-gray-600'}`}
                 >
                   {relationshipOptions.map(({ value, label }) => (
                     <option key={value} value={value}>{label}</option>
@@ -209,12 +208,11 @@ export default function SignUp() {
               {errors.preferredRelationship && <p className="mt-1 text-sm text-red-600">{errors.preferredRelationship}</p>}
             </div>
 
-            {/* Bio */}
             <div className="md:col-span-2">
-              <label htmlFor="bio" className="block text-sm font-medium text-gray-700 mb-1">{t('signup.bio')}</label>
+              <label htmlFor="bio" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('signup.bio')}</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 pt-3 flex items-start pointer-events-none">
-                  <Smile className="text-gray-900" />
+                  <Smile className="text-gray-900 dark:text-white" />
                 </div>
                 <textarea
                   id="bio"
@@ -222,7 +220,7 @@ export default function SignUp() {
                   value={formData.bio}
                   onChange={handleChange}
                   rows={3}
-                  className={`block w-full pl-10 rounded-xl border-0 py-3 pr-1 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:outline-none focus:ring-orange-500 sm:text-sm sm:leading-6 ${errors.bio ? 'ring-red-500' : 'ring-gray-300'}`}
+                  className={`block w-full pl-10 rounded-xl border-0 py-3 pr-1 text-gray-900 dark:text-white bg-white dark:bg-gray-700 shadow-sm ring-1 ring-inset placeholder:text-gray-400 dark:placeholder:text-gray-300 focus:ring-2 focus:outline-none focus:ring-orange-500 sm:text-sm sm:leading-6 ${errors.bio ? 'ring-red-500' : 'ring-gray-300 dark:ring-gray-600'}`}
                 />
               </div>
               {errors.bio && <p className="mt-1 text-sm text-red-600">{errors.bio}</p>}
@@ -248,9 +246,10 @@ export default function SignUp() {
               </button>
             </div>
           </form>
+
           <div className="mt-6 text-center">
             <Divider text={t('login.or')} className="mb-4" />
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
               {t('signup.account')}{' '}
               <Link
                 to="/login"

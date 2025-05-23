@@ -29,7 +29,7 @@ const Chat = () => {
   const [stompClient, setStompClient] = useState(null);
   const [connectionStatus, setConnectionStatus] = useState('connecting');
   const [isSending, setIsSending] = useState(false);
-  
+
   const currentUser = authService.getUserInfo();
   const messagesEndRef = useRef(null);
   const navigate = useNavigate();
@@ -48,15 +48,15 @@ const Chat = () => {
     setMessages(prev => [...prev, newMsg]);
     if (newMsg.receiverUser.id === currentUser.id) {
       stompClient?.send(
-        `/app/chat/${matchId}/markAsRead`, 
-        {}, 
+        `/app/chat/${matchId}/markAsRead`,
+        {},
         JSON.stringify(newMsg.id)
       );
     }
   }, [currentUser.id, matchId, stompClient]);
 
   const handleUpdateMessage = useCallback((updatedMsg) => {
-    setMessages(prev => prev.map(msg => 
+    setMessages(prev => prev.map(msg =>
       msg.id === updatedMsg.id ? updatedMsg : msg
     ));
   }, []);
@@ -94,9 +94,9 @@ const Chat = () => {
         setUnreadCount(unreadMessages.length);
 
         if (unreadMessages.length > 0) {
-         await Promise.all(
-  unreadMessages.map(msg => messagesService.markAsRead(matchId, msg.id))
-);
+          await Promise.all(
+            unreadMessages.map(msg => messagesService.markAsRead(matchId, msg.id))
+          );
           setUnreadCount(0);
         }
 
@@ -111,18 +111,18 @@ const Chat = () => {
     const setupWebSocket = () => {
       const socket = new SockJS('http://localhost:8080/ws');
       const client = over(socket);
-      
+
       client.connect({}, () => {
         if (!isMounted) return;
-        
+
         setStompClient(client);
         setConnectionStatus('connected');
-        
+
         client.subscribe(`/topic/chat/${matchId}`, (message) => {
           const newMsg = JSON.parse(message.body);
           handleNewMessage(newMsg);
         });
-        
+
         client.subscribe(`/topic/chat/${matchId}/updates`, (message) => {
           const updatedMsg = JSON.parse(message.body);
           handleUpdateMessage(updatedMsg);
@@ -161,8 +161,8 @@ const Chat = () => {
 
       if (stompClient && connectionStatus === 'connected') {
         stompClient.send(
-          `/app/chat/${matchId}/send`, 
-          {}, 
+          `/app/chat/${matchId}/send`,
+          {},
           JSON.stringify(messageData)
         );
       } else {
@@ -175,7 +175,7 @@ const Chat = () => {
         );
         setMessages(prev => [...prev, response.data]);
       }
-      
+
       setNewMessage('');
     } catch (error) {
       console.error('Error sending message:', error);
@@ -215,7 +215,7 @@ const Chat = () => {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="flex flex-col min-h-screen">
       <Header />
 
       {/* Encabezado del chat */}
@@ -243,7 +243,7 @@ const Chat = () => {
         <div>
           <h2 className="font-bold">{otherUser.firstname} {otherUser.lastname}</h2>
           <p className="text-xs opacity-80">
-            {connectionStatus === 'connected' 
+            {connectionStatus === 'connected'
               ? unreadCount > 0 ? `${unreadCount} mensajes nuevos` : 'En línea'
               : 'Conectando...'}
           </p>
@@ -288,7 +288,7 @@ const Chat = () => {
               className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${msg.senderUser.id === currentUser.id
                 ? 'bg-orange-500 text-white rounded-br-none'
                 : 'bg-white dark:bg-gray-700 dark:border-gray-600 border border-gray-200 rounded-bl-none'
-              }`}
+                }`}
             >
               <p>{msg.content}</p>
               <div className={`text-xs mt-1 ${msg.senderUser.id === currentUser.id ? 'text-orange-100' : 'text-gray-500'}`}>
@@ -320,8 +320,8 @@ const Chat = () => {
           <button
             onClick={handleSendMessage}
             disabled={!newMessage.trim() || isSending}
-            className={`p-2 rounded-full ${newMessage.trim() && !isSending 
-              ? 'bg-orange-600 text-white' 
+            className={`p-2 rounded-full ${newMessage.trim() && !isSending
+              ? 'bg-orange-600 text-white'
               : 'bg-gray-200 text-gray-500'}`}
             aria-label="Enviar mensaje"
           >

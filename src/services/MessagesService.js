@@ -12,7 +12,7 @@ export default class MessagesService {
   // Configura la conexión WebSocket
   connectWebSocket(matchId, onMessageReceived, onUpdateReceived) {
     if (this.stompClient && this.stompClient.connected) {
-      return; // Ya está conectado
+      return; 
     }
 
     const socket = new SockJS('http://localhost:8080/ws');

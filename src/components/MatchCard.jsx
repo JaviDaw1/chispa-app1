@@ -80,7 +80,7 @@ const MatchCard = ({ match, currentUserId }) => {
           </div>
         </div>
 
-        <div className="mt-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+        <div className="mt-6 flex flex-row items-center justify-between gap-4">
           <div className="flex gap-3">
             <button
               onClick={() => navigate(`/profile/${otherUserId}`)}
@@ -103,7 +103,7 @@ const MatchCard = ({ match, currentUserId }) => {
             </button>
           </div>
 
-          <span className="text-xs text-gray-400 dark:text-gray-500 text-right">
+          <span className="text-xs text-gray-400 dark:text-gray-500">
             {formatDate(match.matchDate)}
           </span>
         </div>

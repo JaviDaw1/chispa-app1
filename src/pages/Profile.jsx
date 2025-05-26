@@ -224,7 +224,10 @@ const Profile = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-6">
                   <ProfileSection title={t("profile.basic_info")}>
-                    <ProfileField label={t("profile.gender")} value={profile.gender} />
+                    <ProfileField
+                      label={t("profile.gender")}
+                      value={profile.gender ? t(`profile.genders.${(profile.gender).toLowerCase()}`) : ""}
+                    />
                     <ProfileField
                       label={t("profile.birthdate")}
                       value={profile.birthDate ? new Date(profile.birthDate).toLocaleDateString() : ''}
@@ -255,7 +258,7 @@ const Profile = () => {
                   <ProfileSection title={t("profile.preferences")}>
                     <ProfileField
                       label={t("profile.relationship_type")}
-                      value={profile.preferredRelationship}
+                      value={profile.preferredRelationship ? t(`profile.relationships.${(profile.preferredRelationship).toLowerCase()}`) : ""}
                     />
                   </ProfileSection>
                 </div>

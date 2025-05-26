@@ -78,8 +78,22 @@
     "hours_ago": "Il y a {{hours}} heure(s)",
     "yesterday": "Hier",
     "days_ago": "Il y a {{days}} jour(s)",
-    "never_active": "Jamais connecté"
-
+    "never_active": "Jamais connecté",
+    "genders": {
+      "male": "Homme",
+      "female": "Femme",
+      "other": "Autre"
+    },
+    "relationships": {
+      "friendship": "Amitié",
+      "casual": "Décontractée",
+      "serious": "Sérieuse",
+      "longTerm": "Long terme",
+      "open": "Ouverte",
+      "hookup": "Rencontres occasionnelles",
+      "marriage": "Mariage",
+      "notSure": "Je ne sais pas"
+    }
   },
   "matches": {
     "title": "Vos Matches",

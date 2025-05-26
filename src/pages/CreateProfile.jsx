@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import Header from "../components/Header";
 import ProfileService from "../services/ProfileService";
 import AuthService from "../services/AuthService";
+import EditProfileForm from "../components/EditProfileForm";
 
 const profileService = new ProfileService();
 const authService = new AuthService();
@@ -36,8 +37,8 @@ export default function CreateProfile() {
         const { data } = await profileService.getByUserId(user.id);
         if (data) {
           setFormData({
-            name: data.name || "",
-            lastName: data.lastName || "",
+            name: data.name || user.firstname || "",
+            lastName: data.lastName || user.lastname || "",
             gender: data.gender || "MALE",
             birthDate: data.birthDate ? data.birthDate.split("T")[0] : "",
             location: data.location || "",
@@ -46,6 +47,12 @@ export default function CreateProfile() {
             profilePhoto: data.profilePhoto || "",
             preferredRelationship: data.preferredRelationship || "CASUAL",
           });
+        } else {
+          setFormData((prev) => ({
+            ...prev,
+            name: user.firstname || "",
+            lastName: user.lastname || "",
+          }));
         }
       } catch (error) {
         console.error("Error fetching profile:", error);
@@ -104,6 +111,7 @@ export default function CreateProfile() {
       }
 
       navigate("/profile", {
+        update: true,
         state: {
           notification: {
             show: true,
@@ -122,193 +130,27 @@ export default function CreateProfile() {
 
   if (loading) {
     return (
-      <div className="flex flex-col min-h-screen">
+      <div className="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-900">
         <Header />
         <div className="flex flex-1 items-center justify-center">
-          <div className="text-xl">{t("common.loading")}</div>
+          <div className="text-xl text-gray-900 dark:text-gray-100">{t("common.loading")}</div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100">
+    <div className="flex flex-col min-h-screen">
       <Header />
       <div className="flex-grow flex items-center justify-center px-4 sm:px-6 lg:px-8 lg:pt-20 pb-20 pt-4">
-        <form
-          onSubmit={handleSubmit}
-          className="bg-white p-6 rounded-lg shadow-md w-full max-w-md"
-        >
-          <h2 className="text-2xl font-bold mb-6 text-center">
-            {formData.name ? t("profile.editProfile") : t("profile.completeProfile")}
-          </h2>
-
-          <div className="space-y-4">
-            {/* Nombre */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t("signup.firstname")}*
-              </label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border rounded-md"
-                required
-              />
-            </div>
-
-            {/* Apellido */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t("signup.lastname")}*
-              </label>
-              <input
-                type="text"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border rounded-md"
-                required
-              />
-            </div>
-
-            {/* Género */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t("signup.gender")}*
-              </label>
-              <select
-                name="gender"
-                value={formData.gender}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border rounded-md"
-                required
-              >
-                <option value="MALE">{t("common.male")}</option>
-                <option value="FEMALE">{t("common.female")}</option>
-                <option value="OTHER">{t("common.other")}</option>
-              </select>
-            </div>
-
-            {/* Fecha de nacimiento */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t("signup.birthdate")}*
-              </label>
-              <input
-                type="date"
-                name="birthDate"
-                value={formData.birthDate}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border rounded-md"
-                required
-              />
-            </div>
-
-            {/* Ubicación */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t("signup.location")}
-              </label>
-              <input
-                type="text"
-                name="location"
-                value={formData.location}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border rounded-md"
-              />
-            </div>
-
-            {/* Biografía */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t("signup.bio")}
-              </label>
-              <textarea
-                name="bio"
-                value={formData.bio}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border rounded-md"
-                rows={3}
-              />
-            </div>
-
-            {/* Relación preferida */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t("signup.relationship")}
-              </label>
-              <select
-                name="preferredRelationship"
-                value={formData.preferredRelationship}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border rounded-md"
-              >
-                <option value="FRIENDSHIP">{t("common.friendship")}</option>
-                <option value="CASUAL">{t("common.casual")}</option>
-                <option value="SERIOUS">{t("common.serious")}</option>
-                <option value="LONG_TERM">{t("common.longTerm")}</option>
-                <option value="OPEN">{t("common.open")}</option>
-                <option value="HOOKUP">{t("common.hookup")}</option>
-                <option value="MARRIAGE">{t("common.marriage")}</option>
-                <option value="NOT_SURE">{t("common.notSure")}</option>
-              </select>
-            </div>
-
-            {/* Intereses */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t("signup.interests")}
-              </label>
-              <textarea
-                name="interests"
-                value={formData.interests}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border rounded-md"
-                rows={2}
-              />
-            </div>
-
-            {/* Foto de perfil */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t("signup.profile_photo")}
-              </label>
-              <input
-                type="text"
-                name="profilePhoto"
-                value={formData.profilePhoto}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border rounded-md"
-              />
-              {formData.profilePhoto && (
-                <img
-                  src={formData.profilePhoto}
-                  alt="Preview"
-                  className="w-20 h-20 rounded-full object-cover mt-2 border"
-                />
-              )}
-            </div>
-
-            {/* Botones */}
-            <button
-              type="submit"
-              disabled={loading}
-              className={`w-full py-2 px-4 rounded-md text-white font-medium transition duration-200 ease-in-out ${loading ? "bg-blue-400" : "bg-blue-600 hover:bg-blue-700"}`}
-            >
-              {loading ? t("profile.saving") : t("profile.saveProfile")}
-            </button>
-            <button
-              type="button"
-              onClick={() => navigate(-1)}
-              className="mt-6 w-full py-2 px-4 rounded-md bg-gray-400 hover:bg-gray-500 text-white font-medium flex items-center justify-center transition duration-200 ease-in-out"
-            >
-              {t("common.cancel")}
-            </button>
-          </div>
-        </form>
+        <EditProfileForm
+          formData={formData}
+          handleChange={handleChange}
+          handleSubmit={handleSubmit}
+          loading={loading}
+          t={t}
+          onCancel={() => navigate(-1)}
+        />
       </div>
     </div>
   );

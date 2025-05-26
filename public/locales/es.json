@@ -80,12 +80,27 @@
     "yesterday": "Ayer",
     "days_ago": "{{days}} día(s) atrás",
     "never_active": "Nunca conectado",
-      "editProfile": "Editar perfil",
-  "completeProfile": "Completar perfil",
-  "saveProfile": "Guardar Perfil",
-  "saving": "Guardando...",
-  "savedSuccess": "Perfil guardado correctamente.",
-  "errorSaving": "Error al guardar el perfil. Por favor intenta nuevamente."
+    "editProfile": "Editar perfil",
+    "completeProfile": "Completar perfil",
+    "saveProfile": "Guardar Perfil",
+    "saving": "Guardando...",
+    "savedSuccess": "Perfil guardado correctamente.",
+    "errorSaving": "Error al guardar el perfil. Por favor intenta nuevamente.",
+    "genders": {
+      "male": "Hombre",
+      "female": "Mujer",
+      "other": "Otro" 
+    },
+    "relationships": {
+      "friendship": "Amistad",
+      "casual": "Casual",
+      "serious": "Seria",
+      "longTerm": "A largo plazo",
+      "open": "Abierta",
+      "hookup": "Encuentros casuales",
+      "marriage": "Matrimonio",
+      "notSure": "No estoy seguro"
+    }
   },
 
   "matches": {

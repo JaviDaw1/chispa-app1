@@ -78,7 +78,22 @@
     "hours_ago": "{{hours}} hour(s) ago",
     "yesterday": "Yesterday",
     "days_ago": "{{days}} day(s) ago",
-    "never_active": "Never active"
+    "never_active": "Never active",
+    "genders": {
+    "male": "Male",
+    "female": "Female",
+    "other": "Other"
+    },
+    "relationships": {
+      "friendship": "Friendship",
+      "casual": "Casual",
+      "serious": "Serious",
+      "longTerm": "Long-term",
+      "open": "Open",
+      "hookup": "Hookup",
+      "marriage": "Marriage",
+      "notSure": "Not sure"
+    }
   },
   "matches": {
     "title": "Your Matches",

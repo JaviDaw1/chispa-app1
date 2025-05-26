@@ -7,8 +7,6 @@ import Header from '../components/Header';
 import Modal from '../components/Modal';
 import BlockService from '../services/BlocksService';
 import ProfileService from '../services/ProfileService';
-import SockJS from 'sockjs-client';
-import { over } from 'stompjs';
 
 const messagesService = new MessagesService();
 const matchService = new MatchService();
@@ -26,7 +24,6 @@ const Chat = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [blockReason, setBlockReason] = useState('');
   const [showMenu, setShowMenu] = useState(false);
-  const [stompClient, setStompClient] = useState(null);
   const [connectionStatus, setConnectionStatus] = useState('connecting');
   const [isSending, setIsSending] = useState(false);
 
@@ -47,13 +44,9 @@ const Chat = () => {
   const handleNewMessage = useCallback((newMsg) => {
     setMessages(prev => [...prev, newMsg]);
     if (newMsg.receiverUser.id === currentUser.id) {
-      stompClient?.send(
-        `/app/chat/${matchId}/markAsRead`,
-        {},
-        JSON.stringify(newMsg.id)
-      );
+      messagesService.markAsRead(matchId, newMsg.id);
     }
-  }, [currentUser.id, matchId, stompClient]);
+  }, [currentUser.id, matchId]);
 
   const handleUpdateMessage = useCallback((updatedMsg) => {
     setMessages(prev => prev.map(msg =>
@@ -109,40 +102,20 @@ const Chat = () => {
     };
 
     const setupWebSocket = () => {
-      const socket = new SockJS('http://localhost:8080/ws');
-      const client = over(socket);
-
-      client.connect({}, () => {
-        if (!isMounted) return;
-
-        setStompClient(client);
-        setConnectionStatus('connected');
-
-        client.subscribe(`/topic/chat/${matchId}`, (message) => {
-          const newMsg = JSON.parse(message.body);
-          handleNewMessage(newMsg);
-        });
-
-        client.subscribe(`/topic/chat/${matchId}/updates`, (message) => {
-          const updatedMsg = JSON.parse(message.body);
-          handleUpdateMessage(updatedMsg);
-        });
-      }, (error) => {
-        if (!isMounted) return;
-        console.error('WebSocket error:', error);
-        setConnectionStatus('disconnected');
-        // Intentar reconectar después de 5 segundos
-        setTimeout(setupWebSocket, 5000);
-      });
+      console.log('Intentando conectar al WebSocket con matchId:', matchId); // <-- AQUÍ
+      messagesService.connectWebSocket(
+        matchId,
+        handleNewMessage,
+        handleUpdateMessage
+      );
+      setConnectionStatus('connected');
     };
 
     loadChatData();
 
     return () => {
       isMounted = false;
-      if (stompClient) {
-        stompClient.disconnect();
-      }
+      messagesService.disconnectWebSocket();
     };
   }, [matchId, currentUser.id, handleNewMessage, handleUpdateMessage]);
 
@@ -151,28 +124,15 @@ const Chat = () => {
 
     setIsSending(true);
     try {
-      const messageData = {
-        match: { id: matchId },
-        senderUser: { id: currentUser.id },
-        receiverUser: { id: otherUser.id },
-        content: newMessage,
-        isRead: false
-      };
+      const response = await messagesService.sendMessage(
+        matchId,
+        currentUser.id,
+        otherUser.id,
+        newMessage
+      );
 
-      if (stompClient && connectionStatus === 'connected') {
-        stompClient.send(
-          `/app/chat/${matchId}/send`,
-          {},
-          JSON.stringify(messageData)
-        );
-      } else {
-        // Fallback a HTTP
-        const response = await messagesService.sendMessage(
-          matchId,
-          currentUser.id,
-          otherUser.id,
-          newMessage
-        );
+      // Si se usó HTTP, añadimos el mensaje manualmente.
+      if (response?.data) {
         setMessages(prev => [...prev, response.data]);
       }
 

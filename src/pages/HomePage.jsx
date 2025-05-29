@@ -58,7 +58,13 @@ export default function HomePage() {
           profileService.getAll(),
           likesService.getLikesByLikerId(userInfo.id),
           blocksService.getByReporterId(userInfo.id),
-          preferenceService.getByUserId(userInfo.id)
+          // Cambia aquí: atrapa el error de preferencias
+          preferenceService.getByUserId(userInfo.id).catch(err => {
+            if (err.response && err.response.status === 404) {
+              return { data: {} }; // Sin preferencias, objeto vacío
+            }
+            throw err; // Otros errores sí se lanzan
+          })
         ]);
 
         const allProfiles = profileRes.data;
@@ -74,7 +80,10 @@ export default function HomePage() {
           !blockedUserIds.includes(profile.id)
         );
 
-        if (preferences) {
+        if (
+          preferences &&
+          (preferences.favoriteGender || preferences.minAgeRange || preferences.maxAgeRange)
+        ) {
           const {
             favoriteGender,
             minAgeRange,
@@ -84,13 +93,15 @@ export default function HomePage() {
 
           availableProfiles = availableProfiles.filter(profile => {
             const matchGender = !favoriteGender || profile.gender === favoriteGender;
-            const matchAge = (!minAgeRange || profile.age >= minAgeRange) && (!maxAgeRange || profile.age <= maxAgeRange);
+            const matchAge =
+              (!minAgeRange || profile.age >= minAgeRange) &&
+              (!maxAgeRange || profile.age <= maxAgeRange);
             // const matchLocation = !maxDistance || profile.location === maxDistance;
             // && matchLocation
             return matchGender && matchAge;
           });
         }
-        
+        // Si no hay preferencias, no se filtra más, se muestran todos los disponibles
         setProfiles(availableProfiles);
       } catch (err) {
         console.error("Error cargando datos:", err);

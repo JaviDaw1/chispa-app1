@@ -12,6 +12,8 @@ import BlocksService from '../services/BlocksService';
 import Modal from '../components/Modal';
 import Logo from "../../public/images/logo.jpg";
 import { Heart, ArrowRight, Ban } from 'lucide-react';
+// eslint-disable-next-line no-unused-vars
+import { motion, AnimatePresence } from 'framer-motion';
 
 const profileService = new ProfileService();
 const authService = new AuthService();
@@ -71,7 +73,6 @@ export default function HomePage() {
         const likedUserIds = likesRes.data.map(like => like.liked.id);
         const blockedUserIds = blocksRes.data.map(block => block.reported.id);
         const preferences = prefRes.data;
-        console.log("Preferences:", preferences);
 
         let availableProfiles = allProfiles.filter(profile =>
           profile.user.id !== userInfo.id &&
@@ -101,7 +102,6 @@ export default function HomePage() {
             return matchGender && matchAge;
           });
         }
-        // Si no hay preferencias, no se filtra más, se muestran todos los disponibles
         setProfiles(availableProfiles);
       } catch (err) {
         console.error("Error cargando datos:", err);
@@ -249,47 +249,59 @@ export default function HomePage() {
       <div className="flex flex-1 flex-col items-center justify-center p-4 w-full">
         <div
           {...handlers}
-          className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg bg-white rounded-xl shadow-lg overflow-hidden relative max-h-[80vh]"
+          className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg relative max-h-[80vh]"
           style={{ touchAction: 'pan-y' }}
         >
-          <div className="h-auto aspect-[3/4] bg-gray-100 flex items-center justify-center overflow-hidden">
-            {currentProfile.profilePhoto ? (
-              <img
-                src={currentProfile.profilePhoto}
-                alt={`${currentProfile.name} ${currentProfile.lastName}`}
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <div className="text-4xl text-gray-400">
-                {currentProfile.name?.charAt(0)}{currentProfile.lastName?.charAt(0)}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentProfile.id}
+              initial={{ x: 100, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: -100, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 260, damping: 25 }}
+              className="bg-white rounded-xl shadow-lg  relative overflow-hidden h-full w-full"
+            >
+              <div className="h-auto aspect-[3/4] bg-gray-100 flex items-center justify-center overflow-hidden">
+                {currentProfile.profilePhoto ? (
+                  <img
+                    src={currentProfile.profilePhoto}
+                    alt={`${currentProfile.name} ${currentProfile.lastName}`}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="text-4xl text-gray-400">
+                    {currentProfile.name?.charAt(0)}{currentProfile.lastName?.charAt(0)}
+                  </div>
+                )}
               </div>
-            )}
-          </div>
 
-          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 sm:p-6 text-white">
-            <h2 className="text-xl sm:text-2xl font-bold">
-              {currentProfile.name} {currentProfile.lastName}, {currentProfile.age}
-            </h2>
-            <p className="text-xs sm:text-sm opacity-80 mt-1">{currentProfile.location}</p>
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 sm:p-6 text-white">
+                <h2 className="text-xl sm:text-2xl font-bold">
+                  {currentProfile.name} {currentProfile.lastName}, {currentProfile.age}
+                </h2>
+                <p className="text-xs sm:text-sm opacity-80 mt-1">{currentProfile.location}</p>
 
-            {currentProfile.bio && (
-              <p className="mt-2 sm:mt-3 text-xs sm:text-sm">{currentProfile.bio}</p>
-            )}
+                {currentProfile.bio && (
+                  <p className="mt-2 sm:mt-3 text-xs sm:text-sm">{currentProfile.bio}</p>
+                )}
 
-            {currentProfile.interests && (
-              <div className="mt-2 sm:mt-3 flex flex-wrap gap-2">
-                {currentProfile.interests.split(',').map((interest, i) => (
-                  <span
-                    key={i}
-                    className="bg-white/20 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs"
-                  >
-                    {interest.trim()}
-                  </span>
-                ))}
+                {currentProfile.interests && (
+                  <div className="mt-2 sm:mt-3 flex flex-wrap gap-2">
+                    {currentProfile.interests.split(',').map((interest, i) => (
+                      <span
+                        key={i}
+                        className="bg-white/20 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs"
+                      >
+                        {interest.trim()}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
-            )}
-          </div>
+            </motion.div>
+          </AnimatePresence>
         </div>
+
 
         <div className="flex gap-4 sm:gap-6 mt-3">
           <button

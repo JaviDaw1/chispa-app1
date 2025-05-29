@@ -55,7 +55,7 @@ const ChatsPage = () => {
         {loading ? (
           <p className="text-gray-500 text-lg">{t('messages.loading')}</p>
         ) : matches.length === 0 ? (
-          <p className="text-gray-500 text-lg">{t('messages.no_chats')}</p>
+          <p className="text-gray-500 dark:text-gray-300 text-lg">{t('messages.no_chats')}</p>
         ) : (
           <div className="w-full max-w-4xl grid grid-cols-1 gap-6 overflow-y-auto max-h-[70vh] pb-2">
             {matches.map((match) => (

@@ -61,7 +61,7 @@ const MatchCard = ({ match, currentUserId }) => {
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white truncate">
               {otherUserProfile.name} {otherUserProfile.lastName}
             </h2>
-            <p className="text-gray-500 dark:text-gray-400 text-sm mt-1 truncate">
+            <p className="text-gray-500 dark:text-gray-400 text-sm mt-1 truncate max-w-[350px]">
               {otherUserProfile.bio || t('matches.no_description')}
             </p>
             <div className="flex items-center gap-1 text-sm text-orange-600 dark:text-orange-400 mt-2">

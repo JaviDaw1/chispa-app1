@@ -80,10 +80,10 @@ const Match = () => {
 
         {matches.length === 0 ? (
           <div className="text-center py-10">
-            <p className="text-gray-500">{t('matches.no_matches')}</p>
+            <p className="text-gray-500 dark:text-gray-300">{t('matches.no_matches')}</p>
             <button
               onClick={() => navigate('/')}
-              className="mt-4 px-6 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700"
+              className="mt-4 px-6 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 text-sm transition"
             >
               {t('matches.discover')}
             </button>

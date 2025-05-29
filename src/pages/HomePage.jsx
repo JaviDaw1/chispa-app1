@@ -46,59 +46,61 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-    const userInfo = authService.getUserInfo();
-    if (!userInfo) {
-      navigate("/login");
-      return;
-    }
+    const loadData = async () => {
+      const userInfo = authService.getUserInfo();
+      if (!userInfo) {
+        navigate("/login");
+        return;
+      }
 
-    const fetchProfilesAndLikes = async () => {
       try {
-        const userInfo = authService.getUserInfo();
-        const response = await profileService.getAll();
-        const filteredProfiles = response.data.filter(profile =>
-          profile.user.id !== userInfo.id && profile.user.role !== "ADMIN"
-        );
+        const [profileRes, likesRes, blocksRes, prefRes] = await Promise.all([
+          profileService.getAll(),
+          likesService.getLikesByLikerId(userInfo.id),
+          blocksService.getByReporterId(userInfo.id),
+          preferenceService.getByUserId(userInfo.id)
+        ]);
 
-        const likesResponse = await likesService.getLikesByLikerId(userInfo.id);
-        const likedUserIds = likesResponse.data.map(like => like.liked.id);
+        const allProfiles = profileRes.data;
+        const likedUserIds = likesRes.data.map(like => like.liked.id);
+        const blockedUserIds = blocksRes.data.map(block => block.reported.id);
+        const preferences = prefRes.data;
+        console.log("Preferences:", preferences);
 
-        const blocksResponse = await blocksService.getByReporterId(userInfo.id);
-        const blockedUserIds = blocksResponse.data.map(block => block.reported.id);
-
-        const availableProfiles = filteredProfiles.filter(profile =>
+        let availableProfiles = allProfiles.filter(profile =>
+          profile.user.id !== userInfo.id &&
+          profile.user.role !== "ADMIN" &&
           !likedUserIds.includes(profile.id) &&
           !blockedUserIds.includes(profile.id)
         );
 
+        if (preferences) {
+          const {
+            favoriteGender,
+            minAgeRange,
+            maxAgeRange,
+            // maxDistance,
+          } = preferences;
+
+          availableProfiles = availableProfiles.filter(profile => {
+            const matchGender = !favoriteGender || profile.gender === favoriteGender;
+            const matchAge = (!minAgeRange || profile.age >= minAgeRange) && (!maxAgeRange || profile.age <= maxAgeRange);
+            // const matchLocation = !maxDistance || profile.location === maxDistance;
+            // && matchLocation
+            return matchGender && matchAge;
+          });
+        }
+        
         setProfiles(availableProfiles);
-        setLoading(false);
       } catch (err) {
-        console.error("Error al obtener perfiles:", err);
+        console.error("Error cargando datos:", err);
         setError(t('errors.load_profiles'));
+      } finally {
         setLoading(false);
       }
     };
-    const checkPreferences = async (user) => {
-      try {
-        const response = await preferenceService.getByUserId(user.id);
 
-        if (!response.data || Object.keys(response.data).length === 0) {
-          setShowPreferenceNotification(true);
-          setTimeout(() => setShowPreferenceNotification(false), 3000);
-        }
-      } catch (err) {
-        if (err.response && err.response.status === 404) {
-          setShowPreferenceNotification(true);
-          setTimeout(() => setShowPreferenceNotification(false), 3000);
-        } else {
-          console.error("Error inesperado al verificar preferencias:", err);
-        }
-      }
-    };
-
-    checkPreferences(userInfo);
-    fetchProfilesAndLikes();
+    loadData();
   }, [navigate, t]);
 
   const handlers = useSwipeable({
@@ -109,9 +111,9 @@ export default function HomePage() {
   });
 
   const goToNextProfile = () => {
-    setCurrentProfileIndex(prev =>
-      prev >= profiles.length - 1 ? 0 : prev + 1
-    );
+    setCurrentProfileIndex(prev => prev >= profiles.length - 1 ? 0 : prev + 1)
+    //TODO: Pensar si es mejor que sea infinito o que tenga un final el swipe
+    // setCurrentProfileIndex(prev => prev + 1);
   };
 
   const handleLike = async () => {
@@ -168,8 +170,8 @@ export default function HomePage() {
 
       await blocksService.create(blockData);
 
-      setBlockedProfile(profileToBlock); // guardamos el perfil bloqueado
-      setShowBlockNotification(true); // mostramos la noti
+      setBlockedProfile(profileToBlock);
+      setShowBlockNotification(true);
       setTimeout(() => setShowBlockNotification(false), 2500);
 
       setProfiles(prev => prev.filter(p => p.id !== profileToBlock.id));
@@ -196,6 +198,17 @@ export default function HomePage() {
         <Header />
         <div className="flex flex-1 items-center justify-center">
           <div className="text-xl text-red-500">{error}</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!currentProfile) {
+    return (
+      <div className="flex flex-col min-h-screen">
+        <Header />
+        <div className="flex flex-1 items-center justify-center">
+          <div className="text-xl">{t('matches.no_profiles')}</div>
         </div>
       </div>
     );
@@ -297,52 +310,52 @@ export default function HomePage() {
         >
           💡 {t('home.swipe_hint')}
         </div>
+        <Modal
+          show={showBlockModal}
+          onClose={() => setShowBlockModal(false)}
+          onConfirm={() => {
+            handleBlock(currentProfile);
+            setShowBlockModal(false);
+          }}
+          title={t('chat.block_confirm', {
+            name: `${currentProfile?.name} ${currentProfile?.lastName}`
+          })}
+          placeholder={t('chat.block_reason')}
+          confirmText={t('common.block')}
+          cancelText={t('common.cancel')}
+          showReasonInput={true}
+          reason={blockReason}
+          onReasonChange={setBlockReason}
+        />
+        <Notification
+          show={showPreferenceNotification}
+          message={t('preferences.missing_alert')}
+          type="info"
+          duration={3000}
+          onClose={() => setShowPreferenceNotification(false)}
+        />
+        <Notification
+          show={showMatchNotification}
+          message={t('matches.match_alert', { name: currentProfile?.name })}
+          type="match"
+          duration={2500}
+          onClose={() => setShowMatchNotification(false)}
+        />
+        <Notification
+          show={showLikeNotification}
+          message={t('matches.like_alert', { name: likedProfile?.name })}
+          type="like"
+          duration={2000}
+          onClose={() => setShowLikeNotification(false)}
+        />
+        <Notification
+          show={showBlockNotification}
+          message={t('blocked.block_alert', { name: blockedProfile?.name })}
+          type="success"
+          duration={2500}
+          onClose={() => setShowBlockNotification(false)}
+        />
       </div>
-      <Modal
-        show={showBlockModal}
-        onClose={() => setShowBlockModal(false)}
-        onConfirm={() => {
-          handleBlock(currentProfile);
-          setShowBlockModal(false);
-        }}
-        title={t('chat.block_confirm', {
-          name: `${currentProfile?.name} ${currentProfile?.lastName}`
-        })}
-        placeholder={t('chat.block_reason')}
-        confirmText={t('common.block')}
-        cancelText={t('common.cancel')}
-        showReasonInput={true}
-        reason={blockReason}
-        onReasonChange={setBlockReason}
-      />
-      <Notification
-        show={showPreferenceNotification}
-        message={t('preferences.missing_alert')}
-        type="info"
-        duration={3000}
-        onClose={() => setShowPreferenceNotification(false)}
-      />
-      <Notification
-        show={showMatchNotification}
-        message={t('matches.match_alert', { name: currentProfile?.name })}
-        type="match"
-        duration={2500}
-        onClose={() => setShowMatchNotification(false)}
-      />
-      <Notification
-        show={showLikeNotification}
-        message={t('matches.like_alert', { name: likedProfile?.name })}
-        type="like"
-        duration={2000}
-        onClose={() => setShowLikeNotification(false)}
-      />
-      <Notification
-        show={showBlockNotification}
-        message={t('blocked.block_alert', { name: blockedProfile?.name })}
-        type="success"
-        duration={2500}
-        onClose={() => setShowBlockNotification(false)}
-      />
     </div>
   );
 }

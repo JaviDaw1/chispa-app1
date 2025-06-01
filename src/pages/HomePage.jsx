@@ -297,6 +297,13 @@ export default function HomePage() {
                     ))}
                   </div>
                 )}
+                {currentProfile.preferredRelationship && (
+                  <p className="mt-2 sm:mt-3 text-xs sm:text-sm text-pink-200">
+                    💘 {t('signup.relationship')}{': '}
+                    {t(`profile.relationships.${(currentProfile.preferredRelationship).toLowerCase()}`) || currentProfile.preferredRelationship}
+                  </p>
+                )}
+
               </div>
             </motion.div>
           </AnimatePresence>

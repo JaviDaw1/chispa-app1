@@ -158,4 +158,14 @@ export default class AuthService {
       );
     }
   }
+
+  static async forgotPassword(email) {
+    try {
+      await api.post("/auth/forgot-password", { email });
+    } catch (error) {
+      throw new Error(
+        error.response?.data?.message || "Error al enviar el correo de recuperación"
+      );
+    }
+  }
 }

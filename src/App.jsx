@@ -15,6 +15,7 @@ import BlockedUsers from './pages/BlockedUsers';
 import AuthService from './services/AuthService';
 import Language from './pages/Language';
 import ChangePassword from './pages/ChangePassword';
+import ForgotPassword from './pages/ForgotPassword';
 
 const authService = new AuthService();
 
@@ -48,6 +49,7 @@ export default function App() {
         <Route path="/settings/blockedUsers" element={<BlockedUsers />} />
         <Route path="/settings/languages" element={<Language />} />
         <Route path="/settings/change-password" element={<ChangePassword />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
       </Routes>
     </Router>
   );

@@ -137,6 +137,15 @@ export default function Login() {
             </button>
           </form>
 
+          <div className="flex justify-end">
+            <Link
+              to="/forgot-password"
+              className="text-sm text-orange-600 hover:underline font-medium"
+            >
+              {t('login.forgotPassword')}
+            </Link>
+          </div>
+
           <Divider text={t('login.or')} />
 
           <div className="text-center text-sm text-gray-600 dark:text-gray-400">

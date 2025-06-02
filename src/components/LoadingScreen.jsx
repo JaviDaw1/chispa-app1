@@ -1,5 +1,5 @@
-import React from 'react';
-
+// This component display the loading screen with a spinner, a message, and an optional logo. 
+// It is designed to be used when the application is loading data or performing background tasks.
 const LoadingScreen = ({
   message = "Cargando...",
   size = 'lg',
@@ -8,15 +8,11 @@ const LoadingScreen = ({
   logoSrc = ''
 }) => {
   const textClass = size === 'sm' ? 'text-sm' : size === 'md' ? 'text-base' : 'text-lg';
-
-  // Clase de color del spinner
   const spinnerColorClass = {
     gray: 'border-gray-500 dark:border-gray-400',
     orange: 'border-orange-500 dark:border-orange-400',
     amber: 'border-amber-500 dark:border-amber-400',
   }[color] || 'border-gray-500 dark:border-gray-400';
-
-  // Clase de color del texto
   const textColorClass = {
     gray: 'text-gray-500 dark:text-gray-400',
     orange: 'text-orange-500 dark:text-orange-400',

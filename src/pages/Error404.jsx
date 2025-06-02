@@ -1,5 +1,7 @@
 import React from 'react';
+import Divider from '../components/Divider';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 export default function Error404() {
   const { t } = useTranslation();
@@ -31,30 +33,35 @@ export default function Error404() {
           <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300 max-w-xl mx-auto">
             {t('error404.description')}
           </p>
+
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-6">
-            <a
-              href="/"
+            <Link
+              to="/"
               className="w-full sm:w-auto rounded-xl bg-gradient-to-r from-orange-400 to-amber-500 px-8 py-4 text-lg font-semibold text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:from-orange-500 hover:to-amber-500 transform hover:-translate-y-1"
             >
               {t('error404.backToHome')}
-            </a>
-            <a
-              href="#"
+            </Link>
+
+            <Link
+              to="/support"
               className="group w-full sm:w-auto rounded-xl bg-white dark:bg-gray-700 px-6 py-3.5 text-lg font-semibold text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 hover:ring-gray-400 dark:hover:ring-gray-500 transition-all duration-200"
             >
               {t('error404.contactSupport')}
               <span className="inline-block ml-2 group-hover:translate-x-1 transition-transform duration-200">→</span>
-            </a>
+            </Link>
           </div>
-          <div className="lg:mt-10 border-t border-gray-200 dark:border-gray-700 pt-8">
+
+          <Divider className="my-10" />
+
+          <div className="lg:mt-10">
             <p className="text-sm text-gray-500 dark:text-gray-400">
               {t('error404.needHelp')}{' '}
-              <a
-                href="#"
+              <Link
+                to="/support"
                 className="font-medium text-orange-600 dark:text-orange-400 hover:text-orange-500 dark:hover:text-orange-300"
               >
                 {t('error404.contactUs')}
-              </a>
+              </Link>
             </p>
           </div>
         </div>

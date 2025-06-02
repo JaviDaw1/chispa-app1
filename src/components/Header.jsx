@@ -1,3 +1,4 @@
+// This component is the Header component that displays the navigation bar with links to different sections of the application. It also includes language and theme switchers for user customization.
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
@@ -11,12 +12,12 @@ import {
 import LanguageSelector from "../components/LanguageSelector";
 import ThemeSwitcher from "../components/ThemeSwitcher";
 import { useTranslation } from "react-i18next";
-import Logo from "../../public/images/logo.jpg";
 
 const Header = () => {
   const location = useLocation();
   const { t } = useTranslation();
 
+  // State to manage authentication status
   const [isAuthenticated, setIsAuthenticated] = useState(
     Boolean(localStorage.getItem("token") || localStorage.getItem("usuario"))
   );
@@ -34,6 +35,7 @@ const Header = () => {
     };
   }, []);
 
+  // Define navigation items based on authentication status
   const navItems = isAuthenticated
     ? [
         { label: t("header.nav.home"), icon: Home, path: "/" },
@@ -46,13 +48,12 @@ const Header = () => {
 
   return (
     <>
-      {/* Header grande */}
+      {/* General Header */}
       <nav className="hidden lg:flex justify-between items-center px-8 py-4 bg-white dark:bg-gray-900 dark:text-gray-100 shadow-md fixed top-0 left-0 w-full z-50 border-b border-gray-200 dark:border-gray-700 transition-all">
         <div className="max-w-screen-xl mx-auto flex items-center justify-between w-full">
-          {/* Logo y título */}
           <div className="flex items-center gap-3">
             <img
-              src={Logo}
+              src="/images/logo.jpg"
               alt={t("header.title")}
               className="h-10 w-10 rounded-2xl shadow-md"
             />
@@ -60,8 +61,6 @@ const Header = () => {
               {t("header.title")}
             </span>
           </div>
-
-          {/* Navegación */}
           <ul className="flex items-center gap-8">
             {navItems.map((item) => {
               const Icon = item.icon;
@@ -97,13 +96,12 @@ const Header = () => {
         </div>
       </nav>
 
-      {/* Header móvil */}
+      {/* Mobile Header */}
       <nav className="lg:hidden fixed bottom-0 left-0 w-full bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 shadow-inner z-50 py-2">
         <ul className="flex justify-around items-center">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = location.pathname === item.path;
-
             return (
               <li key={item.label}>
                 <Link

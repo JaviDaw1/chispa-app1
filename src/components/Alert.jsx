@@ -1,9 +1,11 @@
-import React from "react";
+// This component displays an alert message with different styles based on the type of alert.
 import { AlertCircle } from "lucide-react";
 
+// Message types can be "error", "success", "warning", or "info" and will determine the styling of the alert.
 export default function Alert({ message, type = "error" }) {
   const baseStyles = "p-4 rounded flex items-start gap-3";
 
+  // Define styles for different alert types
   const variants = {
     error:
       "bg-red-50 border-l-4 border-red-500 text-red-700 dark:bg-red-200 dark:border-red-700 dark:text-red-800",

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import HomePage from './pages/HomePage';
@@ -34,23 +34,33 @@ export default function App() {
   return (
     <Router>
       <Routes>
+        {/** General Routes */}
         <Route path="/" element={<HomePage />} />
+        <Route path="*" element={<Error404 />} />
+
+        {/** Auth Routes */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+
+        {/** Profile Routes */}
         <Route path="/profile" element={<Profile />} />
         <Route path="/profile/:id" element={<Profile />} />
         <Route path="/create-profile" element={<CreateProfile />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
+
+        {/** App Routes */}
         <Route path="/preference" element={<Preference />} />
         <Route path="/matches" element={<Match />} />
         <Route path="/chat/:matchId" element={<Chat />} />
         <Route path="/messages" element={<ChatsPage />} />
-        <Route path="*" element={<Error404 />} />
+
+        {/** Settings Routes */}
         <Route path="/settings" element={<Settings />} />
         <Route path="/settings/blockedUsers" element={<BlockedUsers />} />
         <Route path="/settings/languages" element={<Language />} />
         <Route path="/settings/change-password" element={<ChangePassword />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
       </Routes>
     </Router>
   );
 }
+

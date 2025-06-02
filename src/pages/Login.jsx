@@ -6,10 +6,12 @@ import AuthService from '../services/AuthService';
 import Divider from '../components/Divider';
 import LanguageSelector from '../components/LanguageSelector';
 import ThemeSwitcher from '../components/ThemeSwitcher';
+import PrimaryButton from '../components/PrimaryButton';
 import Alert from '../components/Alert';
 import Logo from '../../public/images/logo.jpg';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import LoadingScreen from '../components/LoadingScreen';
+import TopHeader from '../components/TopHeader';
 
 export default function Login() {
   const { t } = useTranslation();
@@ -45,17 +47,7 @@ export default function Login() {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-
-      <div className="lg:hidden fixed top-0 left-0 w-full bg-white shadow z-40 py-2 px-4 flex items-center justify-center dark:bg-gray-900">
-        <img src={Logo} alt={t('header.title')} className="h-14 flex-shrink-0 rounded-xl" />
-
-        {!localStorage.getItem("token") && !localStorage.getItem("usuario") && (
-          <div className="absolute right-4 top-1/2 transform -translate-y-1/2 flex items-center gap-2">
-            <ThemeSwitcher />
-            <LanguageSelector showText={false} />
-          </div>
-        )}
-      </div>
+      <TopHeader showSwitcher={true} logoSrc='/images/logo.jpg'/>
 
       {isSubmitting && (
         <LoadingScreen
@@ -68,7 +60,6 @@ export default function Login() {
 
       <div className="flex-grow flex items-center justify-center px-4 sm:px-6 lg:px-8">
         <div className="bg-white dark:bg-gray-900 px-8 py-10 shadow-xl dark:shadow-md rounded-2xl w-full max-w-md space-y-6 border border-gray-200 dark:border-gray-700">
-
           <div className="text-center">
             <h2 className="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-amber-500 dark:from-orange-300 dark:to-amber-400">
               {t('login.title')}
@@ -128,13 +119,14 @@ export default function Login() {
               </div>
             </div>
 
-            <button
+            <PrimaryButton
               type="submit"
               disabled={isLoading}
-              className="flex w-full justify-center rounded-xl bg-gradient-to-r from-orange-600 to-amber-600 px-4 py-3 text-lg font-semibold text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:from-orange-500 hover:to-amber-500 transform hover:-translate-y-0.5"
+              isLoading={isLoading}
+              className="w-full"
             >
               {t('login.loginButton')}
-            </button>
+            </PrimaryButton>
           </form>
 
           <div className="flex justify-end">

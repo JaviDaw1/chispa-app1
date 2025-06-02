@@ -26,7 +26,8 @@
     "register": "Regístrate",
     "error": "Error en el inicio de sesión",
     "loading": "Iniciando sesión...",
-    "log_in": "Inicia sesión"
+    "log_in": "Inicia sesión",
+    "forgotPassword": "¿Olvidaste tu contraseña?"
   },
   "signup": {
     "title": "Regístrate",
@@ -50,6 +51,13 @@
     "passwordLabel": "Contraseña",
     "passwordPlaceholder": "Tu contraseña",
     "account": "¿Ya tienes cuenta?"
+  },
+  "forgotPassword": {
+    "title": "Recuperar contraseña",
+    "emailPlaceholder": "Introduce tu correo electrónico",
+    "sendButton": "Enviar",
+    "emailSent": "Correo enviado con instrucciones para recuperar tu contraseña.",
+    "error": "Error al enviar el correo. Inténtalo de nuevo."
   },
   "profile": {
     "title": "Perfil",
@@ -95,11 +103,11 @@
       "friendship": "Amistad",
       "casual": "Casual",
       "serious": "Seria",
-      "longTerm": "A largo plazo",
+      "long_term": "A largo plazo",
       "open": "Abierta",
       "hookup": "Encuentros casuales",
       "marriage": "Matrimonio",
-      "notSure": "No estoy seguro"
+      "not_sure": "No estoy seguro"
     }
   },
 

@@ -25,7 +25,8 @@
     "register": "Sign up",
     "error": "Login failed",
     "loading": "Logging in...",
-    "log_in": "Log in"
+    "log_in": "Log in",
+    "forgotPassword": "Forgot your password?"
   },
   "signup": {
     "title": "Sign Up",
@@ -49,6 +50,13 @@
     "passwordLabel": "Password",
     "passwordPlaceholder": "Your password",
     "account": "Already have an account?"
+  },
+  "forgotPassword": {
+    "title": "Forgot Password",
+    "emailPlaceholder": "Enter your email",
+    "sendButton": "Send",
+    "emailSent": "Email sent with instructions to reset your password.",
+    "error": "Error sending email. Please try again."
   },
   "profile": {
     "title": "Profile",

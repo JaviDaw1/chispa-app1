@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import Modal from "../components/Modal";
 import Header from "../components/Header";
 import Alert from "../components/Alert";
-import Logo from "../../public/images/logo.jpg";
 import LoadingScreen from "../components/LoadingScreen";
 import { useTranslation } from "react-i18next";
 import AuthService from "../services/AuthService";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+import PrimaryButton from "../components/PrimaryButton";
+import { Eye, EyeOff } from 'lucide-react';
 
 const ChangePassword = () => {
   const { t } = useTranslation();
@@ -15,6 +16,8 @@ const ChangePassword = () => {
   const authService = new AuthService();
   const user = authService.getUserInfo();
 
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [showModal, setShowModal] = useState(false);
@@ -22,7 +25,6 @@ const ChangePassword = () => {
   const [attemptsLeft, setAttemptsLeft] = useState(3);
   const [cooldown, setCooldown] = useState(0);
   const [loading, setLoading] = useState(false);
-
 
   const ATTEMPT_LIMIT = 3;
   const COOLDOWN_MINUTES = 5;
@@ -57,14 +59,13 @@ const ChangePassword = () => {
 
   const handleSubmit = async () => {
     setLoading(true);
-    const MIN_LOADING_TIME = 2000; // 2 segundos
+    const MIN_LOADING_TIME = 2000;
     const startTime = Date.now();
 
     try {
       await authService.changePassword({ userId: user.id, currentPassword, newPassword });
       localStorage.setItem("attemptsLeft", ATTEMPT_LIMIT.toString());
       setError("");
-      // Asegurar que la pantalla de carga dure al menos 2 segundos
       const elapsed = Date.now() - startTime;
       if (elapsed < MIN_LOADING_TIME) {
         await new Promise((res) => setTimeout(res, MIN_LOADING_TIME - elapsed));
@@ -89,13 +90,16 @@ const ChangePassword = () => {
 
       setError(`${userFriendlyError} (${t("changePassword.attempts_left", { count: newAttempts })})`);
 
+      // Aquí limpias los inputs:
+      setCurrentPassword("");
+      setNewPassword("");
+
       if (newAttempts <= 0) {
         const cooldownUntil = Date.now() + COOLDOWN_MINUTES * 60 * 1000;
         localStorage.setItem("cooldownUntil", cooldownUntil.toString());
         setCooldown(COOLDOWN_MINUTES * 60);
       }
       setShowModal(false);
-      // También esperar el mínimo de 2 segundos en error
       const elapsed = Date.now() - startTime;
       if (elapsed < MIN_LOADING_TIME) {
         await new Promise((res) => setTimeout(res, MIN_LOADING_TIME - elapsed));
@@ -118,7 +122,7 @@ const ChangePassword = () => {
       size="lg"
       message={t('login.loading')}
       showLogo={true}
-      logoSrc={Logo}
+      logoSrc="/images/logo.jpg"
     />;
   }
 
@@ -152,28 +156,50 @@ const ChangePassword = () => {
             </p>
           ) : (
             <div className="space-y-4">
-              <input
-                type="password"
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 dark:bg-gray-700 dark:text-gray-100"
-                placeholder={t("changePassword.current")}
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
-              />
-              <input
-                type="password"
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 dark:bg-gray-700 dark:text-gray-100"
-                placeholder={t("changePassword.new")}
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-              />
+              <div className="relative">
+                <input
+                  type={showCurrentPassword ? "text" : "password"}
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 dark:bg-gray-700 dark:text-gray-100 pr-10"
+                  placeholder={t("changePassword.current")}
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400"
+                  aria-label={showCurrentPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                >
+                  {showCurrentPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
 
-              <button
-                className="flex w-full justify-center rounded-xl bg-gradient-to-r from-orange-600 to-amber-600 px-4 py-3 text-lg font-semibold text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:from-orange-500 hover:to-amber-500 transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
+              <div className="relative">
+                <input
+                  type={showNewPassword ? "text" : "password"}
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 dark:bg-gray-700 dark:text-gray-100 pr-10"
+                  placeholder={t("changePassword.new")}
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowNewPassword(!showNewPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400"
+                  aria-label={showNewPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                >
+                  {showNewPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
+
+              <PrimaryButton
+                type="button"
+                disabled={cooldown > 0 || loading || attemptsLeft <= 0}
+                isLoading={loading}
                 onClick={() => setShowModal(true)}
-                disabled={attemptsLeft <= 0}
               >
                 {t("changePassword.submit")}
-              </button>
+              </PrimaryButton>
             </div>
           )}
         </div>

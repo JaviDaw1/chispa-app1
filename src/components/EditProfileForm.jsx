@@ -1,4 +1,5 @@
-import React from "react";
+// This component is a EditProfileForm that allows users to edit or complete their profile information.
+import PrimaryButton from "./PrimaryButton";
 
 export default function EditProfileForm({
   formData,
@@ -169,13 +170,13 @@ export default function EditProfileForm({
 
       {/* Botones */}
       <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <button
+        <PrimaryButton
           type="submit"
+          className="w-full py-2 px-4 rounded-md bg-orange-600 hover:bg-orange-700 text-white font-medium flex items-center justify-center transition duration-200 ease-in-out"
           disabled={loading}
-          className={`w-full py-2 px-4 rounded-xl bg-gradient-to-r from-orange-600 to-amber-600 text-lg font-semibold text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:from-orange-500 hover:to-amber-500 transform hover:-translate-y-0.5`}
         >
-          {loading ? t("profile.saving") : t("profile.saveProfile")}
-        </button>
+          {loading ? t("common.saving") : t("profile.saveProfile")}
+        </PrimaryButton>
         <button
           type="button"
           onClick={onCancel}

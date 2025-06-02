@@ -1,16 +1,18 @@
+// This component displays the chat card for a user match, showing their profile picture, name, and last message. 
+// It also handles loading states and errors gracefully.
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProfileService from '../services/ProfileService';
 
-const ChatsCard = ({ match, currentUserId }) => {
+export default function ChatsCard({ match, currentUserId }) {
   const [otherUserProfile, setOtherUserProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const profileService = new ProfileService();
 
   const otherUserId = match.user1.id === currentUserId ? match.user2.id : match.user1.id;
 
   useEffect(() => {
+    const profileService = new ProfileService();
     const fetchData = async () => {
       try {
         const profileResponse = await profileService.getByUserId(otherUserId);
@@ -69,5 +71,3 @@ const ChatsCard = ({ match, currentUserId }) => {
     </div>
   );
 };
-
-export default ChatsCard;

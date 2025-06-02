@@ -4,10 +4,9 @@ import { useTranslation } from 'react-i18next';
 import AuthService from '../services/AuthService';
 import Divider from '../components/Divider';
 import Header from '../components/Header';
-import LanguageSelector from '../components/LanguageSelector';
-import ThemeSwitcher from '../components/ThemeSwitcher';
-import Logo from '../../public/images/logo.jpg';
+import PrimaryButton from '../components/PrimaryButton';
 import { Eye, EyeOff, User, Mail, Lock, MapPin, Calendar, Heart, Smile } from 'lucide-react';
+import TopHeader from '../components/TopHeader';
 
 const authService = new AuthService();
 
@@ -88,6 +87,7 @@ export default function SignUp() {
     setIsSubmitting(true);
     try {
       await authService.signup(formData);
+      console.log(formData);
       navigate('/login');
     } catch (error) {
       console.error('Error:', error);
@@ -116,15 +116,7 @@ export default function SignUp() {
   return (
     <div className="min-h-screen">
       <Header />
-      <div className="lg:hidden fixed top-0 left-0 w-full bg-white dark:bg-gray-900 shadow z-40 py-2 px-4 flex items-center justify-center">
-        <img src={Logo} alt={t('header.title')} className="h-14 flex-shrink-0 rounded-xl" />
-        {!localStorage.getItem("token") && !localStorage.getItem("usuario") && (
-          <div className="absolute right-4 top-1/2 transform -translate-y-1/2 flex items-center gap-2">
-            <ThemeSwitcher />
-            <LanguageSelector showText={false} />
-          </div>
-        )}
-      </div>
+      <TopHeader showSwitcher={true} logoSrc="/images/logo.jpg" />
 
       <div className="flex-grow flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-24 pb-20">
         <div className="w-full max-w-4xl mx-auto bg-white dark:bg-gray-900 rounded-2xl shadow-xl p-6 sm:p-10 md:p-12">
@@ -139,7 +131,7 @@ export default function SignUp() {
 
           <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[
-              ['firstname', 'text', <User />, t('signup.firstname')],
+              ['firstname', 'text', <User />, t('signup.firstname'),],
               ['lastname', 'text', <User />, t('signup.lastname')],
               ['username', 'text', <User />, t('signup.username')],
               ['email', 'email', <Mail />, t('signup.emailLabel')],
@@ -159,6 +151,7 @@ export default function SignUp() {
                     type={type}
                     value={formData[name]}
                     onChange={handleChange}
+                    placeholder={label}
                     className={`block w-full ${icon ? 'pl-10' : 'pl-3'} rounded-xl border-0 py-3 text-gray-900 dark:text-white bg-white dark:bg-gray-700 shadow-sm ring-1 ring-inset placeholder:text-gray-400 dark:placeholder:text-gray-300 focus:ring-2 focus:outline-none focus:ring-orange-500 pr-2 sm:text-sm sm:leading-6 ${errors[name] ? 'ring-red-500' : 'ring-gray-300 dark:ring-gray-600'}`}
                   />
                   {name === 'password' && (
@@ -226,22 +219,9 @@ export default function SignUp() {
               {errors.bio && <p className="mt-1 text-sm text-red-600">{errors.bio}</p>}
             </div>
 
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className={`md:col-span-2 flex w-full justify-center rounded-xl bg-gradient-to-r from-orange-600 to-amber-600 px-4 py-3 text-lg font-semibold text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:from-orange-500 hover:to-amber-500 transform hover:-translate-y-0.5 ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}            >
-              {isSubmitting ? (
-                <span className="flex items-center">
-                  <svg className="ease-in-out animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  {t('common.loading')}
-                </span>
-              ) : (
-                t('signup.submit')
-              )}
-            </button>
+            <PrimaryButton type="submit" isLoading={isSubmitting} className="md:col-span-2" onClick={handleSubmit}>
+              {t('signup.submit')}
+            </PrimaryButton>
           </form>
 
           <div className="mt-6 text-center">

@@ -36,7 +36,7 @@ const Match = () => {
         const response = await matchService.getMatchesByUser(currentUser.id);
         setMatches(response.data);
       } catch (err) {
-        setError('errors.load_profiles'); // guardamos clave, la traducimos abajo
+        setError('errors.load_profiles');
         console.error(err);
       } finally {
         setLoading(false);
@@ -89,7 +89,7 @@ const Match = () => {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-6">
             {matches.map(match => (
               <MatchCard 
                 key={match.id} 

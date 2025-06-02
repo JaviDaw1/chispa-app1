@@ -1,11 +1,13 @@
+// This components is a LanguageSelector that allows users to switch between different languages in the application.
 import { useState, useRef, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 import { useTranslation } from 'react-i18next';
 
+// This are the language options available in the selector.
 const languageOptions = [
-  { code: 'es', name: 'Español', flag: '../../public/images/flags/es.png' },
-  { code: 'en', name: 'English', flag: '../../public/images/flags/en.png' },
-  { code: 'fr', name: 'Français', flag: '../../public/images/flags/fr.png' }
+  { code: 'es', name: 'Español', flag: '/images/flags/es.png' },
+  { code: 'en', name: 'English', flag: '/images/flags/en.png' },
+  { code: 'fr', name: 'Français', flag: '/images/flags/fr.png' }
 ];
 
 const LanguageSelector = ({ showText = true, showTextInDropdown = true }) => {

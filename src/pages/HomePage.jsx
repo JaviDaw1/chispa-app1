@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import LikesService from '../services/LikesService';
 import BlocksService from '../services/BlocksService';
 import Modal from '../components/Modal';
-import Logo from "../../public/images/logo.jpg";
+import TopHeader from '../components/TopHeader';
 import { Heart, ArrowRight, Ban } from 'lucide-react';
 // eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from 'framer-motion';
@@ -239,13 +239,7 @@ export default function HomePage() {
   return (
     <div className="flex flex-col min-h-screen lg:pt-16">
       <Header />
-      <div className="lg:hidden fixed top-0 left-0 w-full flex justify-center bg-white dark:bg-gray-900 shadow z-40 py-2">
-        <img
-          src={Logo}
-          alt={t('header.title')}
-          className="h-14 rounded-xl"
-        />
-      </div>
+      <TopHeader showSwitcher={true} logoSrc='/images/logo.jpg' />
       <div className="flex flex-1 flex-col items-center justify-center p-4 w-full">
         <div
           {...handlers}

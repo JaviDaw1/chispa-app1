@@ -61,7 +61,6 @@ export default class AuthService {
         preferredRelationship: data.preferredRelationship,
         user: { id: newUser.id },
       };
-
       await profileService.create(customProfile);
       return newUser;
     } catch (error) {

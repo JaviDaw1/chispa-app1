@@ -3,13 +3,10 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import BlocksService from "../services/BlocksService";
 import AuthService from "../services/AuthService";
-import LikesService from '../services/LikesService';
 import { User, ArrowLeft } from "lucide-react";
 import Header from "../components/Header";
 import Modal from "../components/Modal";
 import Notification from '../components/Notification';
-
-const likesService = new LikesService();
 
 export default function BlockedUsers() {
   const { t } = useTranslation();
@@ -62,11 +59,7 @@ export default function BlockedUsers() {
 
   const confirmUnblock = async () => {
     try {
-      await new BlocksService().delete(userToUnblock.blockId);
-
-      const currentUser = new AuthService().getUserInfo();
-      await likesService.deleteLikeByLikerIdAndLikedId(currentUser.id, userToUnblock.id);
-      await likesService.deleteLikeByLikerIdAndLikedId(userToUnblock.id, currentUser.id);
+      await new BlocksService().unblock(userToUnblock.blockId);
 
       setBlockedUsers((prev) =>
         prev.filter((user) => user.blockId !== userToUnblock.blockId)

@@ -34,7 +34,12 @@ const Match = () => {
 
       try {
         const response = await matchService.getMatchesByUser(currentUser.id);
-        setMatches(response.data);
+
+        const visibleMatches = response.data.filter(
+          match => match.matchState !== 'BLOCKED'
+        );
+
+        setMatches(visibleMatches);
       } catch (err) {
         setError('errors.load_profiles');
         console.error(err);
@@ -91,10 +96,10 @@ const Match = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-6">
             {matches.map(match => (
-              <MatchCard 
-                key={match.id} 
-                match={match} 
-                currentUserId={currentUser.id} 
+              <MatchCard
+                key={match.id}
+                match={match}
+                currentUserId={currentUser.id}
               />
             ))}
           </div>

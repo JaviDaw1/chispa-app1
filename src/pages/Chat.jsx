@@ -153,8 +153,6 @@ const Chat = () => {
       };
 
       await blockService.create(blockData);
-      await messagesService.deleteMessagesByMatchId(matchId);
-      await matchService.deleteMatch(matchId);
 
       setIsModalOpen(false);
       navigate('/messages');

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next'; // ← Importación añadida
+import { useTranslation } from 'react-i18next';
 import ChatsCard from '../components/ChatsCard';
 import MatchService from '../services/MatchService';
 import AuthService from '../services/AuthService';
@@ -14,7 +14,7 @@ const ChatsPage = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState(null);
-  const { t } = useTranslation(); // ← Hook para traducciones
+  const { t } = useTranslation();
 
   useEffect(() => {
     const user = authService.getUserInfo();
@@ -44,6 +44,8 @@ const ChatsPage = () => {
     }
   }, [currentUser]);
 
+  const filteredMatches = matches.filter((match) => match.matchState !== 'BLOCKED');
+
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
@@ -54,11 +56,11 @@ const ChatsPage = () => {
 
         {loading ? (
           <p className="text-gray-500 text-lg">{t('messages.loading')}</p>
-        ) : matches.length === 0 ? (
+        ) : filteredMatches.length === 0 ? (
           <p className="text-gray-500 dark:text-gray-300 text-lg">{t('messages.no_chats')}</p>
         ) : (
           <div className="w-full max-w-4xl grid grid-cols-1 gap-6 overflow-y-auto max-h-[70vh] pb-2">
-            {matches.map((match) => (
+            {filteredMatches.map((match) => (
               <ChatsCard
                 key={match.id}
                 match={match}

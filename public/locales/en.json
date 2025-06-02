@@ -104,12 +104,12 @@
     }
   },
   "matches": {
-    "title": "Your Matches",
-    "no_matches": "You don't have any matches yet. Keep exploring!",
+    "title": "Your Chispazos",
+    "no_matches": "You don't have any chispazos yet. Keep exploring!",
     "discover": "Discover People",
     "view_profile": "View Profile",
     "chat": "Chat",
-    "match_alert": "It's a match with {{name}}!",
+    "match_alert": "It's a chispazo with {{name}}!",
     "like_alert": "You liked {{name}}",
     "no_profiles": "No profiles available",
     "profile_not_available": "Profile not available",

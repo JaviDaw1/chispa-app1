@@ -112,12 +112,12 @@
   },
 
   "matches": {
-   "title": "Tus Matches",
+   "title": "Tus Chispazos",
     "no_matches": "Aún no tienes matches. ¡Sigue explorando!",
     "discover": "Descubrir personas",
     "view_profile": "Ver perfil",
     "chat": "Chatear",
-    "match_alert": "¡Es un match con {{name}}!",
+    "match_alert": "¡Es un chispazo con {{name}}!",
     "like_alert": "Has dado me gusta a {{name}}",
     "no_profiles": "No hay perfiles disponibles",
     "profile_not_available": "Perfil no disponible",

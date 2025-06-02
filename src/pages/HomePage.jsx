@@ -141,7 +141,6 @@ export default function HomePage() {
       const likeData = {
         liker: { id: userInfo.id },
         liked: { id: likedProfile.id },
-        state: "PENDING"
       };
 
       const response = await likesService.postLike(likeData);

@@ -1,8 +1,8 @@
-import api from './api';
+import api from "./api";
 
 export default class BlocksService {
   constructor() {
-    this.url = 'blocks'; // Asegúrate de que la URL corresponde con la de la API
+    this.url = "blocks"; // Asegúrate de que la URL corresponde con la de la API
     this.cache = new Map(); // Cache simple para almacenamiento
   }
 
@@ -12,7 +12,7 @@ export default class BlocksService {
       const response = await api.get(this.url);
       return response;
     } catch (error) {
-      console.error('Error fetching blocks:', error);
+      console.error("Error fetching blocks:", error);
       throw error;
     }
   }
@@ -60,7 +60,10 @@ export default class BlocksService {
       this.cache.set(`reported-${reportedId}`, response);
       return response;
     } catch (error) {
-      console.error(`Error fetching blocks for reported user ${reportedId}:`, error);
+      console.error(
+        `Error fetching blocks for reported user ${reportedId}:`,
+        error
+      );
       throw error;
     }
   }
@@ -69,10 +72,22 @@ export default class BlocksService {
   async create(block) {
     try {
       const response = await api.post(this.url, block);
-      this.cache.clear(); // Limpiar caché después de la modificación
+      this.cache.clear();
       return response;
     } catch (error) {
-      console.error('Error creating block:', error);
+      console.error("Error creating block:", error);
+      throw error;
+    }
+  }
+
+  // Desbloquear usuario
+  async unblock(id) {
+    try {
+      const response = await api.put(`${this.url}/unblock/${id}`);
+      this.clearCache();
+      return response;
+    } catch (error) {
+      console.error(`Error unblocking user with ID ${id}:`, error);
       throw error;
     }
   }
@@ -104,7 +119,9 @@ export default class BlocksService {
   // Contar bloqueos de un usuario que ha bloqueado
   async countBlocksByReporterId(reporterId) {
     try {
-      const response = await api.get(`${this.url}/countBlocks/reporter/${reporterId}`);
+      const response = await api.get(
+        `${this.url}/countBlocks/reporter/${reporterId}`
+      );
       return response;
     } catch (error) {
       console.error(`Error counting blocks for reporter ${reporterId}:`, error);
@@ -115,10 +132,15 @@ export default class BlocksService {
   // Contar bloqueos de un usuario bloqueado
   async countBlocksByReportedId(reportedId) {
     try {
-      const response = await api.get(`${this.url}/countBlocks/reported/${reportedId}`);
+      const response = await api.get(
+        `${this.url}/countBlocks/reported/${reportedId}`
+      );
       return response;
     } catch (error) {
-      console.error(`Error counting blocks for reported user ${reportedId}:`, error);
+      console.error(
+        `Error counting blocks for reported user ${reportedId}:`,
+        error
+      );
       throw error;
     }
   }

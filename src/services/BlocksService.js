@@ -2,11 +2,11 @@ import api from "./api";
 
 export default class BlocksService {
   constructor() {
-    this.url = "blocks"; // Asegúrate de que la URL corresponde con la de la API
-    this.cache = new Map(); // Cache simple para almacenamiento
+    this.url = "blocks";
+    this.cache = new Map();
   }
 
-  // Obtener todos los bloqueos
+  // Obtain all blocks
   async getAll() {
     try {
       const response = await api.get(this.url);
@@ -17,7 +17,7 @@ export default class BlocksService {
     }
   }
 
-  // Obtener bloqueo por ID
+  // Obtain a block by ID
   async getById(id) {
     if (this.cache.has(`id-${id}`)) {
       return this.cache.get(`id-${id}`);
@@ -33,7 +33,7 @@ export default class BlocksService {
     }
   }
 
-  // Obtener bloqueos por ReporterId
+  // Obtain blocks by ReporterId
   async getByReporterId(reporterId) {
     if (this.cache.has(`reporter/${reporterId}`)) {
       return this.cache.get(`reporter-${reporterId}`);
@@ -49,7 +49,7 @@ export default class BlocksService {
     }
   }
 
-  // Obtener bloqueos por ReportedId
+  // Obtain blocks by ReportedId
   async getByReportedId(reportedId) {
     if (this.cache.has(`reported/${reportedId}`)) {
       return this.cache.get(`reported-${reportedId}`);
@@ -68,7 +68,7 @@ export default class BlocksService {
     }
   }
 
-  // Crear un bloqueo
+  // Create a new block
   async create(block) {
     try {
       const response = await api.post(this.url, block);
@@ -80,7 +80,7 @@ export default class BlocksService {
     }
   }
 
-  // Desbloquear usuario
+  // Desblock a user
   async unblock(id) {
     try {
       const response = await api.put(`${this.url}/unblock/${id}`);
@@ -92,7 +92,7 @@ export default class BlocksService {
     }
   }
 
-  // Actualizar un bloqueo
+  // Update a block
   async update(id, block) {
     try {
       const response = await api.put(`${this.url}/${id}`, block);
@@ -104,7 +104,7 @@ export default class BlocksService {
     }
   }
 
-  // Eliminar un bloqueo
+  // Delete a block
   async delete(id) {
     try {
       const response = await api.delete(`${this.url}/${id}`);
@@ -116,7 +116,7 @@ export default class BlocksService {
     }
   }
 
-  // Contar bloqueos de un usuario que ha bloqueado
+  // Count blocks by reporter ID
   async countBlocksByReporterId(reporterId) {
     try {
       const response = await api.get(
@@ -129,7 +129,7 @@ export default class BlocksService {
     }
   }
 
-  // Contar bloqueos de un usuario bloqueado
+  // Count blocks by reported ID
   async countBlocksByReportedId(reportedId) {
     try {
       const response = await api.get(
@@ -145,7 +145,7 @@ export default class BlocksService {
     }
   }
 
-  // Limpiar caché
+  // Clear the cache
   clearCache() {
     this.cache.clear();
   }

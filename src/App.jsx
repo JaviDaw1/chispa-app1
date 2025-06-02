@@ -1,3 +1,4 @@
+// The main entry point for the application, setting up routes and handling authentication.
 import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';

@@ -1,5 +1,3 @@
-// This component display the loading screen with a spinner, a message, and an optional logo. 
-// It is designed to be used when the application is loading data or performing background tasks.
 const LoadingScreen = ({
   message = "Cargando...",
   size = 'lg',

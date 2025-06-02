@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Modal from "../components/Modal";
 import Header from "../components/Header";
 import Alert from "../components/Alert";

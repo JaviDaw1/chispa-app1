@@ -25,10 +25,8 @@ api.interceptors.request.use(
     return config;
   },
   (error) => {
-    // Manejar específicamente errores de conexión WebSocket
     if (error.message.includes("WebSocket")) {
       console.error("Error de conexión WebSocket:", error);
-      // Puedes implementar lógica de reconexión aquí si lo deseas
     }
     return Promise.reject(error);
   }

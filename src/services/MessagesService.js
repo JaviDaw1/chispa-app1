@@ -15,7 +15,7 @@ export default class MessagesService {
       return; 
     }
 
-    const socket = new SockJS('http://localhost:8080/ws');
+    const socket = new SockJS('ws://localhost:8080/ws');
     this.stompClient = over(socket);
     
     this.stompClient.connect({}, () => {

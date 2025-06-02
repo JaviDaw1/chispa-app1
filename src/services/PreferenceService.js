@@ -5,6 +5,7 @@ export default class PreferenceService {
     this.url = '/preferences';
   }
 
+  // Method to obtain all preferences
   async getAll() {
     try {
       const response = await api.get(this.url);
@@ -15,6 +16,7 @@ export default class PreferenceService {
     }
   }
 
+  // Method to obtain a preference by ID
   async getById(id) {
     try {
       const response = await api.get(`${this.url}/${id}`);
@@ -25,6 +27,7 @@ export default class PreferenceService {
     }
   }
 
+  // Method to obtain a preference by user ID
   async getByUserId(userId) {
     try {
       const response = await api.get(`${this.url}/user/${userId}`);
@@ -35,6 +38,7 @@ export default class PreferenceService {
     }
   }
 
+  // Method to create a new preference 
   async create(preference) {
     try {
       const response = await api.post(this.url, preference);
@@ -45,6 +49,7 @@ export default class PreferenceService {
     }
   }
 
+  // Method to update an existing preference
   async update(id, preference) {
     try {
       const response = await api.put(`${this.url}/${id}`, preference);
@@ -55,6 +60,7 @@ export default class PreferenceService {
     }
   }
 
+  // Method to delete a preference by ID
   async delete(id) {
     try {
       const response = await api.delete(`${this.url}/${id}`);

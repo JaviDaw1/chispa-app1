@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default function PrimaryButton({
   type = 'submit',
   disabled = false,
@@ -13,9 +11,8 @@ export default function PrimaryButton({
       type={type}
       disabled={disabled || isLoading}
       onClick={onClick}
-      className={`flex w-full justify-center rounded-xl bg-gradient-to-r from-orange-600 to-amber-600 px-4 py-3 text-lg font-semibold text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:from-orange-500 hover:to-amber-500 transform hover:-translate-y-0.5 ${
-        (disabled || isLoading) ? 'opacity-70 cursor-not-allowed' : ''
-      } ${className}`}
+      className={`flex w-full justify-center rounded-xl bg-gradient-to-r from-orange-600 to-amber-600 px-4 py-3 text-lg font-semibold text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:from-orange-500 hover:to-amber-500 transform hover:-translate-y-0.5 ${(disabled || isLoading) ? 'opacity-70 cursor-not-allowed' : ''
+        } ${className}`}
     >
       {isLoading ? (
         <span className="flex items-center">

@@ -6,6 +6,7 @@ export default class ProfileService {
     this.cache = new Map(); // Simple cache implementation
   }
 
+  // Method to obtain all profiles
   async getAll() {
     try {
       const response = await api.get(this.url);
@@ -16,6 +17,7 @@ export default class ProfileService {
     }
   }
 
+  // Method to obtain a profile by ID
   async getById(id) {
     if (this.cache.has(`id-${id}`)) {
       return this.cache.get(`id-${id}`);
@@ -31,6 +33,7 @@ export default class ProfileService {
     }
   }
 
+  // Method to obtain a profile by user ID
   async getByUserId(userId) {
     if (this.cache.has(`user-${userId}`)) {
       return this.cache.get(`user-${userId}`);
@@ -46,6 +49,7 @@ export default class ProfileService {
     }
   }
 
+  // Method to create a new profile
   async create(profile) {
     try {
       const response = await api.post(this.url, profile);
@@ -57,6 +61,7 @@ export default class ProfileService {
     }
   }
 
+  // Method to update an existing profile
   async update(id, profile) {
     try {
       const response = await api.put(`${this.url}/${id}`, profile);
@@ -68,6 +73,7 @@ export default class ProfileService {
     }
   }
 
+  // Mehtod to delete a profile by ID
   async delete(id) {
     try {
       const response = await api.delete(`${this.url}/${id}`);
@@ -79,6 +85,7 @@ export default class ProfileService {
     }
   }
 
+  // Method to clear the cache
   clearCache() {
     this.cache.clear();
   }

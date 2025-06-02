@@ -1,5 +1,3 @@
-// This component displays the chat card for a user match, showing their profile picture, name, and last message. 
-// It also handles loading states and errors gracefully.
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProfileService from '../services/ProfileService';

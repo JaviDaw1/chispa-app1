@@ -4,8 +4,6 @@ import { useTranslation } from 'react-i18next';
 import Header from '../components/Header';
 import AuthService from '../services/AuthService';
 import Divider from '../components/Divider';
-import LanguageSelector from '../components/LanguageSelector';
-import ThemeSwitcher from '../components/ThemeSwitcher';
 import PrimaryButton from '../components/PrimaryButton';
 import Alert from '../components/Alert';
 import Logo from '../../public/images/logo.jpg';

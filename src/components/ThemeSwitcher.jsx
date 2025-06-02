@@ -1,7 +1,6 @@
-// src/components/ThemeSwitcher.jsx
 import { useContext } from 'react'
 import { ThemeContext } from '../context/ThemeContext'
-import { Sun, Moon } from 'lucide-react' // Puedes usar cualquier ícono
+import { Sun, Moon } from 'lucide-react'
 
 const ThemeSwitcher = () => {
   const { theme, toggleTheme } = useContext(ThemeContext)

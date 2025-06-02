@@ -9,6 +9,7 @@ export default class AuthService {
     this.onlineStatusInterval = null;
   }
 
+  // Login method to authenticate user
   async login(email, password) {
     if (!email || !password) throw new Error("Correo y contraseña requeridos");
 
@@ -34,6 +35,7 @@ export default class AuthService {
     }
   }
 
+  // Signup method to register a new user
   async signup(data) {
     try {
       const response = await api.post(`${this.url}/signup`, {
@@ -48,6 +50,7 @@ export default class AuthService {
       const newUser = response.data;
       await this.login(data.email, data.password);
 
+      // Create a custom profile for the new user
       const customProfile = {
         name: data.firstname,
         lastName: data.lastname,
@@ -74,6 +77,7 @@ export default class AuthService {
     }
   }
 
+  // Logout method to clear user session
   async logout() {
     try {
       await this.setOnlineStatus(false);
@@ -86,10 +90,12 @@ export default class AuthService {
     }
   }
 
+  // Check if user is authenticated retrieving token from localStorage
   getToken() {
     return localStorage.getItem("token");
   }
 
+  // Check if user is authenticated retrieving user in localStorage
   getUserInfo() {
     const user = localStorage.getItem("user");
     return user ? JSON.parse(user) : null;
@@ -115,6 +121,7 @@ export default class AuthService {
     }
   }
 
+  // Get the online status of the user
   setupOnlineStatusHandlers() {
     this.cleanupOnlineStatusHandlers();
 
@@ -126,6 +133,7 @@ export default class AuthService {
     window.addEventListener("beforeunload", this.beforeUnloadHandler);
   }
 
+  // Cleanup online status handlers to avoid memory leaks
   cleanupOnlineStatusHandlers() {
     if (this.onlineStatusInterval) {
       clearInterval(this.onlineStatusInterval);
@@ -138,6 +146,7 @@ export default class AuthService {
     }
   }
 
+  // Method to change user password
   async changePassword({ currentPassword, newPassword }) {
     try {
       const user = this.getUserInfo();
@@ -158,6 +167,7 @@ export default class AuthService {
     }
   }
 
+  // Method to reset password using email
   static async forgotPassword(email) {
     try {
       await api.post("/auth/forgot-password", { email });

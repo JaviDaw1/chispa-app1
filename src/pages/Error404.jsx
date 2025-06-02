@@ -1,4 +1,3 @@
-import React from 'react';
 import Divider from '../components/Divider';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';

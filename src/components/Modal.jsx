@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 /**
@@ -44,6 +44,9 @@ const Modal = ({
   reason = "",
   onReasonChange,
   placeholder = "",
+  hideDefaultButtons = false,
+  hideClose = false,
+  children,
 }) => {
   const { t } = useTranslation();
   const [internalReason, setInternalReason] = useState(reason);
@@ -63,8 +66,8 @@ const Modal = ({
     <div className="fixed inset-0 flex items-center justify-center z-50 overflow-auto bg-gray-800 bg-opacity-75 dark:bg-black dark:bg-opacity-70">
       <div className="absolute mx-4" />
       <div className="absolute bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-6 rounded-md shadow-md w-full max-w-2xl z-50">
-        <h2 className="text-xl font-bold mb-4">{title}</h2>
-        <p className="mb-4">{message}</p>
+        {title && <h2 className="text-xl font-bold mb-4">{title}</h2>}
+        <div>{children || message}</div>
 
         {showReasonInput && (
           <textarea
@@ -79,20 +82,31 @@ const Modal = ({
           />
         )}
 
-        <div className="flex justify-end space-x-4">
+        {!hideDefaultButtons && (
+          <div className="flex justify-end mt-6 gap-2">
+            <button
+              onClick={onClose}
+              className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300"
+            >
+              {cancelText || t("modal.cancel")}
+            </button>
+            <button
+              onClick={handleConfirm}
+              className="px-4 py-2 rounded bg-red-500 text-white hover:bg-red-600"
+            >
+              {confirmText || t("modal.confirm")}
+            </button>
+          </div>
+        )}
+        {!hideClose && (
           <button
+            className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
             onClick={onClose}
-            className="px-4 py-2 bg-gray-300 dark:bg-gray-700 dark:text-white rounded hover:bg-gray-400 dark:hover:bg-gray-600 transition-all duration-200"
+            aria-label="Cerrar"
           >
-            {cancelText || t("modal.cancel")}
+            ×
           </button>
-          <button
-            onClick={handleConfirm}
-            className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-all duration-200"
-          >
-            {confirmText || t("modal.confirm")}
-          </button>
-        </div>
+        )}
       </div>
     </div>
   );

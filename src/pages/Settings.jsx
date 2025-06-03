@@ -14,6 +14,7 @@ import {
 import Header from "../components/Header";
 import Modal from "../components/Modal";
 import SettingItem from "../components/SettingItem";
+import GuidedTutorial from "../components/GuidedTutorial";
 import AuthService from "../services/AuthService";
 import { useTranslation } from "react-i18next";
 
@@ -21,6 +22,8 @@ const authService = new AuthService();
 
 export default function Settings() {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  // eslint-disable-next-line no-unused-vars
+  const [showTutorial, setShowTutorial] = useState(false);
   const navigate = useNavigate();
   const { t } = useTranslation();
 
@@ -57,6 +60,10 @@ export default function Settings() {
       console.error("Error al cerrar sesión:", err);
       navigate("/", { replace: true });
     }
+  };
+
+  const handleCloseTutorial = () => {
+    setShowTutorial(false);
   };
 
   const settingItemClass = `
@@ -113,13 +120,7 @@ export default function Settings() {
               subtitle: t("settings.blocked_sub"),
               aria: "settings.blocked",
             },
-            {
-              to: "/settings/documentation",
-              icon: <Book className="text-blue-600 w-6 h-6" />,
-              title: t("settings.docs"),
-              subtitle: t("settings.docs_sub"),
-              aria: "settings.docs",
-            },
+
             {
               to: "/settings/support",
               icon: <HelpCircle className="text-green-600 w-6 h-6" />,
@@ -137,6 +138,24 @@ export default function Settings() {
               <SettingItem icon={icon} title={title} subtitle={subtitle} />
             </Link>
           ))}
+
+          {/* Tutorial Button */}
+          <div
+            className={settingItemClass + " cursor-pointer"}
+            onClick={() => setShowTutorial(true)}
+            role="button"
+            tabIndex={0}
+            aria-label={t("settings.toggleTheme")}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") setShowTutorial(true);
+            }}
+          >
+            <SettingItem
+              icon={<Book className="text-blue-600 w-6 h-6" />}
+              title={t("settings.tutorial")}
+              subtitle={t("settings.tutorial_sub")}
+            />
+          </div>
 
           {/* Tema oscuro/claro */}
           <div
@@ -194,6 +213,8 @@ export default function Settings() {
         cancelText={t("modal.cancel")}
         confirmColor="red"
       />
+
+      <GuidedTutorial show={showTutorial} onClose={handleCloseTutorial} />
     </div>
   );
 }

@@ -1,5 +1,5 @@
 // The main entry point for the application, setting up routes and handling authentication.
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import HomePage from './pages/HomePage';
@@ -17,6 +17,7 @@ import AuthService from './services/AuthService';
 import Language from './pages/Language';
 import ChangePassword from './pages/ChangePassword';
 import ForgotPassword from './pages/ForgotPassword';
+import GuidedTutorial from './components/GuidedTutorial';
 
 const authService = new AuthService();
 
@@ -26,9 +27,12 @@ const authService = new AuthService();
  * @returns {JSX.Element} The main application component.
  */
 export default function App() {
+  const [showTutorial, setShowTutorial] = useState(false);
+
   useEffect(() => {
     const currentUser = authService.getUserInfo();
     if (currentUser) {
+      setShowTutorial(true); // Mostrar tutorial siempre que haya usuario autenticado
       authService.setupOnlineStatusHandlers();
     }
 
@@ -37,36 +41,43 @@ export default function App() {
     };
   }, []);
 
+  const handleCloseTutorial = () => {
+    setShowTutorial(false);
+  };
+
   return (
-    <Router>
-      <Routes>
-        {/* General Routes */}
-        <Route path="/" element={<HomePage />} />
-        <Route path="*" element={<Error404 />} />
+    <>
+      <Router>
+        <Routes>
+          {/* General Routes */}
+          <Route path="/" element={<HomePage />} />
+          <Route path="*" element={<Error404 />} />
 
-        {/* Authentication Routes */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
+          {/* Authentication Routes */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
 
-        {/* Profile Routes */}
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/profile/:id" element={<Profile />} />
-        <Route path="/create-profile" element={<CreateProfile />} />
+          {/* Profile Routes */}
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile/:id" element={<Profile />} />
+          <Route path="/create-profile" element={<CreateProfile />} />
 
-        {/* Application Routes */}
-        <Route path="/preference" element={<Preference />} />
-        <Route path="/matches" element={<Match />} />
-        <Route path="/chat/:matchId" element={<Chat />} />
-        <Route path="/messages" element={<ChatsPage />} />
+          {/* Application Routes */}
+          <Route path="/preference" element={<Preference />} />
+          <Route path="/matches" element={<Match />} />
+          <Route path="/chat/:matchId" element={<Chat />} />
+          <Route path="/messages" element={<ChatsPage />} />
 
-        {/* Settings Routes */}
-        <Route path="/settings" element={<Settings />} />
-        <Route path="/settings/blocked-users" element={<BlockedUsers />} />
-        <Route path="/settings/languages" element={<Language />} />
-        <Route path="/settings/change-password" element={<ChangePassword />} />
-      </Routes>
-    </Router>
+          {/* Settings Routes */}
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/settings/blocked-users" element={<BlockedUsers />} />
+          <Route path="/settings/languages" element={<Language />} />
+          <Route path="/settings/change-password" element={<ChangePassword />} />
+        </Routes>
+      </Router>
+      <GuidedTutorial show={showTutorial} onClose={handleCloseTutorial} />
+    </>
   );
 }
 

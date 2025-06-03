@@ -1,64 +1,65 @@
 import { useState, useEffect } from "react";
 import Modal from "./Modal";
 import PrimaryButton from "./PrimaryButton";
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
 
 const steps = [
-{
-  title: "¡Bienvenido a Chispa! 🔥",
-  content: (
-    <>
-      <div className="flex justify-center mb-4">
-        <motion.div
-          initial={{ y: -30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ type: "spring", stiffness: 100, damping: 10 }}
-          className="relative w-24 h-24 rounded-full shadow-xl bg-gradient-to-br from-orange-500 to-pink-500 flex items-center justify-center"
-        >
+  {
+    title: "¡Bienvenido a Chispa! 🔥",
+    content: (
+      <>
+        <div className="flex justify-center mb-4">
           <motion.div
-            animate={{ scale: [1, 1.2, 1] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            className="absolute w-28 h-28 rounded-full bg-orange-400 opacity-30"
-          />
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-10 w-10 text-white z-10"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
+            initial={{ y: -30, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ type: "spring", stiffness: 100, damping: 10 }}
+            className="relative w-24 h-24 rounded-full shadow-xl bg-gradient-to-br from-orange-500 to-pink-500 flex items-center justify-center mt-4 mb-4"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M13 10V3L4 14h7v7l9-11h-7z"
+            <motion.div
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="absolute w-28 h-28 rounded-full bg-orange-400 opacity-30"
             />
-          </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-10 w-10 text-white z-10"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M13 10V3L4 14h7v7l9-11h-7z"
+              />
+            </svg>
+          </motion.div>
+        </div>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+          className="text-center space-y-2"
+        >
+          <p className="text-lg font-semibold text-gray-800">
+            Esta es una app para conocer gente, chatear y encontrar pareja o amistad.
+          </p>
+          <p className="text-sm text-gray-600">
+            Te guiaremos en unos pasos rápidos para que aproveches al máximo <span className="font-bold text-orange-500">Chispa</span>.
+          </p>
         </motion.div>
-      </div>
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 0.2, duration: 0.5 }}
-        className="text-center space-y-2"
-      >
-        <p className="text-lg font-semibold text-gray-800">
-          Esta es una app para conocer gente, chatear y encontrar pareja o amistad.
-        </p>
-        <p className="text-sm text-gray-600">
-          Te guiaremos en unos pasos rápidos para que aproveches al máximo <span className="font-bold text-orange-500">Chispa</span>.
-        </p>
-      </motion.div>
-    </>
-  ),
-}
-,
+      </>
+    ),
+  }
+  ,
   {
     title: "Explora perfiles 👀",
     content: (
       <>
         <div className="flex justify-center mb-4">
-          <motion.div 
+          <motion.div
             initial={{ x: -20, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.5 }}
@@ -87,19 +88,19 @@ const steps = [
     title: "Haz match y chatea 💬",
     content: (
       <>
-        <div className="flex justify-center mb-4">
-          <motion.div 
+        <div className="flex justify-center mb-8">
+          <motion.div
             initial={{ scale: 0.9 }}
             animate={{ scale: 1 }}
             transition={{ duration: 0.3 }}
             className="relative"
           >
-            <div className="flex space-x-4">
+            <div className="flex space-x-4 mt-4">
               <div className="w-16 h-16 bg-gradient-to-r from-pink-500 to-red-500 rounded-full"></div>
               <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full"></div>
             </div>
-            <div className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center">
-              <motion.div 
+            <div className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center mt-4">
+              <motion.div
                 animate={{ scale: [1, 1.2, 1] }}
                 transition={{ repeat: Infinity, duration: 1.5 }}
                 className="w-24 h-24 rounded-full bg-yellow-400 bg-opacity-30 absolute"
@@ -117,7 +118,7 @@ const steps = [
     content: (
       <>
         <div className="flex justify-center mb-4">
-          <motion.div 
+          <motion.div
             initial={{ rotate: -5 }}
             animate={{ rotate: 0 }}
             transition={{ duration: 0.5 }}
@@ -150,7 +151,7 @@ const steps = [
     content: (
       <>
         <div className="flex justify-center mb-4">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
@@ -233,7 +234,7 @@ export default function GuidedTutorial({ show, onClose }) {
     >
       {/* Indicador de progreso */}
       <div className="w-full bg-gray-200 rounded-full h-2 mb-6">
-        <motion.div 
+        <motion.div
           initial={{ width: 0 }}
           animate={{ width: `${((step + 1) / steps.length) * 100}%` }}
           transition={{ duration: 0.5 }}

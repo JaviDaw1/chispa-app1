@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import AuthService from '../services/AuthService';
 import Divider from '../components/Divider';
 import Header from '../components/Header';
+import ImageUploader from '../components/ImageUploader';
 import PrimaryButton from '../components/PrimaryButton';
 import { Eye, EyeOff, User, Mail, Lock, MapPin, Calendar, Heart, Smile } from 'lucide-react';
 import TopHeader from '../components/TopHeader';
@@ -105,19 +106,12 @@ export default function SignUp() {
     setErrors((prev) => ({ ...prev, [name]: undefined }));
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setFormData((prev) => ({
-        ...prev,
-        profilePhoto: reader.result, // base64 string
-      }));
-      setErrors((prev) => ({ ...prev, profilePhoto: undefined }));
-    };
-    reader.readAsDataURL(file);
+  const handleImageUpload = (base64) => {
+    setFormData((prev) => ({
+      ...prev,
+      profilePhoto: base64,
+    }));
+    setErrors((prev) => ({ ...prev, profilePhoto: undefined }));
   };
 
   const toggleShowPassword = () => setShowPassword((prev) => !prev);
@@ -178,26 +172,12 @@ export default function SignUp() {
             ))}
 
             <div className="md:col-span-2">
-              <label htmlFor="profilePhotoUpload" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                {t('signup.profile_photo')}
-              </label>
-              <input
-                id="profilePhotoUpload"
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                className={`block w-full rounded-xl border-0 py-3 text-gray-900 dark:text-white bg-white dark:bg-gray-700 shadow-sm ring-1 ring-inset focus:ring-2 focus:ring-orange-500 sm:text-sm sm:leading-6 ${errors.profilePhoto ? 'ring-red-500' : 'ring-gray-300 dark:ring-gray-600'}`}
+              <ImageUploader
+                initialImage={formData.profilePhoto}
+                onImageUpload={handleImageUpload}
+                error={errors.profilePhoto}
+                translate={t}
               />
-              {errors.profilePhoto && <p className="mt-1 text-sm text-red-600">{errors.profilePhoto}</p>}
-
-              {/* Preview de la imagen subida */}
-              {formData.profilePhoto && (
-                <img
-                  src={formData.profilePhoto}
-                  alt="Preview"
-                  className="mt-4 max-h-40 rounded-lg object-contain"
-                />
-              )}
             </div>
 
             <div>

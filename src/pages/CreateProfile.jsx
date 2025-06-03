@@ -150,6 +150,9 @@ export default function CreateProfile() {
           isLoading={loading}
           translate={t}
           onCancel={() => navigate(-1)}
+          onImageUpload={(base64) =>
+            setFormData((prev) => ({ ...prev, profilePhoto: base64 }))
+          }
         />
       </div>
     </div>

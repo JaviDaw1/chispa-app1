@@ -1,4 +1,5 @@
 import PrimaryButton from "./PrimaryButton";
+import ImageUploader from "../components/ImageUploader";
 
 /**
  * EditProfileForm component
@@ -9,6 +10,7 @@ import PrimaryButton from "./PrimaryButton";
  * @param {boolean} props.isLoading - Indicates if the form is in a loading state.
  * @param {Function} props.translate - Translation function for internationalization.
  * @param {Function} props.onCancel - Function to handle cancel action.
+ * @param {Function} props.onImageUpload - Function to handle image upload.
  * @returns {JSX.Element} The rendered form component.
  * @example
  * <EditProfileForm
@@ -27,6 +29,7 @@ export default function EditProfileForm({
   isLoading,
   translate,
   onCancel,
+  onImageUpload
 }) {
   return (
     <form
@@ -167,23 +170,12 @@ export default function EditProfileForm({
 
         {/* Profile Photo (takes full width in lg) */}
         <div className="lg:col-span-2">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            {translate("signup.profile_photo")}
-          </label>
-          <input
-            type="text"
-            name="profilePhoto"
-            value={formData.profilePhoto}
-            onChange={onInputChange}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+          <ImageUploader
+            initialImage={formData.profilePhoto}
+            onImageUpload={onImageUpload}
+            error={formData.profilePhotoError}
+            translate={translate}
           />
-          {formData.profilePhoto && (
-            <img
-              src={formData.profilePhoto}
-              alt="Preview"
-              className="w-20 h-20 rounded-full object-cover mt-2 border border-gray-300 dark:border-gray-600"
-            />
-          )}
         </div>
       </div>
 

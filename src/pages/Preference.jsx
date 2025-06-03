@@ -38,7 +38,7 @@ const Preference = () => {
         return;
       }
 
-      const response = await preferenceService.getByUserId(user.id);
+      const response = await preferenceService.getPreferencesByUserId(user.id);
       if (response.data) {
         const prefs = {
           favoriteGender: response.data.favoriteGender || "",
@@ -99,10 +99,10 @@ const Preference = () => {
 
       let response;
       if (preferencias) {
-        const currentPrefs = await preferenceService.getByUserId(user.id);
-        response = await preferenceService.update(currentPrefs.data.id, preferencesToSend);
+        const currentPrefs = await preferenceService.getPreferencesByUserId(user.id);
+        response = await preferenceService.updatePreferences(currentPrefs.data.id, preferencesToSend);
       } else {
-        response = await preferenceService.create(preferencesToSend);
+        response = await preferenceService.postPreferences(preferencesToSend);
       }
 
       if (response.data) {

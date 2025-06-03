@@ -1,5 +1,14 @@
 import { AlertCircle } from "lucide-react";
 
+/**
+ * Alert component to display messages with different styles based on the type.
+ * @param {Object} props - Component properties.
+ * @param {string} props.message - The message to display in the alert.
+ * @param {string} [props.type="error"] - The type of alert, can be "error", "success", "warning", or "info".
+ * @returns {JSX.Element} The rendered alert component.
+ * @example
+ * <Alert message="This is an error message!" type="error" />
+ * */
 export default function Alert({ message, type = "error" }) {
   const baseStyles = "p-4 rounded flex items-start gap-3";
 

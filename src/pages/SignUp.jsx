@@ -87,7 +87,6 @@ export default function SignUp() {
     setIsSubmitting(true);
     try {
       await authService.signup(formData);
-      console.log(formData);
       navigate('/login');
     } catch (error) {
       console.error('Error:', error);

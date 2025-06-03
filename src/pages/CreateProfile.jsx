@@ -34,7 +34,7 @@ export default function CreateProfile() {
 
     const fetchExistingProfile = async () => {
       try {
-        const { data } = await profileService.getByUserId(user.id);
+        const { data } = await profileService.getProfileByUserId(user.id);
         if (data) {
           setFormData({
             name: data.name || user.firstname || "",
@@ -100,13 +100,13 @@ export default function CreateProfile() {
 
     try {
       setLoading(true);
-      const { data: existingProfile } = await profileService.getByUserId(user.id);
+      const { data: existingProfile } = await profileService.getProfileByUserId(user.id);
 
       if (existingProfile) {
-        await profileService.update(existingProfile.id, profileData);
+        await profileService.updateProfile(existingProfile.id, profileData);
         profileService.clearCache();
       } else {
-        await profileService.create(profileData);
+        await profileService.postProfile(profileData);
         profileService.clearCache();
       }
 
@@ -145,10 +145,10 @@ export default function CreateProfile() {
       <div className="flex-grow flex items-center justify-center px-4 sm:px-6 lg:px-8 lg:pt-20 pb-20 pt-4">
         <EditProfileForm
           formData={formData}
-          handleChange={handleChange}
-          handleSubmit={handleSubmit}
-          loading={loading}
-          t={t}
+          onInputChange={handleChange}
+          onSubmit={handleSubmit}
+          isLoading={loading}
+          translate={t}
           onCancel={() => navigate(-1)}
         />
       </div>

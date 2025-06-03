@@ -2,6 +2,16 @@ import { useTranslation } from 'react-i18next';
 import ThemeSwitcher from './ThemeSwitcher';
 import LanguageSelector from './LanguageSelector';
 
+/**
+ * TopHeader Component
+ * This component renders the top header for mobile devices, including a logo and optional theme and language switchers.
+ * @param {Object} props - Component properties.
+ * @param {boolean} [props.showSwitcher=true] - Whether to show the theme and language switchers.
+ * @param {string} [props.logoSrc="/images/logo.jpg"] - The source URL of the logo image to display.
+ * @returns {JSX.Element} The rendered top header component for mobile devices.
+ * @example
+ * <TopHeader />
+ */
 export default function TopHeader({ showSwitcher = true, logoSrc = '/images/logo.jpg' }) {
   const { t } = useTranslation();
 

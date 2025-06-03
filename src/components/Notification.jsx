@@ -9,6 +9,25 @@ import {
   Heart,
 } from 'lucide-react';
 
+/**
+ * Notification Component
+ * This component displays a notification message with different styles based on the type.
+ * @param {Object} props - Component properties.
+ * @param {boolean} props.show - Whether the notification is visible.
+ * @param {string} props.message - The message to display in the notification.
+ * @param {string} [props.type="info"] - The type of notification, can be "success", "error", "info", "like", or "match".
+ * @param {number} [props.duration=2000] - The duration in milliseconds for which the notification is visible before it automatically closes.
+ * @param {Function} [props.onClose] - Callback function to call when the notification is closed.
+ * @return {JSX.Element} The rendered notification component.
+ * @example
+ * <Notification
+ * show={true}
+ * message="This is a success message!"
+ * type="success"
+ * duration={3000}
+ * onClose={() => console.log("Notification closed")}
+ * />
+ */
 export default function Notification({
   show,
   message,

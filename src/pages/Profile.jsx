@@ -42,10 +42,10 @@ const Profile = () => {
       setLoading(true);
       let profileData;
       if (id) {
-        const { data } = await profileService.getById(id);
+        const { data } = await profileService.getProfileById(id);
         profileData = data;
       } else {
-        const { data } = await profileService.getByUserId(userInfo.id);
+        const { data } = await profileService.getProfileByUserId(userInfo.id);
         profileData = data;
       }
       setProfile(profileData);

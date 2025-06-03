@@ -1,9 +1,29 @@
+/**
+ * LoadingScreen Component
+ * This component displays a loading screen with a spinner and an optional logo.
+ * It can be customized with different messages, sizes, colors, and logo visibility.
+ * @param {Object} props - Component properties.
+ * @param {string} [props.message="Cargando..."] - The message to display on the loading screen.
+ * @param {string} [props.size='lg'] - The size of the text, can be 'sm', 'md', or 'lg'.
+ * @param {string} [props.color='gray'] - The color of the spinner and text, can be 'gray', 'orange', or 'amber'.
+ * @param {boolean} [props.showLogo=false] - Whether to show the logo on the loading screen.
+ * @param {string} [props.logoSrc=''] - The source URL of the logo image to display.
+ * @returns {JSX.Element} The rendered loading screen component.
+ * @example
+ * <LoadingScreen
+ *  message="Cargando datos..."
+ * size="md"
+ * color="orange"
+ * showLogo={true}
+ * logoSrc="/path/to/logo.png"
+ * />
+ */
 const LoadingScreen = ({
   message = "Cargando...",
   size = 'lg',
   color = 'gray',
   showLogo = false,
-  logoSrc = ''
+  logoSrc = '',
 }) => {
   const textClass = size === 'sm' ? 'text-sm' : size === 'md' ? 'text-base' : 'text-lg';
   const spinnerColorClass = {

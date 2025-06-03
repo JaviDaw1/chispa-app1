@@ -57,15 +57,17 @@ export default function HomePage() {
 
       try {
         const [profileRes, likesRes, blocksRes, prefRes] = await Promise.all([
-          profileService.getAll(),
+          profileService.getAllProfiles(),
           likesService.getLikesByLikerId(userInfo.id),
-          blocksService.getByReporterId(userInfo.id),
-          // Cambia aquí: atrapa el error de preferencias
-          preferenceService.getByUserId(userInfo.id).catch(err => {
-            if (err.response && err.response.status === 404) {
-              return { data: {} }; // Sin preferencias, objeto vacío
+          blocksService.getBlocksByReporterId(userInfo.id),
+          preferenceService.getPreferencesByUserId(userInfo.id).catch(err => {
+            if (err.response?.status === 404) {
+              // setShowPreferenceNotification(true);
+              return { data: {} };
+            } else {
+              console.error("Error fetching preferences:", err);
+              throw err;
             }
-            throw err; // Otros errores sí se lanzan
           })
         ]);
 
@@ -178,7 +180,7 @@ export default function HomePage() {
         blockReason: blockReason || t('blocked.default_reason')
       };
 
-      await blocksService.create(blockData);
+      await blocksService.postBlock(blockData);
 
       setBlockedProfile(profileToBlock);
       setShowBlockNotification(true);

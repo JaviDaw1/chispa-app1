@@ -1,6 +1,37 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
+/**
+ * Modal Component
+ * This component renders a modal dialog with a title, message, confirmation button, and optional reason input.
+ * @param {Object} props - Component properties.
+ * @param {boolean} props.show - Whether the modal is visible.
+ * @param {Function} props.onClose - Function to call when the modal is closed.
+ * @param {Function} props.onConfirm - Function to call when the confirmation button is clicked.
+ * @param {string} props.title - The title of the modal.
+ * @param {string} props.message - The message to display in the modal.
+ * @param {string} [props.confirmText] - Text for the confirmation button, defaults to "Confirm".
+ * @param {string} [props.cancelText] - Text for the cancel button, defaults to "Cancel".
+ * @param {boolean} [props.showReasonInput=false] - Whether to show a text area for the reason.
+ * @param {string} [props.reason=""] - Initial value for the reason input.
+ * @param {Function} [props.onReasonChange] - Function to call when the reason input changes.
+ * @param {string} [props.placeholder=""] - Placeholder text for the reason input.
+ * @returns {JSX.Element|null} The rendered modal component or null if not visible.
+ * @example
+ * <Modal
+ * show={true}
+ * onClose={() => console.log("Modal closed")}
+ * onConfirm={() => console.log("Confirmed")}
+ * title="Confirm Action"
+ * message="Are you sure you want to proceed?"
+ * confirmText="Yes, proceed"
+ * cancelText="No, cancel"
+ * showReasonInput={true}
+ * reason="Optional reason"
+ * onReasonChange={(value) => console.log("Reason changed:", value)}
+ * placeholder="Enter your reason here"
+ * />
+ */
 const Modal = ({
   show,
   onClose,

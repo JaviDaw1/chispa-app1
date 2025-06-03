@@ -33,7 +33,7 @@ const Match = () => {
       if (!currentUser?.id) return;
 
       try {
-        const response = await matchService.getMatchesByUser(currentUser.id);
+        const response = await matchService.getMatchesByUserId(currentUser.id);
 
         const visibleMatches = response.data.filter(
           match => match.matchState !== 'BLOCKED'

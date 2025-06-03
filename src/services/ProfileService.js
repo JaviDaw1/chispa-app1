@@ -7,7 +7,7 @@ export default class ProfileService {
   }
 
   // Method to obtain all profiles
-  async getAll() {
+  async getAllProfiles() {
     try {
       const response = await api.get(this.url);
       return response;
@@ -18,7 +18,7 @@ export default class ProfileService {
   }
 
   // Method to obtain a profile by ID
-  async getById(id) {
+  async getProfileById(id) {
     if (this.cache.has(`id-${id}`)) {
       return this.cache.get(`id-${id}`);
     }
@@ -34,7 +34,7 @@ export default class ProfileService {
   }
 
   // Method to obtain a profile by user ID
-  async getByUserId(userId) {
+  async getProfileByUserId(userId) {
     if (this.cache.has(`user-${userId}`)) {
       return this.cache.get(`user-${userId}`);
     }
@@ -50,7 +50,7 @@ export default class ProfileService {
   }
 
   // Method to create a new profile
-  async create(profile) {
+  async postProfile(profile) {
     try {
       const response = await api.post(this.url, profile);
       this.cache.clear(); // Clear cache after modification
@@ -62,7 +62,7 @@ export default class ProfileService {
   }
 
   // Method to update an existing profile
-  async update(id, profile) {
+  async updateProfile(id, profile) {
     try {
       const response = await api.put(`${this.url}/${id}`, profile);
       this.cache.clear(); // Clear cache after modification
@@ -74,7 +74,7 @@ export default class ProfileService {
   }
 
   // Mehtod to delete a profile by ID
-  async delete(id) {
+  async deleteProfile(id) {
     try {
       const response = await api.delete(`${this.url}/${id}`);
       this.cache.clear(); // Clear cache after modification

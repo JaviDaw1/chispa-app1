@@ -6,7 +6,7 @@ export default class MatchService {
   }
 
   // Method to obtain matches by user ID
-  async getMatchesByUser(userId) {
+  async getMatchesByUserId(userId) {
     return api.get(`${this.url}/user/${userId}`);
   }
 

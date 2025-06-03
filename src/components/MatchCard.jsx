@@ -3,9 +3,23 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import ProfileService from '../services/ProfileService';
 
+/**
+ * MatchCard Component
+ * This component displays a card for a match between two users, showing their profile information and actions.
+ * @param {Object} props - Component properties.
+ * @param {Object} props.match - The match object containing user details and match date.
+ * @param {string} props.currentUserId - The ID of the current user to determine which profile to display.
+ * @return {JSX.Element} The rendered match card component.
+ * @example
+ * <MatchCard
+ *  key={match.id}
+ *  match={object}
+ *  currentUserId={currentUserId}
+ * />
+ */
 const MatchCard = ({ match, currentUserId }) => {
   const { t } = useTranslation();
-  const [otherUserProfile, setOtherUserProfile] = useState(null);
+  const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -15,8 +29,8 @@ const MatchCard = ({ match, currentUserId }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const profileResponse = await profileService.getByUserId(otherUserId);
-        setOtherUserProfile(profileResponse.data);
+        const profileResponse = await profileService.getProfileByUserId(otherUserId);
+        setProfile(profileResponse.data);
       } catch (error) {
         console.error(t('errors.load_profiles'), error);
       } finally {
@@ -24,6 +38,7 @@ const MatchCard = ({ match, currentUserId }) => {
       }
     };
     fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [otherUserId, match.id, t]);
 
   const formatDate = (isoString) => {
@@ -40,7 +55,7 @@ const MatchCard = ({ match, currentUserId }) => {
     );
   }
 
-  if (!otherUserProfile) {
+  if (!profile) {
     return (
       <div className="p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-md text-center text-gray-500 dark:text-gray-400">
         {t('matches.profile_not_available')}
@@ -53,16 +68,16 @@ const MatchCard = ({ match, currentUserId }) => {
       <div className="p-5 sm:p-6">
         <div className="flex items-center gap-4">
           <img
-            src={otherUserProfile.profilePhoto || '/default-profile.png'}
-            alt={`${otherUserProfile.name} ${otherUserProfile.lastName}`}
+            src={profile.profilePhoto || '/default-profile.png'}
+            alt={`${profile.name} ${profile.lastName}`}
             className="h-20 w-20 rounded-full object-cover border-4 border-orange-500 shadow-md"
           />
           <div className="flex-1">
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white truncate">
-              {otherUserProfile.name} {otherUserProfile.lastName}
+              {profile.name} {profile.lastName}
             </h2>
             <p className="text-gray-500 dark:text-gray-400 text-sm mt-1 truncate max-w-[350px]">
-              {otherUserProfile.bio || t('matches.no_description')}
+              {profile.bio || t('matches.no_description')}
             </p>
             <div className="flex items-center gap-1 text-sm text-orange-600 dark:text-orange-400 mt-2">
               <svg
@@ -75,7 +90,7 @@ const MatchCard = ({ match, currentUserId }) => {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.243-4.243a8 8 0 1111.313 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
-              <span>{otherUserProfile.location || t('matches.location_unspecified')}</span>
+              <span>{profile.location || t('matches.location_unspecified')}</span>
             </div>
           </div>
         </div>

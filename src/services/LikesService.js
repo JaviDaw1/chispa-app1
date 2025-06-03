@@ -19,11 +19,6 @@ export default class LikesService {
   async postLike(likeData) {
     try {
       const response = await api.post(this.url, likeData);
-      
-      if (response.data.matchCreated) {
-        console.log('¡Match creado!', response.data.match);
-      }
-      
       return response;
     } catch (error) {
       console.error('Error creating like:', error);
@@ -32,7 +27,7 @@ export default class LikesService {
   }
 
   // Method to update an existing like
-  async putLike(id, likeData) {
+  async updateLike(id, likeData) {
     return api.put(`${this.url}/${id}`, likeData);
   }
 

@@ -2,30 +2,38 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProfileService from '../services/ProfileService';
 
+/**
+ * ChatsCard component to display a chat card with user profile information.
+ * @param {Object} props - Component properties.
+ * @param {Object} props.match - The match object containing user information and match date.
+ * @param {string} props.currentUserId - The ID of the current user.
+ * @return {JSX.Element} The rendered chat card component.
+ * @example
+ * <ChatsCard match={match} currentUserId={currentUserId} />
+ * */
 export default function ChatsCard({ match, currentUserId }) {
-  const [otherUserProfile, setOtherUserProfile] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [otherUser, setOtherUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
-  const otherUserId = match.user1.id === currentUserId ? match.user2.id : match.user1.id;
-
   useEffect(() => {
-    const profileService = new ProfileService();
-    const fetchData = async () => {
+    const fetchOtherUser = async () => {
       try {
-        const profileResponse = await profileService.getByUserId(otherUserId);
-        setOtherUserProfile(profileResponse.data);
+        const otherUserId = match.user1.id === currentUserId ? match.user2.id : match.user1.id;
+        const profileService = new ProfileService();
+        const response = await profileService.getProfileByUserId(otherUserId);
+        setOtherUser(response.data);
       } catch (error) {
         console.error("Error al cargar perfil:", error);
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
-    fetchData();
-  }, [otherUserId, match.id]);
+    fetchOtherUser();
+  }, [currentUserId, match.id]);
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg animate-pulse">
         <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-3/4 mb-2"></div>
@@ -34,7 +42,7 @@ export default function ChatsCard({ match, currentUserId }) {
     );
   }
 
-  if (!otherUserProfile) {
+  if (!otherUser) {
     return (
       <div className="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg text-center text-gray-600 dark:text-gray-400">
         <p>Perfil no disponible</p>
@@ -49,15 +57,15 @@ export default function ChatsCard({ match, currentUserId }) {
     >
       <img
         className="h-14 w-14 rounded-full object-cover border-2 border-orange-500"
-        src={otherUserProfile.profilePhoto || '/default-profile.png'}
-        alt={`${otherUserProfile.name} ${otherUserProfile.lastName}`}
+        src={otherUser.profilePhoto || '/default-profile.png'}
+        alt={`${otherUser.name} ${otherUser.lastName}`}
       />
       <div className="ml-4 flex-1 min-w-0">
         <h3 className="text-base font-semibold text-gray-900 dark:text-white truncate">
-          {otherUserProfile.name} {otherUserProfile.lastName}
+          {otherUser.name} {otherUser.lastName}
         </h3>
         <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
-          {otherUserProfile.bio || '¡Nuevo match! Envía un mensaje'}
+          {otherUser.bio || '¡Nuevo match! Envía un mensaje'}
         </p>
       </div>
       <span className="text-xs text-gray-400 dark:text-gray-500 ml-2 whitespace-nowrap">

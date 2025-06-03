@@ -72,7 +72,7 @@ const Chat = () => {
           ? matchResponse.data.user2
           : matchResponse.data.user1;
 
-        const profileResponse = await profileService.getByUserId(other.id);
+        const profileResponse = await profileService.getProfileByUserId(other.id);
         setOtherUser({
           ...other,
           profile: profileResponse.data
@@ -102,7 +102,7 @@ const Chat = () => {
     };
 
     const setupWebSocket = () => {
-      console.log('Intentando conectar al WebSocket con matchId:', matchId); // <-- AQUÍ
+      console.log('Intentando conectar al WebSocket con matchId:', matchId);
       messagesService.connectWebSocket(
         matchId,
         handleNewMessage,
@@ -152,7 +152,7 @@ const Chat = () => {
         blockReason: blockReason || "Bloqueado desde chat",
       };
 
-      await blockService.create(blockData);
+      await blockService.postBlock(blockData);
 
       setIsModalOpen(false);
       navigate('/messages');

@@ -29,7 +29,7 @@ export default function BlockedUsers() {
           return;
         }
 
-        const response = await new BlocksService().getByReporterId(userInfo.id);
+        const response = await new BlocksService().getBlocksByReporterId(userInfo.id);
 
         const users = response.data.map((block) => ({
           blockId: block.id,

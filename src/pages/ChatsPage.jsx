@@ -30,7 +30,7 @@ const ChatsPage = () => {
       if (!currentUser?.id) return;
 
       try {
-        const response = await matchService.getMatchesByUser(currentUser.id);
+        const response = await matchService.getMatchesByUserId(currentUser.id);
         setMatches(response.data);
       } catch (error) {
         console.error('Error al cargar matches:', error);

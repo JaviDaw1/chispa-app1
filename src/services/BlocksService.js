@@ -7,7 +7,7 @@ export default class BlocksService {
   }
 
   // Obtain all blocks
-  async getAll() {
+  async getAllBlocks() {
     try {
       const response = await api.get(this.url);
       return response;
@@ -18,7 +18,7 @@ export default class BlocksService {
   }
 
   // Obtain a block by ID
-  async getById(id) {
+  async getBlockById(id) {
     if (this.cache.has(`id-${id}`)) {
       return this.cache.get(`id-${id}`);
     }
@@ -34,7 +34,7 @@ export default class BlocksService {
   }
 
   // Obtain blocks by ReporterId
-  async getByReporterId(reporterId) {
+  async getBlocksByReporterId(reporterId) {
     if (this.cache.has(`reporter/${reporterId}`)) {
       return this.cache.get(`reporter-${reporterId}`);
     }
@@ -50,7 +50,7 @@ export default class BlocksService {
   }
 
   // Obtain blocks by ReportedId
-  async getByReportedId(reportedId) {
+  async getBlocksByReportedId(reportedId) {
     if (this.cache.has(`reported/${reportedId}`)) {
       return this.cache.get(`reported-${reportedId}`);
     }
@@ -69,7 +69,7 @@ export default class BlocksService {
   }
 
   // Create a new block
-  async create(block) {
+  async postBlock(block) {
     try {
       const response = await api.post(this.url, block);
       this.cache.clear();
@@ -93,7 +93,7 @@ export default class BlocksService {
   }
 
   // Update a block
-  async update(id, block) {
+  async updateBlock(id, block) {
     try {
       const response = await api.put(`${this.url}/${id}`, block);
       this.cache.clear(); // Limpiar caché después de la modificación
@@ -105,7 +105,7 @@ export default class BlocksService {
   }
 
   // Delete a block
-  async delete(id) {
+  async deleteBlock(id) {
     try {
       const response = await api.delete(`${this.url}/${id}`);
       this.cache.clear(); // Limpiar caché después de la eliminación

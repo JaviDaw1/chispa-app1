@@ -107,7 +107,7 @@ export default function Settings() {
               aria: "settings.language",
             },
             {
-              to: "/settings/blockedUsers",
+              to: "/settings/blocked-users",
               icon: <Ban className="text-red-600 w-6 h-6" />,
               title: t("settings.blocked"),
               subtitle: t("settings.blocked_sub"),

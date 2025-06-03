@@ -3,6 +3,12 @@ import ProfileService from "./ProfileService";
 
 const profileService = new ProfileService();
 
+/**
+ * AuthService Class
+ * This class handles user authentication, registration, and online status management.
+ * It provides methods for logging in, signing up, logging out, changing passwords,
+ * and managing user online status.
+ */
 export default class AuthService {
   constructor() {
     this.url = "/auth";
@@ -48,7 +54,6 @@ export default class AuthService {
       });
 
       const newUser = response.data;
-      await this.login(data.email, data.password);
 
       // Create a custom profile for the new user
       const customProfile = {
@@ -64,7 +69,9 @@ export default class AuthService {
         preferredRelationship: data.preferredRelationship,
         user: { id: newUser.id },
       };
-      await profileService.create(customProfile);
+      await profileService.postProfile(customProfile);
+      await this.login(data.email, data.password);
+      
       return newUser;
     } catch (error) {
       console.error(
@@ -106,12 +113,12 @@ export default class AuthService {
     if (!user) return;
 
     try {
-      const profileResponse = await profileService.getByUserId(user.id);
+      const profileResponse = await profileService.getProfileByUserId(user.id);
       const profile = profileResponse.data;
 
-      if (!profile) return;
+       if (!profile || !profile.id) return;
 
-      await profileService.update(profile.id, {
+      await profileService.updateProfile(profile.id, {
         ...profile,
         isOnline,
         lastActive: new Date().toISOString(),

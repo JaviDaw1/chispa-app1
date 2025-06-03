@@ -53,6 +53,7 @@ export default class AuthService {
         userRole: "USER",
       });
 
+      await this.login(data.email, data.password);
       const newUser = response.data;
 
       // Create a custom profile for the new user
@@ -70,7 +71,6 @@ export default class AuthService {
         user: { id: newUser.id },
       };
       await profileService.postProfile(customProfile);
-      await this.login(data.email, data.password);
       
       return newUser;
     } catch (error) {

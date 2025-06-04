@@ -7,6 +7,7 @@ import Header from '../components/Header';
 import PrimaryButton from '../components/PrimaryButton';
 import { Eye, EyeOff, User, Mail, Lock, MapPin, Calendar, Heart, Smile } from 'lucide-react';
 import TopHeader from '../components/TopHeader';
+import LocationAutocomplete from '../components/LocationAutocomplete';
 
 const authService = new AuthService();
 
@@ -21,6 +22,8 @@ export default function SignUp() {
     gender: 'MALE',
     birthDate: '',
     location: '',
+    latitude: null,      // <-- Añade esto
+    longitude: null,     // <-- Y esto
     bio: '',
     interests: '',
     profilePhoto: '',
@@ -217,6 +220,25 @@ export default function SignUp() {
               </div>
               {errors.bio && <p className="mt-1 text-sm text-red-600">{errors.bio}</p>}
             </div>
+
+            {/* Cambia el LocationAutocomplete para que actualice location, latitude y longitude */}
+            <LocationAutocomplete
+              value={formData.location}
+              onChange={e => setFormData(prev => ({
+                ...prev,
+                location: e.target.value,
+                latitude: null,      // Limpiar si el usuario escribe manualmente
+                longitude: null
+              }))}
+              onSelect={({ address, lat, lng }) =>
+                setFormData(prev => ({
+                  ...prev,
+                  location: address,
+                  latitude: lat,
+                  longitude: lng,
+                }))
+              }
+            />
 
             <PrimaryButton type="submit" isLoading={isSubmitting} className="md:col-span-2" onClick={handleSubmit}>
               {t('signup.submit')}

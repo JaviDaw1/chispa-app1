@@ -51,9 +51,13 @@ export default class AuthService {
         email: data.email,
         password: data.password,
         userRole: "USER",
+        location: data.location,
+        latitude: data.latitude,
+        longitude: data.longitude,
       });
 
       const newUser = response.data;
+      await this.login(data.email, data.password);
 
       // Create a custom profile for the new user
       const customProfile = {
@@ -70,8 +74,7 @@ export default class AuthService {
         user: { id: newUser.id },
       };
       await profileService.postProfile(customProfile);
-      await this.login(data.email, data.password);
-      
+
       return newUser;
     } catch (error) {
       console.error(
@@ -116,7 +119,7 @@ export default class AuthService {
       const profileResponse = await profileService.getProfileByUserId(user.id);
       const profile = profileResponse.data;
 
-       if (!profile || !profile.id) return;
+      if (!profile || !profile.id) return;
 
       await profileService.updateProfile(profile.id, {
         ...profile,
@@ -161,7 +164,10 @@ export default class AuthService {
         throw new Error("Usuario no autenticado o sin ID");
       }
 
-      const response = await api.put(`${this.url}/change-password/${user.id}`, {currentPassword, newPassword,});
+      const response = await api.put(`${this.url}/change-password/${user.id}`, {
+        currentPassword,
+        newPassword,
+      });
       return response.data;
     } catch (error) {
       console.error(
@@ -180,7 +186,8 @@ export default class AuthService {
       await api.post("/auth/forgot-password", { email });
     } catch (error) {
       throw new Error(
-        error.response?.data?.message || "Error al enviar el correo de recuperación"
+        error.response?.data?.message ||
+          "Error al enviar el correo de recuperación"
       );
     }
   }

@@ -1,14 +1,12 @@
 import { useRef } from "react";
 import { useJsApiLoader, Autocomplete } from "@react-google-maps/api";
 
-const libraries = ["places"];
-
-export default function LocationAutocomplete({ value, onChange, onSelect }) {
+export default function LocationAutocomplete({ value, onChange, onSelect, inputClassName = '' }) {
   const autocompleteRef = useRef(null);
 
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: "AIzaSyCCTR7gaubOFjXqzySBZ6mdw5uKsmjKc2I", // PON AQUÍ TU API KEY
-    libraries,
+    googleMapsApiKey: "AIzaSyCCTR7gaubOFjXqzySBZ6mdw5uKsmjKc2I",
+    libraries: ["places"],
   });
 
   const handlePlaceChanged = () => {
@@ -23,18 +21,27 @@ export default function LocationAutocomplete({ value, onChange, onSelect }) {
     }
   };
 
-  if (!isLoaded) return <input value={value} onChange={onChange} placeholder="Cargando Google Maps..." />;
+  if (!isLoaded) {
+    return (
+      <input
+        value={value}
+        onChange={onChange}
+        placeholder="Cargando Google Maps..."
+        className={inputClassName}
+      />
+    );
+  }
 
   return (
     <Autocomplete
-      onLoad={ref => (autocompleteRef.current = ref)}
+      onLoad={(ref) => (autocompleteRef.current = ref)}
       onPlaceChanged={handlePlaceChanged}
     >
       <input
         value={value}
         onChange={onChange}
         placeholder="Busca tu ciudad o dirección"
-        className="w-full px-3 py-2 border rounded-lg"
+        className={inputClassName}
       />
     </Autocomplete>
   );

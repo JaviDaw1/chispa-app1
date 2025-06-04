@@ -138,7 +138,7 @@ export default function SignUp() {
               ['username', 'text', <User />, t('signup.username')],
               ['email', 'email', <Mail />, t('signup.emailLabel')],
               ['password', showPassword ? 'text' : 'password', <Lock />, t('signup.passwordLabel')],
-              ['location', 'text', <MapPin />, t('signup.location')],
+              // ['location', 'text', <MapPin />, t('signup.location')],
               ['birthDate', 'date', <Calendar />, t('signup.birthdate')],
               ['profilePhoto', 'url', null, t('signup.profile_photo')],
               ['interests', 'text', null, `${t('signup.interests')} (${t('signup.interests_hint')})`]
@@ -165,6 +165,36 @@ export default function SignUp() {
                 {errors[name] && <p className="mt-1 text-sm text-red-600">{errors[name]}</p>}
               </div>
             ))}
+
+            <div className="md:col-span-2">
+              <label htmlFor="location" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                {t('signup.location')}
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <MapPin className="text-gray-900 dark:text-white" />
+                </div>
+                <LocationAutocomplete
+                  value={formData.location}
+                  onChange={e => setFormData(prev => ({
+                    ...prev,
+                    location: e.target.value,
+                    latitude: null,
+                    longitude: null
+                  }))}
+                  onSelect={({ address, lat, lng }) =>
+                    setFormData(prev => ({
+                      ...prev,
+                      location: address,
+                      latitude: lat,
+                      longitude: lng,
+                    }))
+                  }
+                  inputClassName={`block w-full pl-10 rounded-xl border-0 py-3 pr-2 text-gray-900 dark:text-white bg-white dark:bg-gray-700 shadow-sm ring-1 ring-inset placeholder:text-gray-400 dark:placeholder:text-gray-300 focus:ring-2 focus:outline-none focus:ring-orange-500 sm:text-sm sm:leading-6 ${errors.location ? 'ring-red-500' : 'ring-gray-300 dark:ring-gray-600'}`}
+                />
+              </div>
+              {errors.location && <p className="mt-1 text-sm text-red-600">{errors.location}</p>}
+            </div>
 
             <div>
               <label htmlFor="gender" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('signup.gender')}</label>
@@ -222,23 +252,7 @@ export default function SignUp() {
             </div>
 
             {/* Cambia el LocationAutocomplete para que actualice location, latitude y longitude */}
-            <LocationAutocomplete
-              value={formData.location}
-              onChange={e => setFormData(prev => ({
-                ...prev,
-                location: e.target.value,
-                latitude: null,      // Limpiar si el usuario escribe manualmente
-                longitude: null
-              }))}
-              onSelect={({ address, lat, lng }) =>
-                setFormData(prev => ({
-                  ...prev,
-                  location: address,
-                  latitude: lat,
-                  longitude: lng,
-                }))
-              }
-            />
+
 
             <PrimaryButton type="submit" isLoading={isSubmitting} className="md:col-span-2" onClick={handleSubmit}>
               {t('signup.submit')}

@@ -1,5 +1,5 @@
 // The main entry point for the application, setting up routes and handling authentication.
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import HomePage from './pages/HomePage';
@@ -17,7 +17,6 @@ import AuthService from './services/AuthService';
 import Language from './pages/Language';
 import ChangePassword from './pages/ChangePassword';
 import ForgotPassword from './pages/ForgotPassword';
-import GuidedTutorial from './components/GuidedTutorial';
 
 const authService = new AuthService();
 
@@ -27,12 +26,9 @@ const authService = new AuthService();
  * @returns {JSX.Element} The main application component.
  */
 export default function App() {
-  const [showTutorial, setShowTutorial] = useState(false);
-
   useEffect(() => {
     const currentUser = authService.getUserInfo();
     if (currentUser) {
-      setShowTutorial(true); // Mostrar tutorial siempre que haya usuario autenticado
       authService.setupOnlineStatusHandlers();
     }
 
@@ -40,10 +36,6 @@ export default function App() {
       authService.cleanupOnlineStatusHandlers();
     };
   }, []);
-
-  const handleCloseTutorial = () => {
-    setShowTutorial(false);
-  };
 
   return (
     <>
@@ -76,7 +68,6 @@ export default function App() {
           <Route path="/settings/change-password" element={<ChangePassword />} />
         </Routes>
       </Router>
-      <GuidedTutorial show={showTutorial} onClose={handleCloseTutorial} />
     </>
   );
 }

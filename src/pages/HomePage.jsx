@@ -30,7 +30,7 @@ export default function HomePage() {
   const [blockReason, setBlockReason] = useState('');
   const [showBlockNotification, setShowBlockNotification] = useState(false);
   const [blockedProfile, setBlockedProfile] = useState(null);
-  const [showInstructions, setShowInstructions] = useState(true);
+  // const [showInstructions, setShowInstructions] = useState(true);
   const [showBlockModal, setShowBlockModal] = useState(false);
   const [showLikeNotification, setShowLikeNotification] = useState(false);
   const [likedProfile, setLikedProfile] = useState(null);
@@ -39,13 +39,13 @@ export default function HomePage() {
   const currentProfile = profiles[currentProfileIndex];
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowInstructions(false);
-    }, 4000);
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     setShowInstructions(false);
+  //   }, 4000);
 
-    return () => clearTimeout(timer);
-  }, []);
+  //   return () => clearTimeout(timer);
+  // }, []);
 
   useEffect(() => {
     const loadData = async () => {
@@ -95,7 +95,7 @@ export default function HomePage() {
           } = preferences;
 
           availableProfiles = availableProfiles.filter(profile => {
-            const matchGender = !favoriteGender || profile.gender === favoriteGender;
+            const matchGender = !favoriteGender || favoriteGender === "OTHER" || profile.gender === favoriteGender;
             const matchAge =
               (!minAgeRange || profile.age >= minAgeRange) &&
               (!maxAgeRange || profile.age <= maxAgeRange);
@@ -247,61 +247,63 @@ export default function HomePage() {
           className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg relative max-h-[80vh]"
           style={{ touchAction: 'pan-y' }}
         >
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentProfile.id}
-              initial={{ x: 100, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: -100, opacity: 0 }}
-              transition={{ type: "spring", stiffness: 260, damping: 25 }}
-              className="bg-white rounded-xl shadow-lg  relative overflow-hidden h-full w-full"
-            >
-              <div className="h-auto aspect-[3/4] bg-gray-100 flex items-center justify-center overflow-hidden">
-                {currentProfile.profilePhoto ? (
-                  <img
-                    src={currentProfile.profilePhoto}
-                    alt={`${currentProfile.name} ${currentProfile.lastName}`}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="text-4xl text-gray-400">
-                    {currentProfile.name?.charAt(0)}{currentProfile.lastName?.charAt(0)}
-                  </div>
-                )}
-              </div>
+          <div className="relative w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg max-h-[80vh] overflow-hidden">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentProfile.id}
+                initial={{ x: 100, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                exit={{ x: -100, opacity: 0 }}
+                transition={{ type: "spring", stiffness: 260, damping: 25 }}
+                className="bg-white rounded-xl shadow-lg relative overflow-hidden h-full w-full"
+              >
+                <div className="h-auto aspect-[3/4] bg-gray-100 flex items-center justify-center overflow-hidden">
+                  {currentProfile.profilePhoto ? (
+                    <img
+                      src={currentProfile.profilePhoto}
+                      alt={`${currentProfile.name} ${currentProfile.lastName}`}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="text-4xl text-gray-400">
+                      {currentProfile.name?.charAt(0)}{currentProfile.lastName?.charAt(0)}
+                    </div>
+                  )}
+                </div>
 
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 sm:p-6 text-white">
-                <h2 className="text-xl sm:text-2xl font-bold">
-                  {currentProfile.name} {currentProfile.lastName}, {currentProfile.age}
-                </h2>
-                <p className="text-xs sm:text-sm opacity-80 mt-1">{currentProfile.location}</p>
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 sm:p-6 text-white">
+                  <h2 className="text-xl sm:text-2xl font-bold">
+                    {currentProfile.name} {currentProfile.lastName}, {currentProfile.age}
+                  </h2>
+                  <p className="text-xs sm:text-sm opacity-80 mt-1">{currentProfile.location}</p>
 
-                {currentProfile.bio && (
-                  <p className="mt-2 sm:mt-3 text-xs sm:text-sm">{currentProfile.bio}</p>
-                )}
+                  {currentProfile.bio && (
+                    <p className="mt-2 sm:mt-3 text-xs sm:text-sm">{currentProfile.bio}</p>
+                  )}
 
-                {currentProfile.interests && (
-                  <div className="mt-2 sm:mt-3 flex flex-wrap gap-2">
-                    {currentProfile.interests.split(',').map((interest, i) => (
-                      <span
-                        key={i}
-                        className="bg-white/20 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs"
-                      >
-                        {interest.trim()}
-                      </span>
-                    ))}
-                  </div>
-                )}
-                {currentProfile.preferredRelationship && (
-                  <p className="mt-2 sm:mt-3 text-xs sm:text-sm text-pink-200">
-                    💘 {t('signup.relationship')}{': '}
-                    {t(`profile.relationships.${(currentProfile.preferredRelationship).toLowerCase()}`) || currentProfile.preferredRelationship}
-                  </p>
-                )}
+                  {currentProfile.interests && (
+                    <div className="mt-2 sm:mt-3 flex flex-wrap gap-2">
+                      {currentProfile.interests.split(',').map((interest, i) => (
+                        <span
+                          key={i}
+                          className="bg-white/20 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs"
+                        >
+                          {interest.trim()}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  {currentProfile.preferredRelationship && (
+                    <p className="mt-2 sm:mt-3 text-xs sm:text-sm text-pink-200">
+                      💘 {t('signup.relationship')}{': '}
+                      {t(`profile.relationships.${(currentProfile.preferredRelationship).toLowerCase()}`) || currentProfile.preferredRelationship}
+                    </p>
+                  )}
 
-              </div>
-            </motion.div>
-          </AnimatePresence>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
         </div>
 
 
@@ -330,11 +332,11 @@ export default function HomePage() {
           </button>
         </div>
 
-        <div
+        {/* <div
           className={`mt-6 text-gray-100 text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-gray-800 dark:bg-gray-300 dark:text-gray-800 shadow-md transition-opacity duration-700 ${showInstructions ? 'opacity-100' : 'opacity-0'}`}
         >
           💡 {t('home.swipe_hint')}
-        </div>
+        </div> */}
         <Modal
           show={showBlockModal}
           onClose={() => setShowBlockModal(false)}

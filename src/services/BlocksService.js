@@ -80,7 +80,7 @@ export default class BlocksService {
     }
   }
 
-  // Desblock a user
+  // Unblock a user
   async unblock(id) {
     try {
       const response = await api.put(`${this.url}/unblock/${id}`);

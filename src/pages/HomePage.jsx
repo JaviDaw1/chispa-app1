@@ -91,17 +91,50 @@ export default function HomePage() {
             favoriteGender,
             minAgeRange,
             maxAgeRange,
-            // maxDistance,
+            maxDistance,
           } = preferences;
+
+          // Obtén la ubicación del usuario logueado
+          const userProfile = allProfiles.find(p => p.user.id === userInfo.id);
 
           availableProfiles = availableProfiles.filter(profile => {
             const matchGender = !favoriteGender || favoriteGender === "OTHER" || profile.gender === favoriteGender;
             const matchAge =
               (!minAgeRange || profile.age >= minAgeRange) &&
               (!maxAgeRange || profile.age <= maxAgeRange);
-            // const matchLocation = !maxDistance || profile.location === maxDistance;
-            // && matchLocation
-            return matchGender && matchAge;
+
+            // Filtro de distancia
+            let matchDistance = true;
+            if (
+              maxDistance &&
+              userProfile?.user?.latitude != null &&
+              userProfile?.user?.longitude != null
+            ) {
+              // OJO: ahora cogemos las coords del usuario asociado al perfil
+              const profileLat = Number(profile.user?.latitude);
+              const profileLon = Number(profile.user?.longitude);
+              const userLat = Number(userProfile.user?.latitude);
+              const userLon = Number(userProfile.user?.longitude);
+
+              if (
+                isNaN(profileLat) || isNaN(profileLon) ||
+                isNaN(userLat) || isNaN(userLon)
+              ) {
+                return false;
+              }
+
+              const distance = getDistanceFromLatLonInKm(
+                userLat,
+                userLon,
+                profileLat,
+                profileLon
+              );
+              // Puedes descomentar para debug:
+              // console.log(`Distancia a ${profile.name}: ${distance} km`);
+              matchDistance = distance <= maxDistance;
+            }
+
+            return matchGender && matchAge && matchDistance;
           });
         }
         setProfiles(availableProfiles);
@@ -192,6 +225,25 @@ export default function HomePage() {
       console.error(t('errors.block_error'), err);
     }
   };
+
+  // eslint-disable-next-line no-unused-vars
+  function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+    if (
+      lat1 == null || lon1 == null ||
+      lat2 == null || lon2 == null
+    ) return Infinity;
+    const R = 6371; // Radio de la tierra en km
+    const dLat = ((lat2 - lat1) * Math.PI) / 180;
+    const dLon = ((lon2 - lon1) * Math.PI) / 180;
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos((lat1 * Math.PI) / 180) *
+        Math.cos((lat2 * Math.PI) / 180) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  }
 
   if (loading) {
     return (

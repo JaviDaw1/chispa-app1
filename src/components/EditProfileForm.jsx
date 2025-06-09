@@ -1,5 +1,7 @@
 import PrimaryButton from "./PrimaryButton";
 import ImageUploader from "../components/ImageUploader";
+import LocationAutocomplete from "../components/LocationAutocomplete";
+import { MapPin } from 'lucide-react';
 
 /**
  * EditProfileForm component
@@ -103,19 +105,34 @@ export default function EditProfileForm({
             required
           />
         </div>
-
-        {/* Location */}
+        
+        {/* Location Autocomplete */}
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             {translate("signup.location")}
           </label>
-          <input
-            type="text"
-            name="location"
-            value={formData.location}
-            onChange={onInputChange}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-          />
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <MapPin className="text-gray-900 dark:text-white" />
+            </div>
+            <LocationAutocomplete
+              value={formData.location}
+              onChange={(e) =>
+                onInputChange({
+                  target: {
+                    name: "location",
+                    value: e.target.value
+                  }
+                })
+              }
+              onSelect={({ address, lat, lng }) => {
+                onInputChange({ target: { name: "location", value: address } });
+                onInputChange({ target: { name: "latitude", value: lat } });
+                onInputChange({ target: { name: "longitude", value: lng } });
+              }}
+              inputClassName="pl-10 w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+            />
+          </div>
         </div>
 
         {/* Preferred Relationship */}

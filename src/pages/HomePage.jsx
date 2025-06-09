@@ -232,7 +232,7 @@ export default function HomePage() {
       lat1 == null || lon1 == null ||
       lat2 == null || lon2 == null
     ) return Infinity;
-    const R = 6371; // Radio de la tierra en km
+    const R = 6371;
     const dLat = ((lat2 - lat1) * Math.PI) / 180;
     const dLon = ((lon2 - lon1) * Math.PI) / 180;
     const a =

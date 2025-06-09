@@ -159,7 +159,7 @@
     "no_blocked": "You haven't blocked anyone yet 😎",
     "unblock": "Unblock",
     "unblock_confirm": "Are you sure you want to unblock {{name}}?",
-    "default_reason": "Blocked from swipe",
+    "default_reason": "Blocked from Home",
     "unblock_confirm_title": "Confirm unblock",
     "blocked_count": "You've blocked {{count}} user(s)",
     "block_alert": "You have successfully blocked {{name}}.",

@@ -30,7 +30,6 @@ export default function HomePage() {
   const [blockReason, setBlockReason] = useState('');
   const [showBlockNotification, setShowBlockNotification] = useState(false);
   const [blockedProfile, setBlockedProfile] = useState(null);
-  // const [showInstructions, setShowInstructions] = useState(true);
   const [showBlockModal, setShowBlockModal] = useState(false);
   const [showLikeNotification, setShowLikeNotification] = useState(false);
   const [likedProfile, setLikedProfile] = useState(null);
@@ -38,14 +37,6 @@ export default function HomePage() {
   const [showPreferenceNotification, setShowPreferenceNotification] = useState(false);
   const currentProfile = profiles[currentProfileIndex];
   const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     setShowInstructions(false);
-  //   }, 4000);
-
-  //   return () => clearTimeout(timer);
-  // }, []);
 
   useEffect(() => {
     const loadData = async () => {
@@ -384,11 +375,6 @@ export default function HomePage() {
           </button>
         </div>
 
-        {/* <div
-          className={`mt-6 text-gray-100 text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-gray-800 dark:bg-gray-300 dark:text-gray-800 shadow-md transition-opacity duration-700 ${showInstructions ? 'opacity-100' : 'opacity-0'}`}
-        >
-          💡 {t('home.swipe_hint')}
-        </div> */}
         <Modal
           show={showBlockModal}
           onClose={() => setShowBlockModal(false)}

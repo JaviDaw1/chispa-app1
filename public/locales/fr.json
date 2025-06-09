@@ -159,7 +159,7 @@
     "no_blocked": "Vous n'avez bloqué personne pour l'instant 😎",
     "unblock": "Débloquer",
     "unblock_confirm": "Êtes-vous sûr de vouloir débloquer {{name}}?",
-    "default_reason": "Bloqué depuis le swipe",
+    "default_reason": "Bloqué depuis l'accueil",
     "unblock_confirm_title": "Confirmer le déblocage",
     "blocked_count": "Vous avez bloqué {{count}} utilisateur(s)",
     "block_alert": "Vous avez bloqué {{name}} avec succès.",

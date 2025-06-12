@@ -99,13 +99,13 @@ export default function Settings() {
               subtitle: t("settings.security_sub"),
               aria: "settings.security",
             },
-            {
-              to: "/settings/notifications",
-              icon: <Bell className="text-amber-600 w-6 h-6" />,
-              title: t("settings.notifications"),
-              subtitle: t("settings.notifications_sub"),
-              aria: "settings.notifications",
-            },
+            // {
+            //   to: "/settings/notifications",
+            //   icon: <Bell className="text-amber-600 w-6 h-6" />,
+            //   title: t("settings.notifications"),
+            //   subtitle: t("settings.notifications_sub"),
+            //   aria: "settings.notifications",
+            // },
             {
               to: "/settings/languages",
               icon: <Languages className="text-sky-600 w-6 h-6" />,

@@ -191,4 +191,18 @@ export default class AuthService {
       );
     }
   }
+
+  // Method to reset password using token
+async resetPassword(token, newPassword) {
+  try {
+    const response = await api.post("/auth/reset-password", {
+      token,
+      newPassword,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error al resetear la contraseña:", error.response?.data?.message || error.message);
+    throw new Error(error.response?.data?.message || "Error al resetear la contraseña");
+  }
+}
 }

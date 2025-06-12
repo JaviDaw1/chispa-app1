@@ -17,6 +17,7 @@ import AuthService from './services/AuthService';
 import Language from './pages/Language';
 import ChangePassword from './pages/ChangePassword';
 import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 
 const authService = new AuthService();
 
@@ -49,6 +50,7 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
 
           {/* Profile Routes */}
           <Route path="/profile" element={<Profile />} />

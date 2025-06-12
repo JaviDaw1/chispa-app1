@@ -232,5 +232,16 @@
     "attempts_left": "Tentatives restantes : {{count}}",
     "error_current_password": "Le mot de passe actuel est incorrect.",
     "error_new_password": "Le nouveau mot de passe ne respecte pas les exigences."
+  },
+  "resetPassword": {
+    "title": "Réinitialiser le mot de passe",
+    "newPasswordPlaceholder": "Nouveau mot de passe",
+    "confirmPasswordPlaceholder": "Confirmer le nouveau mot de passe",
+    "sendButton": "Changer le mot de passe",
+    "success": "Mot de passe réinitialisé avec succès ! Vous pouvez maintenant vous connecter.",
+    "error": "Erreur lors de la réinitialisation du mot de passe. Veuillez réessayer.",
+    "invalidToken": "Le lien de récupération n'est pas valide ou a expiré.",
+    "shortPassword": "Le mot de passe doit comporter au moins 6 caractères.",
+    "passwordsDontMatch": "Les mots de passe ne correspondent pas."
   }
 }

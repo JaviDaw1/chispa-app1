@@ -232,5 +232,16 @@
     "attempts_left": "Attempts left: {{count}}",
     "error_current_password": "Current password is incorrect.",
     "error_new_password": "New password does not meet requirements."
+  },
+  "resetPassword": {
+    "title": "Reset Password",
+    "newPasswordPlaceholder": "New password",
+    "confirmPasswordPlaceholder": "Confirm new password",
+    "sendButton": "Change password",
+    "success": "Password successfully reset! You can now log in.",
+    "error": "Error resetting password. Please try again.",
+    "invalidToken": "The recovery link is invalid or has expired.",
+    "shortPassword": "Password must be at least 6 characters.",
+    "passwordsDontMatch": "Passwords do not match."
   }
 }

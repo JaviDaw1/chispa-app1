@@ -44,7 +44,7 @@ export default function EditProfileForm({
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* First Name */}
-        <div>
+        {/* <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             {translate("signup.firstname")}*
           </label>
@@ -56,10 +56,10 @@ export default function EditProfileForm({
             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             required
           />
-        </div>
+        </div> */}
 
         {/* Last Name */}
-        <div>
+        {/* <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             {translate("signup.lastname")}*
           </label>
@@ -71,10 +71,10 @@ export default function EditProfileForm({
             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             required
           />
-        </div>
+        </div> */}
 
         {/* Gender */}
-        <div>
+        {/* <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             {translate("signup.gender")}*
           </label>
@@ -89,10 +89,10 @@ export default function EditProfileForm({
             <option value="FEMALE">{translate("common.female")}</option>
             <option value="OTHER">{translate("common.other")}</option>
           </select>
-        </div>
+        </div> */}
 
         {/* Birthdate */}
-        <div>
+        {/* <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             {translate("signup.birthdate")}*
           </label>
@@ -104,10 +104,10 @@ export default function EditProfileForm({
             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             required
           />
-        </div>
+        </div> */}
         
         {/* Location Autocomplete */}
-        <div>
+        {/* <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             {translate("signup.location")}
           </label>
@@ -133,7 +133,7 @@ export default function EditProfileForm({
               inputClassName="pl-10 w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             />
           </div>
-        </div>
+        </div> */}
 
         {/* Preferred Relationship */}
         <div>

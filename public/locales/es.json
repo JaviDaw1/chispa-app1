@@ -245,5 +245,16 @@
     "attempts_left": "Intentos restantes: {{count}}",
     "error_current_password": "La contraseña actual es incorrecta.",
     "error_new_password": "La nueva contraseña no cumple los requisitos."
-  }
+  },
+  "resetPassword": {
+  "title": "Restablecer contraseña",
+  "newPasswordPlaceholder": "Nueva contraseña",
+  "confirmPasswordPlaceholder": "Confirmar nueva contraseña",
+  "sendButton": "Cambiar contraseña",
+  "success": "¡Contraseña restablecida correctamente! Ahora puedes iniciar sesión.",
+  "error": "Error al restablecer la contraseña. Inténtalo de nuevo.",
+  "invalidToken": "El enlace de recuperación no es válido o ha expirado.",
+  "shortPassword": "La contraseña debe tener al menos 6 caracteres.",
+  "passwordsDontMatch": "Las contraseñas no coinciden."
+}
 }

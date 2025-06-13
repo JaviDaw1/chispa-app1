@@ -30,6 +30,7 @@ export default function HomePage() {
   const [blockReason, setBlockReason] = useState('');
   const [showBlockNotification, setShowBlockNotification] = useState(false);
   const [blockedProfile, setBlockedProfile] = useState(null);
+  // const [showInstructions, setShowInstructions] = useState(true);
   const [showBlockModal, setShowBlockModal] = useState(false);
   const [showLikeNotification, setShowLikeNotification] = useState(false);
   const [likedProfile, setLikedProfile] = useState(null);
@@ -37,6 +38,14 @@ export default function HomePage() {
   const [showPreferenceNotification, setShowPreferenceNotification] = useState(false);
   const currentProfile = profiles[currentProfileIndex];
   const navigate = useNavigate();
+
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     setShowInstructions(false);
+  //   }, 4000);
+
+  //   return () => clearTimeout(timer);
+  // }, []);
 
   useEffect(() => {
     const loadData = async () => {
@@ -287,10 +296,10 @@ export default function HomePage() {
       <div className="flex flex-1 flex-col items-center justify-center p-4 w-full">
         <div
           {...handlers}
-          className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg relative max-h-[80vh]"
+          className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg relative"
           style={{ touchAction: 'pan-y' }}
         >
-          <div className="relative w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg max-h-[80vh] overflow-hidden">
+          <div className="relative w-full bg-white rounded-xl shadow-lg overflow-hidden">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentProfile.id}
@@ -300,7 +309,7 @@ export default function HomePage() {
                 transition={{ type: "spring", stiffness: 260, damping: 25 }}
                 className="bg-white rounded-xl shadow-lg relative overflow-hidden h-full w-full"
               >
-                <div className="h-auto aspect-[3/4] bg-gray-100 flex items-center justify-center overflow-hidden">
+               <div className="h-[75vh] bg-gray-100 flex items-center justify-center overflow-hidden rounded-t-xl">
                   {currentProfile.profilePhoto ? (
                     <img
                       src={currentProfile.profilePhoto}
@@ -375,6 +384,11 @@ export default function HomePage() {
           </button>
         </div>
 
+        {/* <div
+          className={`mt-6 text-gray-100 text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-gray-800 dark:bg-gray-300 dark:text-gray-800 shadow-md transition-opacity duration-700 ${showInstructions ? 'opacity-100' : 'opacity-0'}`}
+        >
+          💡 {t('home.swipe_hint')}
+        </div> */}
         <Modal
           show={showBlockModal}
           onClose={() => setShowBlockModal(false)}
